@@ -8,7 +8,7 @@
     <properties>
         <project.encoding>UTF-8</project.encoding>
         <project.author>Jonas Becker-Kupczok</project.author>
-        <mainClass>de.tub.pes.syscir.Main</mainClass>
+        <mainClass>raid24contribution.Main</mainClass>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
     <repositories>
