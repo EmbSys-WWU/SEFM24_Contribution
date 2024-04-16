@@ -45,8 +45,8 @@ import raid24contribution.util.WrappedSCFunction;
  *        considered in this state may provide
  */
 public class ConsideredState<GlobalStateT extends GlobalState<GlobalStateT>, ProcessStateT extends ProcessState<ProcessStateT, ?>, ProcessT extends AnalyzedProcess<ProcessT, GlobalStateT, ProcessStateT, ?>>
-extends HashCachingLockableObject<ConsideredState<GlobalStateT, ProcessStateT, ProcessT>> {
-
+        extends HashCachingLockableObject<ConsideredState<GlobalStateT, ProcessStateT, ProcessT>> {
+    
     /**
      * Creates the initial state of a SystemC model.
      * 
@@ -64,7 +64,6 @@ extends HashCachingLockableObject<ConsideredState<GlobalStateT, ProcessStateT, P
      *        for the expression values
      * @return the initial state for that SystemC model
      */
-    // TODO: THIS IS UGLY!
     public static <ProcessT extends AnalyzedProcess<ProcessT, GlobalStateT, ProcessStateT, InfoT>, GlobalStateT extends GlobalState<GlobalStateT>, ProcessStateT extends ProcessState<ProcessStateT, ValueT>, InfoT extends TransitionInformation<InfoT>, ValueT extends AbstractedValue<ValueT, ?, ?>> ConsideredState<GlobalStateT, ProcessStateT, ProcessT> getInitialState(
             SCSystem system,
             TriFunction<Map<Event, TimedBlocker>, Set<WrappedSCClassInstance>, Boolean, ? extends GlobalStateT> globalStateConstructor,
@@ -72,16 +71,16 @@ extends HashCachingLockableObject<ConsideredState<GlobalStateT, ProcessStateT, P
             BiFunction<ProcessBlocker, List<EvaluationContext<ValueT>>, ? extends ProcessStateT> processStateConstructor,
             BiFunction<ProcessT, GlobalStateT, Set<Event>> initialSensitivitiesGetter,
             Function<Object, ? extends ValueT> determinedValueConstructor) {
-
+        
         GlobalStateT globalState = globalStateConstructor.apply(new LinkedHashMap<>(), new LinkedHashSet<>(), false);
-
+        
         Map<ProcessT, ProcessStateT> processStates = new LinkedHashMap<>();
-
+        
         for (List<String> processName : system.getProcessNamesToInitialize()) {
             if (processName.size() != 2) {
                 throw new UnsupportedOperationException("nested modlues are not supported yet");
             }
-
+            
             SCClassInstance instance = system.getInstanceByName(processName.get(0));
             SCClass clazz = instance.getSCClass();
             SCProcess scProcess = null;
@@ -91,42 +90,42 @@ extends HashCachingLockableObject<ConsideredState<GlobalStateT, ProcessStateT, P
                     break;
                 }
             }
-
+            
             if (scProcess == null) {
                 throw new RuntimeException("process " + processName + " not found");
             }
-
+            
             ProcessT process = processConstructor.apply(system, scProcess, instance);
-
+            
             ProcessBlocker waitingFor;
             if (scProcess.getType() == SCPROCESSTYPE.SCTHREAD) {
                 waitingFor = null;
-            } else { // TODO: initialize / don't initialize
+            } else {
                 Set<Event> sensitivities = initialSensitivitiesGetter.apply(process, globalState);
                 waitingFor = new EventBlocker(sensitivities, true, null);
             }
-
+            
             List<List<ValueT>> expressionValues = new ArrayList<>();
             expressionValues.add(new ArrayList<>());
-
+            
             List<EvaluationContext<ValueT>> executionStack =
                     List.of(new EvaluationContext<>(WrappedSCFunction.getWrapped(scProcess.getFunction()),
                             new ArrayList<>(), -1, expressionValues,
                             determinedValueConstructor.apply(new WrappedSCClassInstance(instance))));
-
+            
             ProcessStateT processState = processStateConstructor.apply(waitingFor, executionStack);
             processStates.put(process, processState);
         }
-
+        
         ConsideredState<GlobalStateT, ProcessStateT, ProcessT> result =
-                new ConsideredState<GlobalStateT, ProcessStateT, ProcessT>(globalState, processStates);
+                new ConsideredState<>(globalState, processStates);
         result.lock();
         return result;
     }
-
+    
     private GlobalStateT globalState;
     private Map<ProcessT, ProcessStateT> processStates;
-
+    
     /**
      * Constructs a new, mutable ConsideredState with the given global and local portions.
      * 
@@ -142,7 +141,7 @@ extends HashCachingLockableObject<ConsideredState<GlobalStateT, ProcessStateT, P
         this.globalState = globalState;
         this.processStates = processStates;
     }
-
+    
     /**
      * Constructs a new, mutable (deep) copy of the given ConsideredState.
      * 
@@ -150,14 +149,14 @@ extends HashCachingLockableObject<ConsideredState<GlobalStateT, ProcessStateT, P
      */
     protected ConsideredState(ConsideredState<GlobalStateT, ProcessStateT, ProcessT> copyOf) {
         super(copyOf);
-
+        
         LinkedHashMap<ProcessT, ProcessStateT> newProcessStates = new LinkedHashMap<>(copyOf.processStates.size());
         copyOf.processStates.forEach((process, state) -> newProcessStates.put(process, state.unlockedClone()));
-
+        
         this.globalState = copyOf.globalState.unlockedClone();
         this.processStates = newProcessStates;
     }
-
+    
     @Override
     protected int hashCodeInternal() {
         int result = 31 * this.globalState.hashCode();
@@ -166,7 +165,7 @@ extends HashCachingLockableObject<ConsideredState<GlobalStateT, ProcessStateT, P
         }
         return result;
     }
-
+    
     /**
      * Returns the global portion of this state.
      * 
@@ -176,7 +175,7 @@ extends HashCachingLockableObject<ConsideredState<GlobalStateT, ProcessStateT, P
         resetHashCode();
         return this.globalState;
     }
-
+    
     /**
      * Replaces the global portion of this state be the given parameter.
      * 
@@ -189,7 +188,7 @@ extends HashCachingLockableObject<ConsideredState<GlobalStateT, ProcessStateT, P
         resetHashCode();
         this.globalState = globalState;
     }
-
+    
     /**
      * Returns a view of the local portion of this state that is modifiable iff this state is not
      * locked.
@@ -203,7 +202,7 @@ extends HashCachingLockableObject<ConsideredState<GlobalStateT, ProcessStateT, P
         resetHashCode();
         return isLocked() ? Collections.unmodifiableMap(this.processStates) : this.processStates;
     }
-
+    
     /**
      * Replaces the local portion of this state by the given parameter.
      * 
@@ -219,7 +218,7 @@ extends HashCachingLockableObject<ConsideredState<GlobalStateT, ProcessStateT, P
         resetHashCode();
         this.processStates = processStates;
     }
-
+    
     /**
      * Returns the local state associated with the given process in this state.
      * 
@@ -235,7 +234,7 @@ extends HashCachingLockableObject<ConsideredState<GlobalStateT, ProcessStateT, P
         resetHashCode();
         return Objects.requireNonNull(this.processStates.get(process));
     }
-
+    
     /**
      * Sets the local state to be associated with the given process.
      * 
@@ -249,7 +248,7 @@ extends HashCachingLockableObject<ConsideredState<GlobalStateT, ProcessStateT, P
         resetHashCode();
         this.processStates.put(process, state);
     }
-
+    
     /**
      * Returns a collection of all processes which are associated with local states which imply them to
      * be ready to be scheduled.
@@ -268,7 +267,7 @@ extends HashCachingLockableObject<ConsideredState<GlobalStateT, ProcessStateT, P
         }
         return result;
     }
-
+    
     /**
      * {@inheritDoc}
      * 
@@ -279,27 +278,27 @@ extends HashCachingLockableObject<ConsideredState<GlobalStateT, ProcessStateT, P
         if (!super.lock()) {
             return false;
         }
-
+        
         this.globalState.lock();
         for (ProcessStateT processState : this.processStates.values()) {
             processState.lock();
         }
-
+        
         return true;
     }
-
+    
     // increase visibility
     @Override
     public ConsideredState<GlobalStateT, ProcessStateT, ProcessT> unlockedVersion() {
         return super.unlockedVersion();
     }
-
+    
     // increase visibility
     @Override
     public ConsideredState<GlobalStateT, ProcessStateT, ProcessT> unlockedClone() {
         return new ConsideredState<>(this);
     }
-
+    
     @Override
     public boolean equals(Object other) {
         if (other == this) {
@@ -310,11 +309,11 @@ extends HashCachingLockableObject<ConsideredState<GlobalStateT, ProcessStateT, P
         }
         return this.globalState.equals(s.globalState) && this.processStates.equals(s.processStates);
     }
-
+    
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-
+        
         builder.append("(GlobalState: ").append(this.globalState.toString()).append(" ProcessStates: {");
         boolean first = true;
         for (Entry<ProcessT, ProcessStateT> entry : this.processStates.entrySet()) {
@@ -326,8 +325,8 @@ extends HashCachingLockableObject<ConsideredState<GlobalStateT, ProcessStateT, P
             builder.append(entry.getKey().toString()).append(": ").append(entry.getValue().toString());
         }
         builder.append("})");
-
+        
         return builder.toString();
     }
-
+    
 }

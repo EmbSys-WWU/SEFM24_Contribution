@@ -35,10 +35,10 @@ import raid24contribution.statespace_exploration.AnalyzedProcess;
 import raid24contribution.statespace_exploration.EvaluationContext;
 import raid24contribution.statespace_exploration.EvaluationLocation;
 import raid24contribution.statespace_exploration.EventBlocker;
+import raid24contribution.statespace_exploration.EventBlocker.Event;
 import raid24contribution.statespace_exploration.LocalState;
 import raid24contribution.statespace_exploration.ProcessState;
 import raid24contribution.statespace_exploration.TransitionResult;
-import raid24contribution.statespace_exploration.EventBlocker.Event;
 import raid24contribution.statespace_exploration.some_variables_implementation.SomeVariablesExpressionHandler;
 import raid24contribution.statespace_exploration.standard_implementations.InformationHandler;
 import raid24contribution.statespace_exploration.standard_implementations.LocalVariable;
@@ -57,43 +57,41 @@ import raid24contribution.util.WrappedSCFunction;
  * @param <ValueT> the type of abstracted value used in the exploration
  */
 public class PdgInformationHandler<ValueT extends AbstractedValue<ValueT, ?, ?>>
-implements InformationHandler<PdgInformation, ValueT> {
-
+        implements InformationHandler<PdgInformation, ValueT> {
+    
     private ThreadLocal<List<EvaluationLocation>> announcedLocation;
-
+    
     public PdgInformationHandler() {
         this.announcedLocation = new ThreadLocal<>();
     }
-
+    
     protected List<EvaluationLocation> getAnnouncedLocation() {
         return this.announcedLocation.get();
     }
-
+    
     @Override
     public PdgInformation getNeutralInformation() {
         return new PdgInformation();
     }
-
+    
     @Override
     public <LocalStateT extends LocalState<LocalStateT, ValueT>> void announceEvaluation(Expression expression,
-            TransitionResult<?, ?, ?, PdgInformation, ?> currentState,
-            LocalStateT localState) {
+            TransitionResult<?, ?, ?, PdgInformation, ?> currentState, LocalStateT localState) {
         if (!isRelevant(expression, localState.getTopOfStack().getComingFrom())) {
             return;
         }
-
+        
         // since handleExpressionEvaluation is only called after the small step, the then "current"
         // evaluation location is not that of the evaluated expression. store the real one so that it can be
         // retrieved if necessary
-        List<EvaluationLocation> stack =
-                localState.getExecutionStack().stream().map(EvaluationContext::toLocation)
+        List<EvaluationLocation> stack = localState.getExecutionStack().stream().map(EvaluationContext::toLocation)
                 .collect(Collectors.toCollection(ArrayList::new));
         for (EvaluationLocation location : stack) {
             location.lock();
         }
         this.announcedLocation.set(stack);
     }
-
+    
     /**
      * Returns whether or not the given expression when coming from the given child is (or might be)
      * relevant to the PDG.
@@ -111,7 +109,7 @@ implements InformationHandler<PdgInformation, ValueT> {
             return comingFrom == -2;
         }
         boolean endOfExpression = comingFrom == expression.getNumOfChildren() - 1;
-
+        
         if (expression instanceof SCVariableExpression ve) {
             return true;
         }
@@ -131,37 +129,37 @@ implements InformationHandler<PdgInformation, ValueT> {
         if (expression instanceof EventNotificationExpression ee && endOfExpression) {
             return true;
         }
-
+        
         if (comingFrom >= 0 && comingFrom < expression.getNumOfChildren()
                 && expression.getChild(comingFrom) instanceof FunctionCallExpression fe
                 && fe.getFunction().hasReturnType() && !isTopOfStatement(fe)) {
             return true;
         }
-
+        
         if (expression.getParent() != null && comingFrom == -1) {
             int controllingIndex = getControllingIndex(expression, 1); // quite hacky: 1 never gives special case
             if (controllingIndex != -1 && expression == expression.getParent().getChild(controllingIndex)) {
                 return true;
             }
         }
-
+        
         if (expression instanceof ReturnExpression re) {
             return comingFrom == 0;
         }
-
+        
         if (expression.getParent() instanceof FunctionCallExpression fe) {
             return endOfExpression;
         }
-
+        
         if (expression.getParent() instanceof AccessExpression ae) {
             if (ae.getLeft() == expression && ae.getRight() instanceof FunctionCallExpression fe) {
                 return endOfExpression;
             }
         }
-
+        
         return false;
     }
-
+    
     /**
      * Returns a copy of the given location list with the last location trimmed by
      * {@link #trimLocation(EvaluationLocation, Expression)}.
@@ -176,7 +174,7 @@ implements InformationHandler<PdgInformation, ValueT> {
         result.forEach(EvaluationLocation::lock);
         return Collections.unmodifiableList(result);
     }
-
+    
     /**
      * Discards indices from {@link EvaluationLocation#getExpressionIndices()} until
      * {@link #formsOwnNode(Expression)} is true for the expression indicated by the location.
@@ -195,7 +193,7 @@ implements InformationHandler<PdgInformation, ValueT> {
         expression = expression.getParent();
         return trimLocation(location, expression);
     }
-
+    
     /**
      * Returns whether or not the given expression corresponds to its own node in the PDG, in contrast
      * to beeing subsumed in its parent's (or further ancestor's) node.
@@ -219,7 +217,7 @@ implements InformationHandler<PdgInformation, ValueT> {
         }
         return isTopOfStatement(expression);
     }
-
+    
     /**
      * Returns whether or not the given expression is the top of a statement, i.e. the topmost
      * expression ended by a semicolon or forming the conditional of some control structure.
@@ -231,7 +229,7 @@ implements InformationHandler<PdgInformation, ValueT> {
         if (expression.getParent() == null) {
             return true;
         }
-
+        
         if (expression.getParent() instanceof SwitchExpression) {
             return true;
         } else if (expression.getParent() instanceof CaseExpression) {
@@ -243,14 +241,14 @@ implements InformationHandler<PdgInformation, ValueT> {
         } else if (expression.getParent() instanceof ExpressionBlock) {
             return true;
         }
-
+        
         if (expression instanceof FunctionCallExpression fe && expression.getParent() instanceof AccessExpression ae
                 && fe == ae.getRight()) {
             return isTopOfStatement(ae);
         }
         return false;
     }
-
+    
     @Override
     public <LocalStateT extends LocalState<LocalStateT, ValueT>> PdgInformation handleExpressionEvaluation(
             Expression evaluated, int comingFrom, TransitionResult<?, ?, ?, PdgInformation, ?> resultingState,
@@ -260,13 +258,13 @@ implements InformationHandler<PdgInformation, ValueT> {
          * added accordingly and finally control dependencies computed. All the while, necessary bookkeeping
          * takes place.
          */
-
+        
         if (!isRelevant(evaluated, comingFrom)) {
             return resultingState.transitionInformation();
         }
-
+        
         PdgInformation currentInfo = resultingState.transitionInformation().unlockedVersion();
-
+        
         // end of code reached
         if (evaluated == null) {
             assert comingFrom == -2;
@@ -274,10 +272,7 @@ implements InformationHandler<PdgInformation, ValueT> {
             currentInfo.getReachingDefs().keySet().removeIf(variable -> variable instanceof LocalVariable<?>);
             return currentInfo;
         }
-
-        // TODO: remove local variables from reaching defs after end of block (not function) where they are
-        // in scope
-
+        
         boolean evaluationFinished = comingFrom == evaluated.getNumOfChildren() - 1;
         List<EvaluationLocation> currentLocation = this.announcedLocation.get();
         List<EvaluationLocation> trimmedLocation = trimLocation(currentLocation, evaluated);
@@ -289,9 +284,9 @@ implements InformationHandler<PdgInformation, ValueT> {
         Set<Variable<?, ?>> variablesWritten =
                 localState.getStateInformation(SomeVariablesExpressionHandler.VARIABLES_WRITTEN_KEY);
         variablesWritten = new LinkedHashSet<>(variablesWritten == null ? Set.of() : variablesWritten);
-
+        
         PdgNode currentNode = null;
-
+        
         if (evaluationFinished && evaluated.getParent() instanceof FunctionCallExpression fe) {
             // parameter evaluated, add variable representing it as written
             List<WrappedSCFunction> stackTrace = localState.getStackTrace();
@@ -303,25 +298,24 @@ implements InformationHandler<PdgInformation, ValueT> {
                 // special case for functions with variable number of parameters
                 paramVar = new LocalVariable<>(stackTrace, indexOfChild);
             } else if (fe.getFunction().getParameters().size() != fe.getNumOfChildren()) {
-                // TODO look at all special cases
                 paramVar = new LocalVariable<>(stackTrace, indexOfChild);
             } else {
                 SCParameter param = fe.getFunction().getParameters().get(indexOfChild);
                 paramVar = new LocalVariable<>(stackTrace, param.getVar());
             }
-
+            
             variablesWritten.add(paramVar);
         }
-
-        if (evaluationFinished && evaluated.getParent() instanceof AccessExpression ae
-                && ae.getLeft() == evaluated && ae.getRight() instanceof FunctionCallExpression fe) {
+        
+        if (evaluationFinished && evaluated.getParent() instanceof AccessExpression ae && ae.getLeft() == evaluated
+                && ae.getRight() instanceof FunctionCallExpression fe) {
             // new "this" for function call evaluated, add variable representing "this" for the called function
             // as written
             List<WrappedSCFunction> stackTrace = localState.getStackTrace();
             stackTrace.add(wrap(fe.getFunction()));
             variablesWritten.add(LocalVariable.getThisVariable(stackTrace));
         }
-
+        
         // handle function calls, with special cases first
         if (evaluated instanceof FunctionCallExpression fe && comingFrom == fe.getParameters().size() - 1
                 && fe.getFunction().getName().equals("request_update")) {
@@ -338,19 +332,19 @@ implements InformationHandler<PdgInformation, ValueT> {
             // were already handled earlier) and add variable representing "this" for the called function
             // as read
             variablesWritten = new LinkedHashSet<>();
-
+            
             List<WrappedSCFunction> stackTrace = localState.getStackTrace();
             assert stackTrace.getLast().equals(wrap(fe.getFunction()));
-
+            
             if (!(fe.getParent() instanceof AccessExpression ae && ae.getRight() == fe)) {
                 // current "this" becomes new "this"
                 variablesRead.add(LocalVariable.getThisVariable(stackTrace.subList(0, stackTrace.size() - 1)));
                 variablesWritten.add(LocalVariable.getThisVariable(stackTrace));
             }
-
+            
             variablesRead.add(LocalVariable.getThisVariable(stackTrace));
         }
-
+        
         if (evaluated instanceof FunctionCallExpression fe && evaluationFinished) {
             // return from function call, remove local variables no longer in scope from reaching definitions
             LocalVariable<?> protectedResultVar;
@@ -365,16 +359,16 @@ implements InformationHandler<PdgInformation, ValueT> {
                 protectedResultVar = null;
                 sizeOfReturnedFromStack = localState.getExecutionStack().size() + 1;
             }
-            currentInfo.getReachingDefs().keySet().removeIf(
-                    variable -> isVariableOutOfScope(variable, sizeOfReturnedFromStack, protectedResultVar));
+            currentInfo.getReachingDefs().keySet()
+                    .removeIf(variable -> isVariableOutOfScope(variable, sizeOfReturnedFromStack, protectedResultVar));
         }
-
+        
         if (evaluated instanceof ReturnExpression re && comingFrom == 0) {
             // non-empty return statement writes result of function call
             List<WrappedSCFunction> stackTrace = currentLocation.stream().map(EvaluationLocation::getFunction).toList();
             variablesWritten.add(LocalVariable.getResultVariable(stackTrace));
         }
-
+        
         LocalVariable<?> usedReturnValue = null;
         if (comingFrom >= 0 && comingFrom < evaluated.getNumOfChildren()
                 && evaluated.getChild(comingFrom) instanceof FunctionCallExpression fe
@@ -386,25 +380,25 @@ implements InformationHandler<PdgInformation, ValueT> {
             usedReturnValue = LocalVariable.getResultVariable(stackTrace);
             variablesRead.add(usedReturnValue);
         }
-
+        
         if (evaluationFinished && evaluated instanceof EventNotificationExpression ee) {
             currentNode = handleNotify(currentInfo, currentNode, variablesRead, variablesWritten, ee, comingFrom,
                     resultingState, localState, currentLocation);
         }
-
+        
         // ========== read and written variables have been determined ========== //
-
+        
         if (!variablesRead.isEmpty()) {
             // if variables were read, add the corresponding data dependencies
-            currentNode = currentInfo.getNodes()
-                    .computeIfAbsent(new PdgNodeId(NodeType.STATEMENT, trimmedStatementId), PdgNode::new);
-
+            currentNode = currentInfo.getNodes().computeIfAbsent(new PdgNodeId(NodeType.STATEMENT, trimmedStatementId),
+                    PdgNode::new);
+            
             for (Variable<?, ?> read : variablesRead) {
                 Set<PdgNode> writtenAt = currentInfo.getReachingDefs().get(read);
                 if (writtenAt == null) {
                     writtenAt = nullSet();
                 }
-
+                
                 for (PdgNode sourceNode : writtenAt) {
                     if (sourceNode == null) {
                         // a null value means written before the current transition, so create an in node for that
@@ -417,26 +411,26 @@ implements InformationHandler<PdgInformation, ValueT> {
                 }
             }
         }
-
+        
         if (usedReturnValue != null) {
             // the return value is only in scope for the expression directly using it and removed from the
             // reaching definitions afterwards
             currentInfo.getReachingDefs().remove(usedReturnValue);
         }
-
+        
         if (!variablesWritten.isEmpty()) {
             // if variabes were written, insert a node (to capture control dependencies) and add it the reaching
             // definitions
-            currentNode = currentInfo.getNodes()
-                    .computeIfAbsent(new PdgNodeId(NodeType.STATEMENT, trimmedStatementId), PdgNode::new);
-
+            currentNode = currentInfo.getNodes().computeIfAbsent(new PdgNodeId(NodeType.STATEMENT, trimmedStatementId),
+                    PdgNode::new);
+            
             for (Variable<?, ?> written : variablesWritten) {
                 currentInfo.getReachingDefs().put(written, new LinkedHashSet<>(Set.of(currentNode)));
             }
         }
-
+        
         // ========== now it's time for control dependencies ========== //
-
+        
         // insert a node if this statement might be controlling other statements (e.g. a loop condition)
         Expression parent = evaluated.getParent();
         int controllingIndex = getControllingIndex(evaluated, 1); // quite hacky: 1 never gives special case
@@ -445,26 +439,26 @@ implements InformationHandler<PdgInformation, ValueT> {
             currentNode = currentInfo.getNodes().computeIfAbsent(new PdgNodeId(NodeType.STATEMENT, trimmedStatementId),
                     PdgNode::new);
         }
-
+        
         if (currentNode != null && comingFrom == evaluated.getNumOfChildren() - 1
                 && evaluated.getParent() instanceof FunctionCallExpression fe) {
             // add member edge for function call parameters
-
+            
             List<EvaluationLocation> callNodeLocation = new ArrayList<>(this.announcedLocation.get());
             EvaluationLocation topLocation = callNodeLocation.removeLast().unlockedClone();
             topLocation.getExpressionIndices().removeLast();
             callNodeLocation.add(topLocation);
             StatementId callNodeId = new StatementId(localState.getInitialThisValue(), callNodeLocation);
-
+            
             PdgNode callNode =
                     currentInfo.getNodes().computeIfAbsent(new PdgNodeId(NodeType.STATEMENT, callNodeId), PdgNode::new);
             PdgEdge edge = new PdgEdge(EdgeType.MEMBER, callNode, currentNode, false);
             edge.insert();
         } else if (currentNode != null && !currentNode.hasControlDependency()) {
             // add control dependence edges
-
+            
             Set<List<EvaluationLocation>> controllingLocations = getControlling(evaluated, currentLocation);
-
+            
             if (controllingLocations.isEmpty()) {
                 PdgNode controllingNode = currentInfo.getCurrentEntryNode();
                 PdgEdge edge = new PdgEdge(EdgeType.CONTROL, controllingNode, currentNode, false);
@@ -483,10 +477,10 @@ implements InformationHandler<PdgInformation, ValueT> {
                 }
             }
         }
-
+        
         return currentInfo;
     }
-
+    
     /**
      * Returns the set of locations (as call stacks) of all expression controlling the given expression.
      *
@@ -503,7 +497,7 @@ implements InformationHandler<PdgInformation, ValueT> {
          * case labels which are controlled by the switch expression as well as the case label above them if
          * fall-through is possbible.
          */
-
+        
         EvaluationLocation currentLocation = location.getLast();
         Set<List<EvaluationLocation>> result = new LinkedHashSet<>();
         while (true) {
@@ -515,11 +509,11 @@ implements InformationHandler<PdgInformation, ValueT> {
                     result.add(null);
                     return result;
                 }
-
+                
                 // the controlling location is the function call
                 List<EvaluationLocation> controllingLoc = location.subList(0, location.size() - 1).stream()
                         .map(EvaluationLocation::unlockedClone).collect(Collectors.toCollection(ArrayList::new));
-
+                
                 controllingLoc.set(controllingLoc.size() - 1,
                         trimLocation(controllingLoc.getLast(), controllingLoc.getLast().getNextExpression()));
                 controllingLoc.forEach(EvaluationLocation::lock);
@@ -528,17 +522,18 @@ implements InformationHandler<PdgInformation, ValueT> {
             }
             int currentIndex = currentLocation.getExpressionIndices().getLast();
             int controllingIndex = getControllingIndex(expression, currentIndex);
-
+            
             if (expression instanceof CaseExpression ce && currentIndex >= 2) {
                 // case expressions need special treatment because of potential fall-through
                 CaseExpression before = (CaseExpression) ((SwitchExpression) ce.getParent()).getChild(currentIndex - 1);
-
+                
                 Expression last = before.getBody().getLast();
                 while (last instanceof ExpressionBlock eb) {
                     last = eb.getBlock().getLast();
                 }
-
-                if (!(last instanceof BreakExpression || last instanceof ReturnExpression || last instanceof ContinueExpression)) {
+                
+                if (!(last instanceof BreakExpression || last instanceof ReturnExpression
+                        || last instanceof ContinueExpression)) {
                     // fall-through is possible, add before as a controlling location
                     List<EvaluationLocation> controllingLoc = location.stream().map(EvaluationLocation::unlockedClone)
                             .collect(Collectors.toCollection(ArrayList::new));
@@ -548,7 +543,7 @@ implements InformationHandler<PdgInformation, ValueT> {
                     result.add(controllingLoc);
                 }
             }
-
+            
             if (controllingIndex == -1) {
                 // the current parent has no controlling child (with regards to the current expression), move
                 // further up
@@ -557,7 +552,7 @@ implements InformationHandler<PdgInformation, ValueT> {
                 expression = expression.getParent();
                 continue;
             }
-
+            
             if (controllingIndex == currentIndex) {
                 // the current expression is the controlling child of it's parent (with regards to itself), add it
                 // as a controlling location and move further up.
@@ -565,17 +560,16 @@ implements InformationHandler<PdgInformation, ValueT> {
                         .collect(Collectors.toCollection(ArrayList::new));
                 controllingLoc.forEach(EvaluationLocation::lock);
                 result.add(controllingLoc);
-
+                
                 currentLocation = currentLocation.unlockedVersion();
                 currentLocation.getExpressionIndices().removeLast();
                 expression = expression.getParent();
                 continue;
             }
-
+            
             // add the current parent's controlling child as the controlling location and return
-            List<EvaluationLocation> controllingLoc =
-                    location.subList(0, location.size() - 1).stream().map(EvaluationLocation::unlockedClone)
-                    .collect(Collectors.toCollection(ArrayList::new));
+            List<EvaluationLocation> controllingLoc = location.subList(0, location.size() - 1).stream()
+                    .map(EvaluationLocation::unlockedClone).collect(Collectors.toCollection(ArrayList::new));
             currentLocation = currentLocation.unlockedVersion();
             currentLocation.getExpressionIndices().set(currentLocation.getExpressionIndices().size() - 1,
                     controllingIndex);
@@ -585,7 +579,7 @@ implements InformationHandler<PdgInformation, ValueT> {
             return result;
         }
     }
-
+    
     /**
      * Returns the index of the expression controlling the given expression within the expression's
      * parent.
@@ -622,7 +616,7 @@ implements InformationHandler<PdgInformation, ValueT> {
             return -1;
         }
     }
-
+    
     /**
      * Returns whether the given variable is out of scope after returning from a stack of the given
      * size.
@@ -638,7 +632,7 @@ implements InformationHandler<PdgInformation, ValueT> {
         return variable instanceof LocalVariable<?> lv && lv.stack().size() >= sizeOfReturnedFromStack
                 && !lv.equals(protectedVariable);
     }
-
+    
     /**
      * Called during {@link #handleExpressionEvaluation(Expression, int, TransitionResult, LocalState)}
      * when the encountered expression is a {@link EventNotificationExpression} (and the evaluation has
@@ -651,7 +645,7 @@ implements InformationHandler<PdgInformation, ValueT> {
      * 
      * @implSpec This implementation simply inserts a new corresponding node if one isn't yet present
      *           and returns it.
-     * 
+     *           
      * @param <LocalStateT> the type of local state provided
      * @param currentInfo the (unlocked) current PdgInformation
      * @param currentNode the node corresponding to the expression if it was already determined, or null
@@ -666,10 +660,9 @@ implements InformationHandler<PdgInformation, ValueT> {
      * @return the node corresponding to that expression
      */
     protected <LocalStateT extends LocalState<LocalStateT, ValueT>> PdgNode handleNotify(PdgInformation currentInfo,
-            PdgNode currentNode, Set<Variable<?, ?>> variablesRead,
-            Set<Variable<?, ?>> variablesWritten,
-            EventNotificationExpression expression, int comingFrom, TransitionResult<?, ?, ?, PdgInformation, ?> resultingState,
-            LocalStateT localState,
+            PdgNode currentNode, Set<Variable<?, ?>> variablesRead, Set<Variable<?, ?>> variablesWritten,
+            EventNotificationExpression expression, int comingFrom,
+            TransitionResult<?, ?, ?, PdgInformation, ?> resultingState, LocalStateT localState,
             List<EvaluationLocation> currentLocation) {
         if (currentNode != null) {
             return currentNode;
@@ -678,7 +671,7 @@ implements InformationHandler<PdgInformation, ValueT> {
                 new PdgNodeId(NodeType.STATEMENT, new StatementId(localState.getInitialThisValue(), currentLocation)),
                 PdgNode::new);
     }
-
+    
     /**
      * Called during {@link #handleExpressionEvaluation(Expression, int, TransitionResult, LocalState)}
      * when the encountered expression is a {@link FunctionCallExpression} to wait (and all parameters
@@ -691,7 +684,7 @@ implements InformationHandler<PdgInformation, ValueT> {
      * 
      * @implSpec This implementation simply inserts a new corresponding node if one isn't yet present
      *           and returns it.
-     * 
+     *           
      * @param <LocalStateT> the type of local state provided
      * @param currentInfo the (unlocked) current PdgInformation
      * @param currentNode the node corresponding to the expression if it was already determined, or null
@@ -706,10 +699,9 @@ implements InformationHandler<PdgInformation, ValueT> {
      * @return the node corresponding to that expression
      */
     protected <LocalStateT extends LocalState<LocalStateT, ValueT>> PdgNode handleWait(PdgInformation currentInfo,
-            PdgNode currentNode, Set<Variable<?, ?>> variablesRead,
-            Set<Variable<?, ?>> variablesWritten,
-            FunctionCallExpression expression, int comingFrom, TransitionResult<?, ?, ?, PdgInformation, ?> resultingState,
-            LocalStateT localState,
+            PdgNode currentNode, Set<Variable<?, ?>> variablesRead, Set<Variable<?, ?>> variablesWritten,
+            FunctionCallExpression expression, int comingFrom,
+            TransitionResult<?, ?, ?, PdgInformation, ?> resultingState, LocalStateT localState,
             List<EvaluationLocation> currentLocation) {
         if (currentNode != null) {
             return currentNode;
@@ -718,7 +710,7 @@ implements InformationHandler<PdgInformation, ValueT> {
                 new PdgNodeId(NodeType.STATEMENT, new StatementId(localState.getInitialThisValue(), currentLocation)),
                 PdgNode::new);
     }
-
+    
     /**
      * Called during {@link #handleExpressionEvaluation(Expression, int, TransitionResult, LocalState)}
      * when the encountered expression is a {@link FunctionCallExpression} to request_update (and all
@@ -731,7 +723,7 @@ implements InformationHandler<PdgInformation, ValueT> {
      * 
      * @implSpec This implementation simply inserts a new corresponding node if one isn't yet present
      *           and returns it.
-     * 
+     *           
      * @param <LocalStateT> the type of local state provided
      * @param currentInfo the (unlocked) current PdgInformation
      * @param currentNode the node corresponding to the expression if it was already determined, or null
@@ -757,11 +749,11 @@ implements InformationHandler<PdgInformation, ValueT> {
                 new PdgNodeId(NodeType.STATEMENT, new StatementId(localState.getInitialThisValue(), currentLocation)),
                 PdgNode::new);
     }
-
+    
     @Override
     public PdgInformation finalizeInformation(PdgInformation currentInfo) {
         currentInfo = currentInfo.unlockedVersion();
-
+        
         // introduce out nodes for all reaching definitions which are still in scope
         for (Entry<Variable<?, ?>, Set<PdgNode>> reachingDef : currentInfo.getReachingDefs().entrySet()) {
             PdgNode outNode = new PdgNode(NodeType.OUT, reachingDef.getKey());
@@ -770,7 +762,7 @@ implements InformationHandler<PdgInformation, ValueT> {
                 // cannot have been written
                 continue;
             }
-
+            
             for (PdgNode definedAt : reachingDef.getValue()) {
                 if (definedAt == null) {
                     definedAt = currentInfo.getNodes().computeIfAbsent(new PdgNodeId(NodeType.IN, reachingDef.getKey()),
@@ -779,29 +771,30 @@ implements InformationHandler<PdgInformation, ValueT> {
                 new PdgEdge(EdgeType.DATA, definedAt, outNode, true);
             }
         }
-
+        
         // reaching definitions are irrelevant after the transition is finished
         currentInfo.getReachingDefs().clear();
-
+        
         currentInfo.lock();
         return currentInfo;
     }
-
+    
     @Override
     public <LocalStateT extends LocalState<LocalStateT, ValueT>> PdgInformation handleStartOfCode(
             TransitionResult<?, ?, ?, PdgInformation, ?> currentState, LocalStateT localState) {
         PdgInformation currentInformation = currentState.transitionInformation().unlockedVersion();
-
+        
         // insert an entry node for the entered code block, identified by the initial this value and the
         // location stack
-
-        List<EvaluationLocation> entryLocation = localState.getExecutionStack().stream().map(EvaluationContext::toLocation).toList();
+        
+        List<EvaluationLocation> entryLocation =
+                localState.getExecutionStack().stream().map(EvaluationContext::toLocation).toList();
         if (localState.getTopOfStack().getComingFrom() != -1) {
             // the start of the evaluation is the next expression targetted
             entryLocation.getLast().getExpressionIndices().add(localState.getTopOfStack().getComingFrom() + 1);
         }
         entryLocation.forEach(EvaluationLocation::lock);
-
+        
         PdgNode entryNode =
                 new PdgNode(NodeType.ENTRY, new StatementId(localState.getInitialThisValue(), entryLocation));
         assert !currentInformation.getNodes().containsKey(entryNode.getId());
@@ -809,24 +802,24 @@ implements InformationHandler<PdgInformation, ValueT> {
         currentInformation.setCurrentEntryNode(entryNode);
         return currentInformation;
     }
-
+    
     @Override
     public PdgInformation handleProcessWaitedForDelta(AnalyzedProcess<?, ?, ?, ?> process,
             ProcessState<?, ValueT> resultingState, PdgInformation currentInformation) {
         return currentInformation;
     }
-
+    
     @Override
     public PdgInformation handleProcessWaitedForTime(AnalyzedProcess<?, ?, ?, ?> process,
             ProcessState<?, ValueT> resultingState, PdgInformation currentInformation) {
         return currentInformation;
     }
-
+    
     @Override
     public PdgInformation handleProcessWaitedForEvents(AnalyzedProcess<?, ?, ?, ?> process,
             ProcessState<?, ValueT> resultingState, Set<Event> events, EventBlocker blockerBefore,
             PdgInformation currentInformation) {
         return currentInformation;
     }
-
+    
 }

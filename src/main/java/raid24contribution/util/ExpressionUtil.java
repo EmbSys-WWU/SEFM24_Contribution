@@ -4,7 +4,7 @@ import raid24contribution.sc_model.expressions.Expression;
 import raid24contribution.sc_model.expressions.ForLoopExpression;
 
 public class ExpressionUtil {
-
+    
     /**
      * Returns the child of an expression that is evaluated at the given index. This might differ from
      * the result of {@link Expression#getChild(int)} if the evaluation order does not match the
@@ -32,9 +32,8 @@ public class ExpressionUtil {
                 throw new IndexOutOfBoundsException(index);
             }
         }
-
+        
         return expression.getChild(index);
-        // TODO: add special cases where necessary
     }
-
+    
 }

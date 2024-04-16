@@ -60,8 +60,11 @@ import raid24contribution.statespace_exploration.AnalyzedProcess;
 import raid24contribution.statespace_exploration.DeltaTimeBlocker;
 import raid24contribution.statespace_exploration.EvaluationContext;
 import raid24contribution.statespace_exploration.EventBlocker;
+import raid24contribution.statespace_exploration.EventBlocker.Event;
 import raid24contribution.statespace_exploration.GlobalState;
 import raid24contribution.statespace_exploration.LocalState;
+import raid24contribution.statespace_exploration.LocalState.StateInformation;
+import raid24contribution.statespace_exploration.LocalState.StateInformationKey;
 import raid24contribution.statespace_exploration.ProcessState;
 import raid24contribution.statespace_exploration.ProcessTransitionResult;
 import raid24contribution.statespace_exploration.RealTimedBlocker;
@@ -69,9 +72,6 @@ import raid24contribution.statespace_exploration.Scheduler;
 import raid24contribution.statespace_exploration.TimedBlocker;
 import raid24contribution.statespace_exploration.TransitionInformation;
 import raid24contribution.statespace_exploration.TransitionResult;
-import raid24contribution.statespace_exploration.EventBlocker.Event;
-import raid24contribution.statespace_exploration.LocalState.StateInformation;
-import raid24contribution.statespace_exploration.LocalState.StateInformationKey;
 import raid24contribution.util.CollectionUtil;
 import raid24contribution.util.WrappedExpression;
 import raid24contribution.util.WrappedSCClassInstance;
@@ -88,14 +88,16 @@ import raid24contribution.util.WrappedSCPortInstance;
  *
  * @param <GlobalStateT> the type of global state abstraction which this implementation can handle
  * @param <ProcessStateT> the type of process state abstraction which this implementation can handle
- * @param <LocalStateT> the type of local scheduler state abstraction which this implementation can handle
- *        (which may or may not be P)
+ * @param <LocalStateT> the type of local scheduler state abstraction which this implementation can
+ *        handle (which may or may not be P)
  * @param <ValueT> the type of abstracted value which this implementation can handle
- * @param <TransitionResultT> the type of transition result which this implementation produces and uses internally
- * @param <InfoT> the type of additional transition information which this implementation can provide.
+ * @param <TransitionResultT> the type of transition result which this implementation produces and
+ *        uses internally
+ * @param <InfoT> the type of additional transition information which this implementation can
+ *        provide.
  */
 public abstract class ExpressionCrawler<GlobalStateT extends GlobalState<GlobalStateT>, ProcessStateT extends ProcessState<ProcessStateT, ValueT>, LocalStateT extends LocalState<LocalStateT, ValueT>, TransitionResultT extends TransitionResult<TransitionResultT, GlobalStateT, ProcessStateT, InfoT, ProcessT>, ValueT extends AbstractedValue<ValueT, ?, ?>, InfoT extends ComposableTransitionInformation<InfoT>, ProcessT extends AnalyzedProcess<ProcessT, GlobalStateT, ProcessStateT, InfoT>> {
-
+    
     /**
      * Exception indicating that the current state information ins insufficiently precise for the
      * analysis to continue.
@@ -104,27 +106,27 @@ public abstract class ExpressionCrawler<GlobalStateT extends GlobalState<GlobalS
      *
      */
     public static class InsufficientPrecisionException extends RuntimeException {
-
+        
         private static final long serialVersionUID = -1470717330359116133L;
-
+        
         public InsufficientPrecisionException() {
             super();
         }
-
+        
         public InsufficientPrecisionException(String message, Throwable cause) {
             super(message, cause);
         }
-
+        
         public InsufficientPrecisionException(String message) {
             super(message);
         }
-
+        
         public InsufficientPrecisionException(Throwable cause) {
             super(cause);
         }
-
+        
     }
-
+    
     /**
      * Record capturing the intermediate result of one expression step.
      * 
@@ -141,42 +143,39 @@ public abstract class ExpressionCrawler<GlobalStateT extends GlobalState<GlobalS
      */
     public static record SmallStepResult<G extends GlobalState<G>, P extends ProcessState<P, ?>, T extends ComposableTransitionInformation<T>, R extends TransitionResult<R, G, P, T, ?>>(
             List<R> transitions, boolean endOfStep, boolean possiblyRepeatingStep) {}
-
-    // TODO: this is not very elegant and not totally correct either (because the value of a variable
-    // used in a condition can change later on). it's also not necessary for my (Jonas) research. is it
-    // good for anything else? or should it go?
+    
     public static class ExecutionConditions<B extends AbstractedValue<B, B, Boolean>>
-    implements StateInformation<ExecutionConditions<B>> {
-
+            implements StateInformation<ExecutionConditions<B>> {
+        
         // one map per entry on call stack
         private List<SequencedMap<WrappedExpression, B>> conditions;
-
+        
         public ExecutionConditions() {
             this.conditions = new ArrayList<>();
             addCall();
         }
-
+        
         public ExecutionConditions(ExecutionConditions<B> copyOf) {
             this.conditions = new ArrayList<>(copyOf.conditions.size());
             for (int i = 0; i < copyOf.conditions.size(); i++) {
                 this.conditions.add(new LinkedHashMap<>(copyOf.conditions.get(i)));
             }
         }
-
+        
         @Override
         public ExecutionConditions<B> copy() {
             return new ExecutionConditions<>(this);
         }
-
+        
         public void addCall() {
             this.conditions.add(new LinkedHashMap<>());
         }
-
+        
         public void add(Expression expression, B condition) {
             this.conditions.getLast().merge(wrap(expression), condition,
                     (b1, b2) -> b1.getAbstractedLogic().and(b1, b2));
         }
-
+        
         // inclusive
         public void removeUntil(Expression expression) {
             WrappedExpression we = wrap(expression);
@@ -190,7 +189,7 @@ public abstract class ExpressionCrawler<GlobalStateT extends GlobalState<GlobalS
                 removed = this.conditions.getLast().pollLastEntry().getKey();
             } while (!we.equals(removed));
         }
-
+        
         public void removeCall() {
             if (!this.conditions.isEmpty()) {
                 this.conditions.removeLast();
@@ -199,30 +198,30 @@ public abstract class ExpressionCrawler<GlobalStateT extends GlobalState<GlobalS
                 addCall();
             }
         }
-
+        
         public List<B> getConditions() {
             return this.conditions.stream().flatMap(map -> map.values().stream()).toList();
         }
-
+        
         @Override
         public String toString() {
             return this.conditions.toString();
         }
-
+        
     }
-
+    
     private static final StateInformationKey<ExecutionConditions<?>> EXECUTION_CONDITION_KEY =
             new StateInformationKey<>();
-
+    
     @SuppressWarnings({"unchecked", "rawtypes"})
     public static <B extends AbstractedValue<B, B, Boolean>> StateInformationKey<ExecutionConditions<B>> executionConditionsKey() {
         return (StateInformationKey) EXECUTION_CONDITION_KEY;
     }
-
+    
     protected final SCSystem scSystem;
     protected final Scheduler<GlobalStateT, ProcessStateT, InfoT, ProcessT> scheduler;
     protected final InformationHandler<InfoT, ValueT> informationHandler;
-
+    
     /**
      * Creates a new ExpressionCralwer analyzing the given SystemC design and using the given scheduler.
      * <p>
@@ -243,12 +242,12 @@ public abstract class ExpressionCrawler<GlobalStateT extends GlobalState<GlobalS
                         "scheduler must be non-null if this is not a scheduler implementation");
             }
         }
-
+        
         this.scSystem = scSystem;
         this.scheduler = scheduler;
         this.informationHandler = informationHandler;
     }
-
+    
     /**
      * Returns the SysCIR SystemC design analyzed by this crawler.
      *
@@ -257,7 +256,7 @@ public abstract class ExpressionCrawler<GlobalStateT extends GlobalState<GlobalS
     public SCSystem getSCSystem() {
         return this.scSystem;
     }
-
+    
     /**
      * Returns the scheduler that is used in the state space exploration.
      *
@@ -266,7 +265,7 @@ public abstract class ExpressionCrawler<GlobalStateT extends GlobalState<GlobalS
     public Scheduler<GlobalStateT, ProcessStateT, InfoT, ProcessT> getScheduler() {
         return this.scheduler;
     }
-
+    
     /**
      * Returns the information handler that provides {@link TransitionInformation} for this crawler.
      *
@@ -275,7 +274,7 @@ public abstract class ExpressionCrawler<GlobalStateT extends GlobalState<GlobalS
     public InformationHandler<InfoT, ValueT> getInformationHandler() {
         return this.informationHandler;
     }
-
+    
     /**
      * Returns a transition information representing no information, i.e. one that is neutral with
      * respect to {@link ComposableTransitionInformation#compose(ComposableTransitionInformation)}.
@@ -287,7 +286,7 @@ public abstract class ExpressionCrawler<GlobalStateT extends GlobalState<GlobalS
     public InfoT getNeutralInformation() {
         return getInformationHandler().getNeutralInformation();
     }
-
+    
     /**
      * Returns the information describing the small step that just occured.
      * 
@@ -300,10 +299,11 @@ public abstract class ExpressionCrawler<GlobalStateT extends GlobalState<GlobalS
      * @param localState the local part of the result
      * @return the information describing the step
      */
-    InfoT getInformation(Expression evaluated, int comingFrom, TransitionResultT resultingState, LocalStateT localState) {
+    InfoT getInformation(Expression evaluated, int comingFrom, TransitionResultT resultingState,
+            LocalStateT localState) {
         return getInformationHandler().handleExpressionEvaluation(evaluated, comingFrom, resultingState, localState);
     }
-
+    
     /**
      * Creates a SmallStepResult from a list of TransitionResults by getting the new
      * TransitionInformation from the InformationHandler and composing it onto the result.
@@ -317,8 +317,8 @@ public abstract class ExpressionCrawler<GlobalStateT extends GlobalState<GlobalS
      * @return the SmallStepResult, with appropriate TransitionInformation
      */
     public SmallStepResult<GlobalStateT, ProcessStateT, InfoT, TransitionResultT> createSmallStepResult(
-            Expression evaluated, int comingFrom,
-            List<TransitionResultT> resultingStates, boolean endOfStep, boolean possiblyRepeatingStep) {
+            Expression evaluated, int comingFrom, List<TransitionResultT> resultingStates, boolean endOfStep,
+            boolean possiblyRepeatingStep) {
         resultingStates = new ArrayList<>(resultingStates);
         for (int i = 0; i < resultingStates.size(); i++) {
             TransitionResultT resultingState = resultingStates.get(i);
@@ -328,7 +328,7 @@ public abstract class ExpressionCrawler<GlobalStateT extends GlobalState<GlobalS
         }
         return new SmallStepResult<>(resultingStates, endOfStep, possiblyRepeatingStep);
     }
-
+    
     /**
      * Creates a SmallStepResult from a list of TransitionResults by getting the new
      * TransitionInformation from the InformationHandler and composing it onto the result.
@@ -343,15 +343,15 @@ public abstract class ExpressionCrawler<GlobalStateT extends GlobalState<GlobalS
      * @return the SmallStepResult, with appropriate TransitionInformation
      */
     public SmallStepResult<GlobalStateT, ProcessStateT, InfoT, TransitionResultT> createSmallStepResult(
-            Expression evaluated, int comingFrom, TransitionResultT resultingState,
-            LocalStateT localState, boolean endOfStep, boolean possiblyRepeatingStep) {
+            Expression evaluated, int comingFrom, TransitionResultT resultingState, LocalStateT localState,
+            boolean endOfStep, boolean possiblyRepeatingStep) {
         localState = localState == null ? getLocalState(resultingState) : localState;
         return new SmallStepResult<>(
                 List.of(resultingState.replaceTransitionInformation(
                         getInformation(evaluated, comingFrom, resultingState, localState))),
                 endOfStep, possiblyRepeatingStep);
     }
-
+    
     public ProcessTransitionResult<GlobalStateT, ProcessStateT, InfoT, ProcessT> finalizeTransitionResult(
             ProcessTransitionResult<GlobalStateT, ProcessStateT, InfoT, ProcessT> result) {
         result = new ProcessTransitionResult<>(result.resultingState(),
@@ -360,7 +360,7 @@ public abstract class ExpressionCrawler<GlobalStateT extends GlobalState<GlobalS
         result.resultingState().lock();
         return result;
     }
-
+    
     /**
      * Returns the local state covered by this crawler contained in the given state.
      *
@@ -368,21 +368,21 @@ public abstract class ExpressionCrawler<GlobalStateT extends GlobalState<GlobalS
      * @return local state
      */
     public abstract LocalStateT getLocalState(TransitionResultT currentState);
-
+    
     /**
      * Returns an object representing a non-determined value.
      * 
      * @return non-determined value
      */
     public abstract ValueT getNonDeterminedValue();
-
+    
     /**
      * Returns an object representing a determined value.
      * 
      * @return determined value
      */
     public abstract ValueT getDeterminedValue(Object value);
-
+    
     /**
      * Makes a small step in the evaluation, i.e. one step in the abstract syntax tree where every
      * expression is an individual node.
@@ -412,26 +412,26 @@ public abstract class ExpressionCrawler<GlobalStateT extends GlobalState<GlobalS
         EvaluationContext<ValueT> currentLocation =
                 localState.getExecutionStack().get(localState.getExecutionStack().size() - 1);
         int comingFrom = currentLocation.getComingFrom();
-
+        
         if (currentLocation.getExpressionIndices().isEmpty()) {
             return handleFunctionBody(currentState, localState, comingFrom);
         }
-
+        
         Expression nextExpression = currentLocation.getNextExpression();
-
+        
         getInformationHandler().announceEvaluation(nextExpression, currentState, localState);
-
+        
         SmallStepResult<GlobalStateT, ProcessStateT, InfoT, TransitionResultT> result =
                 handleSpecialExpression(currentState, localState, nextExpression, comingFrom);
         if (result != null) {
             return result;
         }
-
+        
         // End of function body
         if (nextExpression == null) {
             return returnFromFunction(currentState, localState, null, comingFrom);
         }
-
+        
         // Constants
         if (nextExpression instanceof ConstantExpression ex) {
             return handleConstantExpression(currentState, localState, ex, comingFrom, ConstantExpression::getValue);
@@ -441,8 +441,7 @@ public abstract class ExpressionCrawler<GlobalStateT extends GlobalState<GlobalS
             return handleConstantExpression(currentState, localState, ex, comingFrom,
                     EnumElementExpression::getEnumElement);
         } else if (nextExpression instanceof SCClassInstanceExpression ex) {
-            return handleConstantExpression(currentState, localState, ex, comingFrom,
-                    e -> wrap(e.getInstance()));
+            return handleConstantExpression(currentState, localState, ex, comingFrom, e -> wrap(e.getInstance()));
         } else if (nextExpression instanceof SCDeltaCountExpression ex) {
             return handleConstantExpression(currentState, localState, ex, comingFrom, x -> DeltaTimeBlocker.INSTANCE);
         } else if (nextExpression instanceof SCPortSCSocketExpression ex) {
@@ -453,7 +452,7 @@ public abstract class ExpressionCrawler<GlobalStateT extends GlobalState<GlobalS
         } else if (nextExpression instanceof TimeUnitExpression ex) {
             return handleConstantExpression(currentState, localState, ex, comingFrom, TimeUnitExpression::getTimeUnit);
         }
-
+        
         // Ignored expressions
         if (nextExpression instanceof AssertionExpression ex) {
             return handleIgnoredExpression(currentState, localState, ex, comingFrom);
@@ -464,7 +463,7 @@ public abstract class ExpressionCrawler<GlobalStateT extends GlobalState<GlobalS
         } else if (nextExpression instanceof SCTimeStampExpression ex) {
             return handleIgnoredExpression(currentState, localState, ex, comingFrom);
         }
-
+        
         // Bottom-up evaluated expressions
         if (nextExpression instanceof AccessExpression ex) {
             return handleBottomUpExpression(currentState, localState, ex, comingFrom);
@@ -493,7 +492,7 @@ public abstract class ExpressionCrawler<GlobalStateT extends GlobalState<GlobalS
         } else if (nextExpression instanceof UnaryExpression ex) {
             return handleBottomUpExpression(currentState, localState, ex, comingFrom);
         }
-
+        
         // Control structures
         if (nextExpression instanceof IfElseExpression ex) {
             return handleIfElseExpression(currentState, localState, ex, comingFrom);
@@ -512,8 +511,7 @@ public abstract class ExpressionCrawler<GlobalStateT extends GlobalState<GlobalS
         } else if (nextExpression instanceof ContinueExpression ex) {
             return handleContinueExpression(currentState, localState, ex, comingFrom);
         }
-        // TODO GoalAnnotation, continue, goto
-
+        
         // Function calls
         if (nextExpression instanceof FunctionCallExpression ex) {
             return handleFunctionCallExpression(currentState, localState, ex, comingFrom);
@@ -524,13 +522,11 @@ public abstract class ExpressionCrawler<GlobalStateT extends GlobalState<GlobalS
         } else if (nextExpression instanceof SCStopExpression ex) {
             return handleSCStopExpression(currentState, localState, ex, comingFrom);
         }
-
+        
         // Other types of expressions
         return handleOtherExpression(currentState, localState, nextExpression, comingFrom);
-
-        // TODO how to deal with SocketFunctionCallExpression? simply "not supported" for now?
     }
-
+    
     /**
      * Returns the next expression to be executed given the execution stack.
      *
@@ -540,7 +536,7 @@ public abstract class ExpressionCrawler<GlobalStateT extends GlobalState<GlobalS
     public Expression getNextExpression(List<EvaluationContext<ValueT>> executionStack) {
         return executionStack.getLast().getNextExpression();
     }
-
+    
     /**
      * Returns the abstracted evaluation result of the child of the currently evaluated expression at
      * the given index.
@@ -552,7 +548,7 @@ public abstract class ExpressionCrawler<GlobalStateT extends GlobalState<GlobalS
     public ValueT getValueOfChild(TransitionResultT currentState, LocalStateT localState, int indexOfChild) {
         return getValueOfExpression(currentState, localState, 0, indexOfChild);
     }
-
+    
     /**
      * Returns the abstracted evaluation result of a child of some expression that has not yet been
      * fully evaluated.
@@ -569,7 +565,7 @@ public abstract class ExpressionCrawler<GlobalStateT extends GlobalState<GlobalS
         EvaluationContext<ValueT> ec = localState.getExecutionStack().getLast();
         return ec.getExpressionValue(levelsAbove, indexOfChild);
     }
-
+    
     /**
      * Returns whetehr or not the given expression cares about the (abstracted) evaluation result of its
      * child with the given index.
@@ -600,10 +596,10 @@ public abstract class ExpressionCrawler<GlobalStateT extends GlobalState<GlobalS
         if (expression instanceof CaseExpression ex) {
             return indexOfChild == 0 && !ex.isDefaultCase();
         }
-
+        
         return true;
     }
-
+    
     /**
      * Attempts to convert the given abstracted value to one of type Boolean.
      * 
@@ -616,7 +612,7 @@ public abstract class ExpressionCrawler<GlobalStateT extends GlobalState<GlobalS
         if (!value.isDetermined()) {
             return (B) value;
         }
-
+        
         Object val = value.get();
         if (val == null) {
             return (B) value;
@@ -631,10 +627,10 @@ public abstract class ExpressionCrawler<GlobalStateT extends GlobalState<GlobalS
                 throw new ClassCastException("String \"" + s + "\" cannot be converted to Boolean");
             }
         }
-
+        
         throw new ClassCastException(val.getClass().getName() + " cannot be converted to Boolean");
     }
-
+    
     /**
      * Attempts to convert the given value to one of type Boolean.
      * 
@@ -645,7 +641,7 @@ public abstract class ExpressionCrawler<GlobalStateT extends GlobalState<GlobalS
     public Boolean getAsBoolean(Object value) throws ClassCastException {
         return getAsBoolean(getDeterminedValue(value)).get();
     }
-
+    
     /**
      * Attempts to convert the given abstracted value to one of type Integer.
      * 
@@ -658,7 +654,7 @@ public abstract class ExpressionCrawler<GlobalStateT extends GlobalState<GlobalS
         if (!value.isDetermined()) {
             return (AbstractedValue<?, ?, Integer>) value;
         }
-
+        
         Object val = value.get();
         if (val == null) {
             return (AbstractedValue<?, ?, Integer>) value;
@@ -671,10 +667,10 @@ public abstract class ExpressionCrawler<GlobalStateT extends GlobalState<GlobalS
                 throw new ClassCastException("String \"" + s + "\" cannot be converted to Integer");
             }
         }
-
+        
         throw new ClassCastException(val.getClass().getName() + " cannot be converted to Integer");
     }
-
+    
     /**
      * Attempts to convert the given value to one of type Integer.
      * 
@@ -685,7 +681,7 @@ public abstract class ExpressionCrawler<GlobalStateT extends GlobalState<GlobalS
     public Integer getAsInteger(Object value) throws ClassCastException {
         return getAsInteger(getDeterminedValue(value)).get();
     }
-
+    
     /**
      * Attempts to convert the given abstracted value to one of type Double.
      * 
@@ -698,7 +694,7 @@ public abstract class ExpressionCrawler<GlobalStateT extends GlobalState<GlobalS
         if (!value.isDetermined()) {
             return (AbstractedValue<?, ?, Double>) value;
         }
-
+        
         Object val = value.get();
         if (val == null) {
             return (AbstractedValue<?, ?, Double>) value;
@@ -711,10 +707,10 @@ public abstract class ExpressionCrawler<GlobalStateT extends GlobalState<GlobalS
                 throw new ClassCastException("String \"" + s + "\" cannot be converted to Double");
             }
         }
-
+        
         throw new ClassCastException(val.getClass().getName() + " cannot be converted to Double");
     }
-
+    
     /**
      * Attempts to convert the given value to one of type Double.
      * 
@@ -725,7 +721,7 @@ public abstract class ExpressionCrawler<GlobalStateT extends GlobalState<GlobalS
     public Double getAsDouble(Object value) throws ClassCastException {
         return getAsDouble(getDeterminedValue(value)).get();
     }
-
+    
     /**
      * Checks whether or not two abstracted values are guaranteed to be equal, unequal or whether no
      * definitive answer can be given.
@@ -739,15 +735,15 @@ public abstract class ExpressionCrawler<GlobalStateT extends GlobalState<GlobalS
         if (!v1.isDetermined() || !v2.isDetermined()) {
             return (B) getNonDeterminedValue();
         }
-
+        
         if (v1.get() == null || v2.get() == null) {
             return (B) getDeterminedValue(v1.get() == null && v2.get() == null);
         }
-
+        
         if (v1.get().getClass() == v2.get().getClass()) {
             return (B) getDeterminedValue(v1.equals(v2));
         }
-
+        
         if (v1.get() instanceof String || v2.get() instanceof String) {
             try {
                 int i = Integer.parseInt(String.valueOf(v1.get()));
@@ -764,10 +760,10 @@ public abstract class ExpressionCrawler<GlobalStateT extends GlobalState<GlobalS
                 // ignore
             }
         }
-
+        
         return (B) getNonDeterminedValue();
     }
-
+    
     /**
      * Returns the port instance corresponding to a port variable.
      *
@@ -788,7 +784,7 @@ public abstract class ExpressionCrawler<GlobalStateT extends GlobalState<GlobalS
         }
         return result;
     }
-
+    
     /**
      * Returns the channel instance corresponding to a port instance.
      * 
@@ -798,7 +794,7 @@ public abstract class ExpressionCrawler<GlobalStateT extends GlobalState<GlobalS
     public WrappedSCClassInstance getChannel(WrappedSCPortInstance portInstance) {
         return wrap(portInstance.getChannels().get(0));
     }
-
+    
     /**
      * Returns the channel instance corresponding to a port variable.
      *
@@ -808,7 +804,7 @@ public abstract class ExpressionCrawler<GlobalStateT extends GlobalState<GlobalS
     public WrappedSCClassInstance getChannel(SCPort port) {
         return getChannel(getPortInstance(port));
     }
-
+    
     public <B extends AbstractedValue<B, B, Boolean>> ExecutionConditions<B> getExecutionConditions(
             LocalStateT localState) {
         ExecutionConditions<B> result = localState.getStateInformation(executionConditionsKey());
@@ -818,7 +814,7 @@ public abstract class ExpressionCrawler<GlobalStateT extends GlobalState<GlobalS
         }
         return result;
     }
-
+    
     /**
      * Called by {@link #makeSmallStep(TransitionResult)} to allow subclasses to intervene in the
      * handling of certain expressions.
@@ -840,11 +836,10 @@ public abstract class ExpressionCrawler<GlobalStateT extends GlobalState<GlobalS
      *         null if no special treatment is given
      */
     public SmallStepResult<GlobalStateT, ProcessStateT, InfoT, TransitionResultT> handleSpecialExpression(
-            TransitionResultT currentState, LocalStateT localState, Expression expression,
-            int comingFrom) {
+            TransitionResultT currentState, LocalStateT localState, Expression expression, int comingFrom) {
         return null;
     }
-
+    
     /**
      * Called by {@link #makeSmallStep(TransitionResult)} to handle any kind of expression with constant
      * value.
@@ -860,14 +855,14 @@ public abstract class ExpressionCrawler<GlobalStateT extends GlobalState<GlobalS
      * @return the possible transitions and whether or not the end of an atomic block has been reached
      */
     public <X extends Expression> SmallStepResult<GlobalStateT, ProcessStateT, InfoT, TransitionResultT> handleConstantExpression(
-            TransitionResultT currentState, LocalStateT localState,
-            X expression, int comingFrom, Function<X, Object> valueGetter) {
+            TransitionResultT currentState, LocalStateT localState, X expression, int comingFrom,
+            Function<X, Object> valueGetter) {
         assert comingFrom == -1;
-
+        
         returnToParent(expression.getParent(), localState, getDeterminedValue(valueGetter.apply(expression)));
         return createSmallStepResult(expression, comingFrom, currentState, localState, false, false);
     }
-
+    
     /**
      * Called by {@link #makeSmallStep(TransitionResult)} to handle expressions that are ignored by this
      * implementation.
@@ -878,12 +873,11 @@ public abstract class ExpressionCrawler<GlobalStateT extends GlobalState<GlobalS
      * @return the possible transitions and whether or not the end of an atomic block has been reached
      */
     public SmallStepResult<GlobalStateT, ProcessStateT, InfoT, TransitionResultT> handleIgnoredExpression(
-            TransitionResultT currentState, LocalStateT localState, Expression expression,
-            int comingFrom) {
+            TransitionResultT currentState, LocalStateT localState, Expression expression, int comingFrom) {
         returnToParent(expression.getParent(), localState, getNonDeterminedValue());
         return createSmallStepResult(expression, comingFrom, currentState, localState, false, false);
     }
-
+    
     /**
      * Called by {@link #makeSmallStep(TransitionResult)} to handle expressions which are evaluated
      * bottom up, i.e. first their children are evaluated and then their resulting values are aggregated
@@ -896,10 +890,9 @@ public abstract class ExpressionCrawler<GlobalStateT extends GlobalState<GlobalS
      * @return the possible transitions and whether or not the end of an atomic block has been reached
      */
     public SmallStepResult<GlobalStateT, ProcessStateT, InfoT, TransitionResultT> handleBottomUpExpression(
-            TransitionResultT currentState, LocalStateT localState, Expression expression,
-            int comingFrom) {
+            TransitionResultT currentState, LocalStateT localState, Expression expression, int comingFrom) {
         int numOfChildren = expression.getNumOfChildren();
-
+        
         // coming from the last child
         if (comingFrom == numOfChildren - 1) {
             // handle event lists (e1 & e2 or e1 | e2) separately
@@ -919,7 +912,7 @@ public abstract class ExpressionCrawler<GlobalStateT extends GlobalState<GlobalS
                             Set<Event> newEvents = new LinkedHashSet<>(current.getEvents());
                             newEvents.add(re);
                             result = current.replaceEvents(newEvents);
-
+                            
                             assert current.isChoice() == be.getOp().equals("|");
                         }
                         returnToParent(expression.getParent(), localState, getDeterminedValue(result));
@@ -927,24 +920,24 @@ public abstract class ExpressionCrawler<GlobalStateT extends GlobalState<GlobalS
                     }
                 }
             }
-
+            
             ValueT expressionValue = aggregateExpressionValue(currentState, localState, expression);
             returnToParent(expression.getParent(), localState, expressionValue);
             return createSmallStepResult(expression, comingFrom, currentState, localState, false, false);
         }
-
+        
         // stop execution early (e.g. in case of short circuit evaluation)?
         ValueT expressionValue = stopEvaluationEarly(currentState, localState, expression, comingFrom);
         if (expressionValue != null) {
             returnToParent(expression.getParent(), localState, expressionValue);
             return createSmallStepResult(expression, comingFrom, currentState, localState, false, false);
         }
-
+        
         // go into the next child
         enterChildExpression(localState, comingFrom + 1);
         return createSmallStepResult(expression, comingFrom, currentState, localState, false, false);
     }
-
+    
     /**
      * Called after all children of an expression have been evaluated to aggregate their results
      * according to the state abstraction chosen for the analysis.
@@ -957,7 +950,7 @@ public abstract class ExpressionCrawler<GlobalStateT extends GlobalState<GlobalS
      */
     public abstract ValueT aggregateExpressionValue(TransitionResultT currentState, LocalStateT localState,
             Expression expression);
-
+    
     /**
      * Called by {@link #handleBottomUpExpression(TransitionResult, Expression, int)} every time the
      * evaluation reaches an expression before its last child has been evaluated to determine whether or
@@ -975,7 +968,7 @@ public abstract class ExpressionCrawler<GlobalStateT extends GlobalState<GlobalS
             int comingFrom) {
         return null;
     }
-
+    
     public SmallStepResult<GlobalStateT, ProcessStateT, InfoT, TransitionResultT> handleBracketExpression(
             TransitionResultT currentState, LocalStateT localState, BracketExpression expression, int comingFrom) {
         // entering from parent
@@ -984,25 +977,24 @@ public abstract class ExpressionCrawler<GlobalStateT extends GlobalState<GlobalS
             enterChildExpression(localState, 0);
             return createSmallStepResult(expression, comingFrom, currentState, localState, false, false);
         }
-
+        
         returnToParent(expression, localState, getValueOfChild(currentState, localState, 0));
         return createSmallStepResult(expression, comingFrom, currentState, localState, false, false);
     }
-
+    
     public <B extends AbstractedValue<B, B, Boolean>> SmallStepResult<GlobalStateT, ProcessStateT, InfoT, TransitionResultT> handleIfElseExpression(
-            TransitionResultT currentState, LocalStateT localState,
-            IfElseExpression expression, int comingFrom) {
+            TransitionResultT currentState, LocalStateT localState, IfElseExpression expression, int comingFrom) {
         // entering from parent
         if (comingFrom == -1) {
             // go into condition
             enterChildExpression(localState, 0);
             return createSmallStepResult(expression, comingFrom, currentState, localState, false, false);
         }
-
+        
         // returning from condition
         if (comingFrom == 0) {
             B conditionResult = getAsBoolean(getValueOfChild(currentState, localState, 0));
-
+            
             if (!conditionResult.isDetermined()) {
                 // go into both then and else block
                 TransitionResultT copyForThenCase = currentState.clone();
@@ -1010,7 +1002,7 @@ public abstract class ExpressionCrawler<GlobalStateT extends GlobalState<GlobalS
                 ExecutionConditions<B> executionConditionsForThenCase = getExecutionConditions(localStateForThenCase);
                 executionConditionsForThenCase.add(expression, conditionResult);
                 enterChildExpression(localStateForThenCase, 1);
-
+                
                 if (expression.getElseBlock().isEmpty()) {
                     returnToParent(expression.getParent(), localState);
                 } else {
@@ -1023,7 +1015,7 @@ public abstract class ExpressionCrawler<GlobalStateT extends GlobalState<GlobalS
                         false);
             } else if (conditionResult.get()) {
                 // go into then block
-
+                
                 // add a condition result even though it is "true" because we always remove a condition upon leaving
                 // the statement
                 ExecutionConditions<B> executionConditions = getExecutionConditions(localState);
@@ -1035,7 +1027,7 @@ public abstract class ExpressionCrawler<GlobalStateT extends GlobalState<GlobalS
                     returnToParent(expression.getParent(), localState);
                 } else {
                     // go into else block
-
+                    
                     // add a condition result even though it is "true" because we always remove a condition upon leaving
                     // the statement
                     ExecutionConditions<B> executionConditions = getExecutionConditions(localState);
@@ -1045,9 +1037,9 @@ public abstract class ExpressionCrawler<GlobalStateT extends GlobalState<GlobalS
                 return createSmallStepResult(expression, comingFrom, currentState, localState, false, false);
             }
         }
-
+        
         int lengthOfThenBlock = expression.getThenBlock().size();
-
+        
         // returning from then block
         if (comingFrom <= lengthOfThenBlock) {
             // returning from end of then block
@@ -1069,7 +1061,7 @@ public abstract class ExpressionCrawler<GlobalStateT extends GlobalState<GlobalS
             }
             return createSmallStepResult(expression, comingFrom, currentState, localState, false, false);
         }
-
+        
         // returning from else block
         int lengthOfElseBlock = expression.getElseBlock().size();
         // returning from end of else block
@@ -1094,15 +1086,14 @@ public abstract class ExpressionCrawler<GlobalStateT extends GlobalState<GlobalS
             return createSmallStepResult(expression, comingFrom, currentState, localState, false, false);
         }
     }
-
+    
     public <B extends AbstractedValue<B, B, Boolean>> SmallStepResult<GlobalStateT, ProcessStateT, InfoT, TransitionResultT> handleWhileLoopExpression(
-            TransitionResultT currentState, LocalStateT localState,
-            LoopExpression expression, int comingFrom) {
+            TransitionResultT currentState, LocalStateT localState, LoopExpression expression, int comingFrom) {
         // entering from parent
         if (comingFrom == -1) {
             // add true condition so that removing one when breaking is always correct
             getExecutionConditions(localState).add(expression, getAsBoolean(getDeterminedValue(true)));
-
+            
             if (expression instanceof WhileLoopExpression) {
                 // go into condition
                 enterChildExpression(localState, 0);
@@ -1116,11 +1107,11 @@ public abstract class ExpressionCrawler<GlobalStateT extends GlobalState<GlobalS
                 return createSmallStepResult(expression, comingFrom, currentState, localState, false, false);
             }
         }
-
+        
         // returning from condition
         if (comingFrom == 0) {
             B conditionResult = getAsBoolean(getValueOfChild(currentState, localState, 0));
-
+            
             if (!conditionResult.isDetermined()) {
                 // go into body and leave loop
                 TransitionResultT copyForLoopCase = currentState.clone();
@@ -1128,16 +1119,15 @@ public abstract class ExpressionCrawler<GlobalStateT extends GlobalState<GlobalS
                 ExecutionConditions<B> executionConditionsForLoopCase = getExecutionConditions(localStateForLoopCase);
                 executionConditionsForLoopCase.add(expression, conditionResult);
                 enterChildExpression(getLocalState(copyForLoopCase), 1);
-
+                
                 ExecutionConditions<B> executionConditionsForBreakCase = getExecutionConditions(localState);
                 executionConditionsForBreakCase.removeUntil(expression);
-                // TODO: add negative of condition instead?
                 returnToParent(expression.getParent(), localState);
                 return createSmallStepResult(expression, comingFrom, List.of(copyForLoopCase, currentState), false,
                         false);
             } else if (conditionResult.get()) {
                 // go into body
-
+                
                 // don't add execution condition because the condition result is determined, meaning the current
                 // condition is still sufficient
                 enterChildExpression(localState, 1);
@@ -1150,10 +1140,10 @@ public abstract class ExpressionCrawler<GlobalStateT extends GlobalState<GlobalS
                 return createSmallStepResult(expression, comingFrom, currentState, localState, false, false);
             }
         }
-
+        
         // returning from loop body
         int lengthOfBody = expression.getLoopBody().size();
-
+        
         // returning from end of loop body
         if (comingFrom >= lengthOfBody) {
             // go into condition
@@ -1168,20 +1158,19 @@ public abstract class ExpressionCrawler<GlobalStateT extends GlobalState<GlobalS
             return createSmallStepResult(expression, comingFrom, currentState, localState, false, false);
         }
     }
-
+    
     public <B extends AbstractedValue<B, B, Boolean>> SmallStepResult<GlobalStateT, ProcessStateT, InfoT, TransitionResultT> handleForLoopExpression(
-            TransitionResultT currentState, LocalStateT localState,
-            ForLoopExpression expression, int comingFrom) {
+            TransitionResultT currentState, LocalStateT localState, ForLoopExpression expression, int comingFrom) {
         // entering from parent
         if (comingFrom == -1) {
             // add true condition so that removing one when breaking is always correct
             getExecutionConditions(localState).add(expression, getAsBoolean(getDeterminedValue(true)));
-
+            
             // go into initializer
             enterChildExpression(localState, 0);
             return createSmallStepResult(expression, comingFrom, currentState, localState, false, false);
         }
-
+        
         // returning from initializer
         if (comingFrom == 0) {
             // go into condition
@@ -1189,11 +1178,11 @@ public abstract class ExpressionCrawler<GlobalStateT extends GlobalState<GlobalS
             // condition check might repeat
             return createSmallStepResult(expression, comingFrom, currentState, localState, false, true);
         }
-
+        
         // returning from condition
         if (comingFrom == 1) {
             B conditionResult = getAsBoolean(getValueOfChild(currentState, localState, 1));
-
+            
             if (!conditionResult.isDetermined()) {
                 // go into body and leave loop
                 TransitionResultT copyForLoopCase = currentState.clone();
@@ -1201,7 +1190,7 @@ public abstract class ExpressionCrawler<GlobalStateT extends GlobalState<GlobalS
                 ExecutionConditions<B> executionConditionsForLoopCase = getExecutionConditions(localStateForLoopCase);
                 executionConditionsForLoopCase.add(expression, conditionResult);
                 enterChildExpression(getLocalState(copyForLoopCase), 2);
-
+                
                 ExecutionConditions<B> executionConditionsForBreakCase = getExecutionConditions(localState);
                 executionConditionsForBreakCase.removeUntil(expression);
                 returnToParent(expression.getParent(), localState);
@@ -1209,23 +1198,23 @@ public abstract class ExpressionCrawler<GlobalStateT extends GlobalState<GlobalS
                         false);
             } else if (conditionResult.get()) {
                 // go into body
-
+                
                 // don't add execution condition because the condition result is determined, meaning the current
                 // condition is still sufficient
                 enterChildExpression(localState, 2);
                 return createSmallStepResult(expression, comingFrom, currentState, localState, false, false);
             } else {
                 // leave loop
-
+                
                 ExecutionConditions<B> executionConditions = getExecutionConditions(localState);
                 executionConditions.removeUntil(expression);
                 returnToParent(expression.getParent(), localState);
                 return createSmallStepResult(expression, comingFrom, currentState, localState, false, false);
             }
         }
-
+        
         int lengthOfBody = expression.getLoopBody().size();
-
+        
         // returning from iterator
         if (comingFrom == lengthOfBody + 2) {
             // go into condition
@@ -1233,9 +1222,9 @@ public abstract class ExpressionCrawler<GlobalStateT extends GlobalState<GlobalS
             // condition check might repeat
             return createSmallStepResult(expression, comingFrom, currentState, localState, false, true);
         }
-
+        
         // returning from loop body
-
+        
         // returning from end of loop body
         if (comingFrom == lengthOfBody + 1) {
             // go into iterator
@@ -1248,49 +1237,46 @@ public abstract class ExpressionCrawler<GlobalStateT extends GlobalState<GlobalS
         }
         return createSmallStepResult(expression, comingFrom, currentState, localState, false, false);
     }
-
+    
     public <B extends AbstractedValue<B, B, Boolean>> SmallStepResult<GlobalStateT, ProcessStateT, InfoT, TransitionResultT> handleSwitchExpression(
-            TransitionResultT currentState, LocalStateT localState,
-            SwitchExpression expression, int comingFrom) {
+            TransitionResultT currentState, LocalStateT localState, SwitchExpression expression, int comingFrom) {
         // coming from parent
         if (comingFrom == -1) {
             // add true condition so that removing one when leaving is always correct
             getExecutionConditions(localState).add(expression, getAsBoolean(getDeterminedValue(true)));
-
+            
             // go into expression to switch on
             enterChildExpression(localState, 0);
             return createSmallStepResult(expression, comingFrom, currentState, localState, false, false);
         }
-
+        
         // returning from expression to switch on
         if (comingFrom == 0) {
             // go into first case
             enterChildExpression(localState, 1);
             return createSmallStepResult(expression, comingFrom, currentState, localState, false, false);
         }
-
+        
         // returning from the last case
         if (comingFrom == expression.getNumOfChildren() - 1) {
             ExecutionConditions<B> executionConditions = getExecutionConditions(localState);
             executionConditions.removeUntil(expression);
-
+            
             returnToParent(expression.getParent(), localState);
             // can't repeat, but might improve performance to check whether taking one path or the other makes
             // any difference
             return createSmallStepResult(expression, comingFrom, currentState, localState, false, true);
         }
-
+        
         // returning from some case other than the last: enter the next one
         enterChildExpression(localState, comingFrom + 1);
         // can't repeat, but might improve performance to check whether taking one path or the other makes
         // any difference
         return createSmallStepResult(expression, comingFrom, currentState, localState, false, true);
     }
-
+    
     public <B extends AbstractedValue<B, B, Boolean>> SmallStepResult<GlobalStateT, ProcessStateT, InfoT, TransitionResultT> handleCaseExpression(
             TransitionResultT currentState, LocalStateT localState, CaseExpression expression, int comingFrom) {
-        // TODO: use expression.getParent() instead of expression when adding execution conditions=
-
         // coming from parent
         if (comingFrom == -1) {
             // checking case or falling through?
@@ -1303,10 +1289,10 @@ public abstract class ExpressionCrawler<GlobalStateT extends GlobalState<GlobalS
                 ValueT fallingThroughWrapper = getValueOfExpression(currentState, localState, 1, myIndex - 1);
                 fallingThrough = getAsBoolean(fallingThroughWrapper).get();
             }
-
+            
             if (fallingThrough) {
                 // go into body directly, if body exists
-
+                
                 // don't add to execution condition because the one added when entering the matching case is still
                 // sufficient.
                 if (expression.getBody().isEmpty()) {
@@ -1330,26 +1316,26 @@ public abstract class ExpressionCrawler<GlobalStateT extends GlobalState<GlobalS
             }
             return createSmallStepResult(expression, comingFrom, currentState, localState, false, false);
         }
-
+        
         // returning from case value evaluation
         if (comingFrom == 0 && !expression.isDefaultCase()) {
             ValueT switchValue = getValueOfExpression(currentState, localState, 1, 0);
             ValueT caseValue = getValueOfChild(currentState, localState, 0);
             B equality = checkEquality(switchValue, caseValue);
-
+            
             if (!equality.isDetermined()) {
                 // go into case and step over case
                 TransitionResultT copyForIntoCase = currentState.clone();
                 LocalStateT localStateForIntoCase = getLocalState(copyForIntoCase);
                 ExecutionConditions<B> executionConditionsForIntoCase = getExecutionConditions(localStateForIntoCase);
                 executionConditionsForIntoCase.add(expression, equality);
-
+                
                 if (expression.getBody().isEmpty()) {
                     returnToParent(expression.getParent(), getLocalState(copyForIntoCase), getDeterminedValue(true));
                 } else {
                     enterChildExpression(getLocalState(copyForIntoCase), 1);
                 }
-
+                
                 ExecutionConditions<B> executionConditionsForSkipCase = getExecutionConditions(localState);
                 executionConditionsForSkipCase.add(expression, equality.getAbstractedLogic().not(equality));
                 returnToParent(expression.getParent(), localState, getDeterminedValue(false));
@@ -1369,7 +1355,7 @@ public abstract class ExpressionCrawler<GlobalStateT extends GlobalState<GlobalS
                 return createSmallStepResult(expression, comingFrom, currentState, localState, false, false);
             }
         }
-
+        
         // returning from last body expression
         if (comingFrom == expression.getNumOfChildren() - 1) {
             returnToParent(expression.getParent(), localState, getDeterminedValue(true));
@@ -1381,16 +1367,15 @@ public abstract class ExpressionCrawler<GlobalStateT extends GlobalState<GlobalS
         }
         return createSmallStepResult(expression, comingFrom, currentState, localState, false, false);
     }
-
+    
     public SmallStepResult<GlobalStateT, ProcessStateT, InfoT, TransitionResultT> handleBreakExpression(
-            TransitionResultT currentState, LocalStateT localState,
-            BreakExpression expression, int comingFrom) {
+            TransitionResultT currentState, LocalStateT localState, BreakExpression expression, int comingFrom) {
         assert comingFrom == -1;
-
+        
         String label = expression.getLabel();
         EvaluationContext<ValueT> ec = localState.getTopOfStack();
         List<Integer> indices = ec.getExpressionIndices();
-
+        
         Expression targetted;
         int levelsAbove = 1;
         for (;; levelsAbove++) {
@@ -1399,9 +1384,9 @@ public abstract class ExpressionCrawler<GlobalStateT extends GlobalState<GlobalS
                 break;
             }
         }
-
+        
         getExecutionConditions(localState).removeUntil(targetted);
-
+        
         int removedIndex = 0;
         List<List<ValueT>> expressionValues = ec.getExpressionValues();
         for (int i = 0; i <= levelsAbove; i++) {
@@ -1409,20 +1394,20 @@ public abstract class ExpressionCrawler<GlobalStateT extends GlobalState<GlobalS
             expressionValues.remove(expressionValues.size() - 1);
         }
         ec.setComingFrom(removedIndex);
-
+        
         List<ValueT> parentValues = ec.getExpressionValues().getLast();
         CollectionUtil.addOrSet(parentValues, ec.getComingFrom(), null);
         return createSmallStepResult(expression, comingFrom, currentState, localState, false, false);
     }
-
+    
     public SmallStepResult<GlobalStateT, ProcessStateT, InfoT, TransitionResultT> handleContinueExpression(
             TransitionResultT currentState, LocalStateT localState, ContinueExpression expression, int comingFrom) {
         assert comingFrom == -1;
-
+        
         String label = expression.getLabel();
         EvaluationContext<ValueT> ec = localState.getTopOfStack();
         List<Integer> indices = ec.getExpressionIndices();
-
+        
         Expression childOfTargetted;
         Expression targetted = null;
         int levelsAbove = 1;
@@ -1433,9 +1418,9 @@ public abstract class ExpressionCrawler<GlobalStateT extends GlobalState<GlobalS
                 break;
             }
         }
-
+        
         getExecutionConditions(localState).removeUntil(childOfTargetted);
-
+        
         List<List<ValueT>> expressionValues = ec.getExpressionValues();
         for (int i = 0; i < levelsAbove; i++) {
             indices.remove(indices.size() - 1);
@@ -1447,10 +1432,10 @@ public abstract class ExpressionCrawler<GlobalStateT extends GlobalState<GlobalS
         } else {
             ec.setComingFrom(targetted.getNumOfChildren() - 1);
         }
-
+        
         return createSmallStepResult(expression, comingFrom, currentState, localState, false, false);
     }
-
+    
     /**
      * Returns whether or not an expression is the target of a break or continue statement.
      * 
@@ -1468,36 +1453,35 @@ public abstract class ExpressionCrawler<GlobalStateT extends GlobalState<GlobalS
         }
         return label.isEmpty() || label.equals(candidate.getLabel());
     }
-
+    
     public SmallStepResult<GlobalStateT, ProcessStateT, InfoT, TransitionResultT> handleEventNotificationExpression(
-            TransitionResultT currentState, LocalStateT localState,
-            EventNotificationExpression expression,
+            TransitionResultT currentState, LocalStateT localState, EventNotificationExpression expression,
             int comingFrom) {
         // entering from parent
         if (comingFrom == -1) {
             enterChildExpression(localState, 0);
             return createSmallStepResult(expression, comingFrom, currentState, localState, false, false);
         }
-
+        
         int numOfParameters = expression.getParameters().size();
-
+        
         // returning from the evaluation of a parameter (not the last one)
         if (comingFrom < numOfParameters) {
             enterChildExpression(localState, comingFrom + 1);
             return createSmallStepResult(expression, comingFrom, currentState, localState, false, false);
         }
-
+        
         // returning from the last parameter
-
+        
         ValueT eventObject = getValueOfChild(currentState, localState, 0);
         if (!eventObject.isDetermined()) {
             throw new ExpressionCrawler.InsufficientPrecisionException(expression.toString());
         }
-
+        
         Event event = (Event) eventObject.get();
-
+        
         TimedBlocker delay;
-
+        
         if (numOfParameters == 0) {
             // immediate notification
             delay = null;
@@ -1506,7 +1490,7 @@ public abstract class ExpressionCrawler<GlobalStateT extends GlobalState<GlobalS
             if (!firstParam.isDetermined()) {
                 throw new ExpressionCrawler.InsufficientPrecisionException();
             }
-
+            
             if (numOfParameters == 1) {
                 if (firstParam.get() instanceof TimedBlocker tb) {
                     delay = tb;
@@ -1525,16 +1509,16 @@ public abstract class ExpressionCrawler<GlobalStateT extends GlobalState<GlobalS
                 if (!secondParam.isDetermined()) {
                     throw new ExpressionCrawler.InsufficientPrecisionException();
                 }
-
+                
                 // delta delayed or timed notification
                 assert numOfParameters == 2;
-
+                
                 int amount = getAsInteger(firstParam).get();
                 SCTIMEUNIT unit = (SCTIMEUNIT) secondParam.get();
                 delay = amount == 0 ? DeltaTimeBlocker.INSTANCE : new RealTimedBlocker(amount, unit);
             }
         }
-
+        
         List<TransitionResultT> transitions =
                 CollectionUtil.asList(this.scheduler.notifyEvents(currentState, event, delay));
         for (TransitionResultT transition : transitions) {
@@ -1542,66 +1526,60 @@ public abstract class ExpressionCrawler<GlobalStateT extends GlobalState<GlobalS
         }
         return createSmallStepResult(expression, comingFrom, transitions, false, false);
     }
-
+    
     public SmallStepResult<GlobalStateT, ProcessStateT, InfoT, TransitionResultT> handleSCStopExpression(
-            TransitionResultT currentState, LocalStateT localState,
-            SCStopExpression expression, int comingFrom) {
+            TransitionResultT currentState, LocalStateT localState, SCStopExpression expression, int comingFrom) {
         returnToParent(expression.getParent(), localState);
         Collection<TransitionResultT> transitions = getScheduler().stopSimulation(currentState);
         return createSmallStepResult(expression, comingFrom, new ArrayList<>(transitions), false, false);
     }
-
+    
     public SmallStepResult<GlobalStateT, ProcessStateT, InfoT, TransitionResultT> handleFunctionCallExpression(
-            TransitionResultT currentState, LocalStateT localState,
-            FunctionCallExpression expression,
-            int comingFrom) {
+            TransitionResultT currentState, LocalStateT localState, FunctionCallExpression expression, int comingFrom) {
         int numOfParameters = expression.getParameters().size();
-
+        
         // returning from the evaluation of a parameter (not the last one)
         if (comingFrom < numOfParameters - 1) {
             enterChildExpression(localState, comingFrom + 1);
             return createSmallStepResult(expression, comingFrom, currentState, localState, false, false);
         }
-
+        
         // returning from function call
         if (comingFrom >= numOfParameters) {
             returnToParent(expression.getParent(), localState,
                     getValueOfChild(currentState, localState, numOfParameters));
             return createSmallStepResult(expression, comingFrom, currentState, localState, false, false);
         }
-
+        
         SmallStepResult<GlobalStateT, ProcessStateT, InfoT, TransitionResultT> result =
                 handleSpecialCaseFunctionCall(currentState, localState, expression, comingFrom);
         if (result != null) {
             return result;
         }
-
+        
         // returning from the last parameter, call function
-
+        
         // first, find new value of "this"
         ValueT thisValue;
         if (expression.getParent() instanceof AccessExpression ae) {
             thisValue = getValueOfExpression(currentState, localState, 1, 0);
-            // TODO: differentiate based on operator ('.' or '->')?
         } else {
             thisValue = localState.getTopOfStack().getThisValue();
         }
-
+        
         List<List<ValueT>> executionValues = new ArrayList<>();
         executionValues.add(new ArrayList<>());
-
-        EvaluationContext<ValueT> newContext =
-                new EvaluationContext<>(wrap(expression.getFunction()), new ArrayList<>(), -1,
-                        executionValues,
-                        thisValue);
+        
+        EvaluationContext<ValueT> newContext = new EvaluationContext<>(wrap(expression.getFunction()),
+                new ArrayList<>(), -1, executionValues, thisValue);
         localState.getExecutionStack().add(newContext);
         getExecutionConditions(localState).addCall();
-
+        
         functionCalled(expression, currentState, localState);
-
+        
         return createSmallStepResult(expression, comingFrom, currentState, localState, false, false);
     }
-
+    
     /**
      * Called when a function has been called (i.e. entered), right before the SmallStepResult is
      * created. Not called when entering special case functions (wait, notify, request_update).
@@ -1615,9 +1593,9 @@ public abstract class ExpressionCrawler<GlobalStateT extends GlobalState<GlobalS
      */
     protected void functionCalled(FunctionCallExpression expression, TransitionResultT currentState,
             LocalStateT localState) {
-
+        
     }
-
+    
     /**
      * Called when a function has been returned from (i.e. left), right before the SmallStepResult is
      * created. Not called when leaving special case functions (wait, notify, request_update) or the top
@@ -1632,9 +1610,9 @@ public abstract class ExpressionCrawler<GlobalStateT extends GlobalState<GlobalS
      */
     protected void functionReturned(FunctionCallExpression expression, TransitionResultT currentState,
             LocalStateT localState) {
-
+        
     }
-
+    
     /**
      * Handles function calls that require special treatment, such as wait statements or update
      * requests.
@@ -1648,72 +1626,67 @@ public abstract class ExpressionCrawler<GlobalStateT extends GlobalState<GlobalS
      * @return the result of the special treatment, or null
      */
     public SmallStepResult<GlobalStateT, ProcessStateT, InfoT, TransitionResultT> handleSpecialCaseFunctionCall(
-            TransitionResultT currentState, LocalStateT localState,
-            FunctionCallExpression expression, int comingFrom) {
+            TransitionResultT currentState, LocalStateT localState, FunctionCallExpression expression, int comingFrom) {
         if (expression.getFunction().getName().equals("wait")) {
             return handleWaitExpression(currentState, localState, expression, comingFrom);
         }
-
+        
         if (expression.getFunction().getName().equals("request_update")) {
             return handleRequestUpdateExpression(currentState, localState, expression, comingFrom);
         }
-
+        
         return null;
     }
-
+    
     public SmallStepResult<GlobalStateT, ProcessStateT, InfoT, TransitionResultT> handleReturnExpression(
-            TransitionResultT currentState, LocalStateT localState,
-            ReturnExpression expression, int comingFrom) {
+            TransitionResultT currentState, LocalStateT localState, ReturnExpression expression, int comingFrom) {
         // entering from parent
         if (comingFrom == -1 && expression.getReturnStatement() != null) {
             // evaluate return value
             enterChildExpression(localState, 0);
             return createSmallStepResult(expression, comingFrom, currentState, localState, false, false);
         }
-
+        
         // returning after evaluation of return value
         return returnFromFunction(currentState, localState, expression, comingFrom,
                 getValueOfChild(currentState, localState, 0));
     }
-
+    
     public SmallStepResult<GlobalStateT, ProcessStateT, InfoT, TransitionResultT> handleFunctionBody(
             TransitionResultT currentState, LocalStateT localState, int comingFrom) {
         EvaluationContext<ValueT> evaluationLocation = localState.getTopOfStack();
-
+        
         if (comingFrom == -1) {
             enterChildExpression(localState, 0);
             return createSmallStepResult(null, comingFrom, currentState, localState, false, false);
         }
-
+        
         int lengthOfBody = evaluationLocation.getFunction().getBody().size();
-
+        
         if (comingFrom < lengthOfBody - 1) {
             enterChildExpression(localState, comingFrom + 1);
             return createSmallStepResult(null, comingFrom, currentState, localState, false, false);
         }
-
+        
         return returnFromFunction(currentState, localState, null, comingFrom);
     }
-
+    
     public SmallStepResult<GlobalStateT, ProcessStateT, InfoT, TransitionResultT> handleWaitExpression(
-            TransitionResultT currentState, LocalStateT localState,
-            FunctionCallExpression expression, int comingFrom) {
+            TransitionResultT currentState, LocalStateT localState, FunctionCallExpression expression, int comingFrom) {
         throw new UnsupportedOperationException("This expression crawler can't handle wait expressions.");
     }
-
+    
     public SmallStepResult<GlobalStateT, ProcessStateT, InfoT, TransitionResultT> handleRequestUpdateExpression(
-            TransitionResultT currentState, LocalStateT localState,
-            FunctionCallExpression expression, int comingFrom) {
+            TransitionResultT currentState, LocalStateT localState, FunctionCallExpression expression, int comingFrom) {
         throw new UnsupportedOperationException("This expression crawler can't handle request update expressions.");
     }
-
+    
     public SmallStepResult<GlobalStateT, ProcessStateT, InfoT, TransitionResultT> handleOtherExpression(
-            TransitionResultT currentState, LocalStateT localState, Expression expression,
-            int comingFrom) {
+            TransitionResultT currentState, LocalStateT localState, Expression expression, int comingFrom) {
         throw new UnsupportedOperationException(
                 "Expression type " + expression.getClass().getName() + " not supported.");
     }
-
+    
     /**
      * Updates the execution stack of the local state to reflect entering the current expression's child
      * with the given index.
@@ -1723,12 +1696,12 @@ public abstract class ExpressionCrawler<GlobalStateT extends GlobalState<GlobalS
      */
     public void enterChildExpression(LocalStateT localState, int index) {
         EvaluationContext<ValueT> top = localState.getTopOfStack();
-
+        
         top.getExpressionIndices().add(index);
         top.setComingFrom(-1);
         top.getExpressionValues().add(new ArrayList<>());
     }
-
+    
     /**
      * Updates the execution stack of the local state to reflect returning from the evaluation of a
      * child back to the parent.
@@ -1741,8 +1714,8 @@ public abstract class ExpressionCrawler<GlobalStateT extends GlobalState<GlobalS
     public void returnToParent(Expression parent, LocalStateT localState) {
         returnToParent(parent, localState, null);
     }
-
-
+    
+    
     /**
      * Updates the execution stack of the local state to reflect returning from the evaluation of a
      * child back to the parent, with the given value as the evaluation result.
@@ -1753,20 +1726,20 @@ public abstract class ExpressionCrawler<GlobalStateT extends GlobalState<GlobalS
      */
     public void returnToParent(Expression parent, LocalStateT localState, ValueT result) {
         EvaluationContext<ValueT> top = localState.getTopOfStack();
-
+        
         int removedIndex = top.getExpressionIndices().remove(top.getExpressionIndices().size() - 1);
         top.setComingFrom(removedIndex);
-
-
+        
+        
         top.getExpressionValues().remove(top.getExpressionValues().size() - 1);
         if (!caresAboutValue(parent, removedIndex)) {
             return;
         }
-
+        
         List<ValueT> parentValues = top.getExpressionValues().get(top.getExpressionValues().size() - 1);
         CollectionUtil.addOrSet(parentValues, top.getComingFrom(), result);
     }
-
+    
     /**
      * Updates the execution stack of the local state to reflect returning from a function call.
      * 
@@ -1776,11 +1749,10 @@ public abstract class ExpressionCrawler<GlobalStateT extends GlobalState<GlobalS
      * @param localState the local part of that state
      */
     public SmallStepResult<GlobalStateT, ProcessStateT, InfoT, TransitionResultT> returnFromFunction(
-            TransitionResultT currentState, LocalStateT localState, ReturnExpression expression,
-            int comingFrom) {
+            TransitionResultT currentState, LocalStateT localState, ReturnExpression expression, int comingFrom) {
         return returnFromFunction(currentState, localState, expression, comingFrom, null);
     }
-
+    
     /**
      * Updates the execution stack of the local state to reflect returning from a function call with the
      * given return value.
@@ -1790,26 +1762,26 @@ public abstract class ExpressionCrawler<GlobalStateT extends GlobalState<GlobalS
      * @param result the return value
      */
     public SmallStepResult<GlobalStateT, ProcessStateT, InfoT, TransitionResultT> returnFromFunction(
-            TransitionResultT currentState, LocalStateT localState, ReturnExpression expression,
-            int comingFrom, ValueT result) {
+            TransitionResultT currentState, LocalStateT localState, ReturnExpression expression, int comingFrom,
+            ValueT result) {
         List<EvaluationContext<ValueT>> stack = localState.getExecutionStack();
         stack.remove(stack.size() - 1);
-
+        
         if (stack.isEmpty()) {
             return handleEndOfCodeReached(currentState, localState, stack);
         }
-
+        
         EvaluationContext<ValueT> top = stack.get(stack.size() - 1);
         top.setComingFrom(top.getComingFrom() + 1);
-
+        
         List<ValueT> parentValues = top.getExpressionValues().get(top.getExpressionValues().size() - 1);
         CollectionUtil.addOrSet(parentValues, top.getComingFrom(), result);
-
+        
         getExecutionConditions(localState).removeCall();
         functionReturned((FunctionCallExpression) top.getNextExpression(), currentState, localState);
         return createSmallStepResult(expression, comingFrom, currentState, localState, false, false);
     }
-
+    
     /**
      * Handles reaching the end of the top-level function considered by this expression crawler.
      *
@@ -1819,7 +1791,6 @@ public abstract class ExpressionCrawler<GlobalStateT extends GlobalState<GlobalS
      * @return the possible transitions and whether or not the end of an atomic block has been reached
      */
     public abstract SmallStepResult<GlobalStateT, ProcessStateT, InfoT, TransitionResultT> handleEndOfCodeReached(
-            TransitionResultT currentState, LocalStateT localState,
-            List<EvaluationContext<ValueT>> stack);
-
+            TransitionResultT currentState, LocalStateT localState, List<EvaluationContext<ValueT>> stack);
+    
 }

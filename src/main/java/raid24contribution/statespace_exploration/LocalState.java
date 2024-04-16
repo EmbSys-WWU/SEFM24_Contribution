@@ -30,24 +30,24 @@ import raid24contribution.util.WrappedSCFunction;
  */
 public abstract class LocalState<LocalStateT extends LocalState<LocalStateT, ValueT>, ValueT extends AbstractedValue<? extends ValueT, ?, ?>>
         extends HashCachingLockableObject<LocalStateT> {
-
+    
     public static class StateInformationKey<T extends StateInformation<T>> {
-
+        
         @Override
         public String toString() {
             return "StateInfoKey" + hashCode();
         }
     }
-
+    
     public static interface StateInformation<T extends StateInformation<T>> {
-
+        
         T copy();
     }
-
-    private List<EvaluationContext<ValueT>> executionStack; // TODO: allow abstraction of only storing top element?
-
+    
+    private List<EvaluationContext<ValueT>> executionStack;
+    
     private Map<StateInformationKey<?>, StateInformation<?>> stateInformation;
-
+    
     /**
      * Constructs a new, mutable LocalState at the given execution stack.
      * <p>
@@ -60,10 +60,10 @@ public abstract class LocalState<LocalStateT extends LocalState<LocalStateT, Val
      */
     public LocalState(List<EvaluationContext<ValueT>> executionStack) {
         this.executionStack = executionStack;
-
+        
         this.stateInformation = new LinkedHashMap<>();
     }
-
+    
     /**
      * Constructs a new, mutable copy of the given LocalState.
      * 
@@ -71,16 +71,16 @@ public abstract class LocalState<LocalStateT extends LocalState<LocalStateT, Val
      */
     protected LocalState(LocalState<LocalStateT, ValueT> copyOf) {
         super(copyOf);
-
+        
         this.executionStack = new ArrayList<>(copyOf.executionStack.size());
         for (EvaluationContext<ValueT> ec : copyOf.executionStack) {
             this.executionStack.add(ec.unlockedClone());
         }
-
+        
         this.stateInformation = new LinkedHashMap<>(copyOf.stateInformation);
         this.stateInformation.replaceAll((key, info) -> info.copy());
     }
-
+    
     /**
      * Returns a modifiable or unmodifiable view of the execution stack at this state, depending on
      * whether or not this state is locked.
@@ -94,7 +94,7 @@ public abstract class LocalState<LocalStateT extends LocalState<LocalStateT, Val
         resetHashCode();
         return isLocked() ? Collections.unmodifiableList(this.executionStack) : this.executionStack;
     }
-
+    
     /**
      * Returns the topmost element of the execution stack.
      *
@@ -104,7 +104,7 @@ public abstract class LocalState<LocalStateT extends LocalState<LocalStateT, Val
         resetHashCode();
         return getExecutionStack().get(getExecutionStack().size() - 1);
     }
-
+    
     /**
      * Returns the list of all functions on the execution stack in their order on the execution stack.
      * 
@@ -119,11 +119,11 @@ public abstract class LocalState<LocalStateT extends LocalState<LocalStateT, Val
         }
         return result;
     }
-
+    
     public WrappedSCClassInstance getInitialThisValue() {
         return (WrappedSCClassInstance) this.executionStack.getFirst().getThisValue().get();
     }
-
+    
     /**
      * Replaces the execution stack at this state by the given parameter.
      * 
@@ -137,7 +137,7 @@ public abstract class LocalState<LocalStateT extends LocalState<LocalStateT, Val
         resetHashCode();
         this.executionStack = executionStack;
     }
-
+    
     /**
      * Returns the additional state information that was stored for the given key, or null.
      *
@@ -149,8 +149,8 @@ public abstract class LocalState<LocalStateT extends LocalState<LocalStateT, Val
     public <T extends StateInformation<T>> T getStateInformation(StateInformationKey<T> key) {
         return (T) this.stateInformation.get(key);
     }
-
-
+    
+    
     /**
      * Stores additional state information for the given key.
      * 
@@ -168,14 +168,14 @@ public abstract class LocalState<LocalStateT extends LocalState<LocalStateT, Val
             this.stateInformation.put(key, value);
         }
     }
-
+    
     /**
      * Removes all currently stored additional state information.
      */
     public void clearStateInformation() {
         this.stateInformation.clear();
     }
-
+    
     /**
      * {@inheritDoc}
      * 
@@ -186,13 +186,13 @@ public abstract class LocalState<LocalStateT extends LocalState<LocalStateT, Val
         if (!super.lock()) {
             return false;
         }
-
+        
         for (EvaluationContext<ValueT> loc : this.executionStack) {
             loc.lock();
         }
         return true;
     }
-
+    
     /**
      * {@inheritDoc}
      * 
@@ -203,12 +203,12 @@ public abstract class LocalState<LocalStateT extends LocalState<LocalStateT, Val
      */
     @Override
     public abstract LocalStateT unlockedClone();
-
+    
     @Override
     protected int hashCodeInternal() {
         return this.executionStack.hashCode();
     }
-
+    
     @Override
     public boolean equals(Object other) {
         if (other == this) {
@@ -219,14 +219,14 @@ public abstract class LocalState<LocalStateT extends LocalState<LocalStateT, Val
         }
         return equals(l);
     }
-
+    
     protected boolean equalsInternal(LocalState<?, ?> other) {
         return this.executionStack.equals(other.executionStack);
     }
-
+    
     @Override
     public String toString() {
         return "At " + this.executionStack;
     }
-
+    
 }

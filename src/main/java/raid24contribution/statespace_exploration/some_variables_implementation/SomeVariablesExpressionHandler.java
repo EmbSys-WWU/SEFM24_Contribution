@@ -24,18 +24,18 @@ import raid24contribution.sc_model.variables.SCEvent;
 import raid24contribution.sc_model.variables.SCPortEvent;
 import raid24contribution.statespace_exploration.AbstractedValue;
 import raid24contribution.statespace_exploration.EvaluationContext;
-import raid24contribution.statespace_exploration.LocalState;
-import raid24contribution.statespace_exploration.TransitionResult;
 import raid24contribution.statespace_exploration.EventBlocker.Event;
+import raid24contribution.statespace_exploration.LocalState;
 import raid24contribution.statespace_exploration.LocalState.StateInformation;
 import raid24contribution.statespace_exploration.LocalState.StateInformationKey;
+import raid24contribution.statespace_exploration.TransitionResult;
 import raid24contribution.statespace_exploration.standard_implementations.ComposableTransitionInformation;
 import raid24contribution.statespace_exploration.standard_implementations.ExpressionCrawler;
+import raid24contribution.statespace_exploration.standard_implementations.ExpressionCrawler.SmallStepResult;
 import raid24contribution.statespace_exploration.standard_implementations.GlobalVariable;
 import raid24contribution.statespace_exploration.standard_implementations.LocalVariable;
 import raid24contribution.statespace_exploration.standard_implementations.Variable;
 import raid24contribution.statespace_exploration.standard_implementations.VariableHolder;
-import raid24contribution.statespace_exploration.standard_implementations.ExpressionCrawler.SmallStepResult;
 import raid24contribution.util.WrappedSCClassInstance;
 import raid24contribution.util.WrappedSCFunction;
 
@@ -50,31 +50,31 @@ import raid24contribution.util.WrappedSCFunction;
  * @param <TransitionResultT> the type of transition result
  */
 public class SomeVariablesExpressionHandler<LocalStateT extends LocalState<LocalStateT, ValueT> & VariableHolder<LocalVariable<?>, ValueT>, ValueT extends AbstractedValue<ValueT, ?, ?>, TransitionResultT extends TransitionResult<TransitionResultT, SomeVariablesGlobalState<ValueT>, SomeVariablesProcessState<ValueT>, InfoT, SomeVariablesProcess<ValueT, InfoT>>, InfoT extends ComposableTransitionInformation<InfoT>> {
-
+    
     public static class AccessedVariablesInformation extends LinkedHashSet<Variable<?, ?>>
-    implements StateInformation<AccessedVariablesInformation> {
-
+            implements StateInformation<AccessedVariablesInformation> {
+        
         private static final long serialVersionUID = -8549558425124611127L;
-
+        
         public AccessedVariablesInformation() {
             super();
         }
-
+        
         public AccessedVariablesInformation(Collection<? extends Variable<?, ?>> copyOf) {
             super(copyOf);
         }
-
+        
         @Override
         public AccessedVariablesInformation copy() {
             return new AccessedVariablesInformation(this);
         }
     }
-
+    
     public static final StateInformationKey<AccessedVariablesInformation> VARIABLES_READ_KEY =
             new StateInformationKey<>();
     public static final StateInformationKey<AccessedVariablesInformation> VARIABLES_WRITTEN_KEY =
             new StateInformationKey<>();
-
+    
     /**
      * Returns the internally used SCEvent for an SCPortEvent and the specific port instance.
      *
@@ -106,15 +106,15 @@ public class SomeVariablesExpressionHandler<LocalStateT extends LocalState<Local
             }
             throw new NoSuchElementException(eventType + " on " + instance.toString());
         }
-
+        
         throw new UnsupportedOperationException(eventType + " on " + instance.toString());
     }
-
+    
     private ExpressionCrawler<SomeVariablesGlobalState<ValueT>, SomeVariablesProcessState<ValueT>, LocalStateT, TransitionResultT, ValueT, InfoT, SomeVariablesProcess<ValueT, InfoT>> crawler;
-
+    
     private Predicate<? super GlobalVariable<?, ?>> globalVariableStorageCondition;
     private Predicate<? super LocalVariable<?>> localVariableStorageCondition;
-
+    
     /**
      * Constructs a new SomeVariableNoInformationExpressionHandler.
      * 
@@ -127,12 +127,12 @@ public class SomeVariablesExpressionHandler<LocalStateT extends LocalState<Local
     public SomeVariablesExpressionHandler(
             ExpressionCrawler<SomeVariablesGlobalState<ValueT>, SomeVariablesProcessState<ValueT>, LocalStateT, TransitionResultT, ValueT, InfoT, SomeVariablesProcess<ValueT, InfoT>> crawler,
             Predicate<? super GlobalVariable<?, ?>> globalVariableStorageCondition,
-                    Predicate<? super LocalVariable<?>> localVariableStorageCondition) {
+            Predicate<? super LocalVariable<?>> localVariableStorageCondition) {
         this.crawler = crawler;
         this.globalVariableStorageCondition = globalVariableStorageCondition;
         this.localVariableStorageCondition = localVariableStorageCondition;
     }
-
+    
     /**
      * Returns, as an abstracted value, the actual {@link Event} instance of an SCPortEvent, given some
      * global state.
@@ -144,10 +144,10 @@ public class SomeVariablesExpressionHandler<LocalStateT extends LocalState<Local
     protected GlobalVariable<WrappedSCClassInstance, SCVariable> getEventVariable(SCPort port) {
         WrappedSCClassInstance instance = this.crawler.getChannel(port);
         SCVariable scVariable = getPortEvent("default_event", instance);
-
+        
         return new GlobalVariable<>(instance, scVariable);
     }
-
+    
     /**
      * Returns, as an abstracted value, the actual {@link Event} instance of an SCPortEvent, given some
      * global state.
@@ -159,10 +159,10 @@ public class SomeVariablesExpressionHandler<LocalStateT extends LocalState<Local
     protected GlobalVariable<WrappedSCClassInstance, SCVariable> getEventVariable(SCPortEvent portEvent) {
         WrappedSCClassInstance instance = this.crawler.getChannel(portEvent.getPort());
         SCVariable scVariable = getPortEvent(portEvent.getEventType(), instance);
-
+        
         return new GlobalVariable<>(instance, scVariable);
     }
-
+    
     /**
      * Returns, as an abstracted value, the actual {@link Event} instance of an SCPortEvent, given some
      * global state.
@@ -173,11 +173,10 @@ public class SomeVariablesExpressionHandler<LocalStateT extends LocalState<Local
      */
     protected ValueT getEventValue(SomeVariablesGlobalState<ValueT> globalState,
             GlobalVariable<WrappedSCClassInstance, SCVariable> eventVariable) {
-        ValueT eventValue =
-                globalState.getValue(eventVariable, this.crawler::getNonDeterminedValue);
+        ValueT eventValue = globalState.getValue(eventVariable, this.crawler::getNonDeterminedValue);
         return eventValue;
     }
-
+    
     /**
      * See
      * {@link ExpressionCrawler#handleSpecialExpression(TransitionResult, LocalState, Expression, int)}.
@@ -197,10 +196,10 @@ public class SomeVariablesExpressionHandler<LocalStateT extends LocalState<Local
             TransitionResultT currentState, LocalStateT localState, Expression expression, int comingFrom) {
         localState.setStateInformation(VARIABLES_READ_KEY, null);
         localState.setStateInformation(VARIABLES_WRITTEN_KEY, null);
-
+        
         Object var;
         boolean global;
-
+        
         if (expression instanceof SCVariableExpression ve) {
             var = ve.getVar();
             if (localState.getTopOfStack().getFunction().getParameters().stream()
@@ -215,12 +214,12 @@ public class SomeVariablesExpressionHandler<LocalStateT extends LocalState<Local
         } else {
             return null;
         }
-
+        
         AccessedVariablesInformation readVariables = new AccessedVariablesInformation();
         localState.setStateInformation(VARIABLES_READ_KEY, readVariables);
-
+        
         assert comingFrom == -1;
-
+        
         // most variable expressions are treated as their values, but if they appear on the left hand side
         // of an assignment (or they are the rightmost part of an access which appears on the left hand side
         // of an assignment), they are treated as the variables
@@ -243,7 +242,7 @@ public class SomeVariablesExpressionHandler<LocalStateT extends LocalState<Local
         } else {
             treatAsValue = true;
         }
-
+        
         ValueT result;
         if (treatAsValue) {
             // distinguish between local and global variable based on the existence of a DeclarationExpression
@@ -252,7 +251,6 @@ public class SomeVariablesExpressionHandler<LocalStateT extends LocalState<Local
                 readVariables.add(variable);
                 result = localState.getValue(variable, this.crawler::getNonDeterminedValue);
             } else {
-                // TODO: assume variable is global, is this correct?
                 if (var instanceof SCPortEvent portEvent) {
                     GlobalVariable<WrappedSCClassInstance, SCVariable> variable = getEventVariable(portEvent);
                     readVariables.add(variable);
@@ -292,11 +290,11 @@ public class SomeVariablesExpressionHandler<LocalStateT extends LocalState<Local
                 }
             }
         }
-
+        
         this.crawler.returnToParent(expression.getParent(), localState, result);
         return this.crawler.createSmallStepResult(expression, comingFrom, currentState, localState, false, false);
     }
-
+    
     /**
      * Returns, as an abstracted value, the qualifier for the variable accessed in the given expression.
      * 
@@ -307,7 +305,8 @@ public class SomeVariablesExpressionHandler<LocalStateT extends LocalState<Local
      * @param expression an expression constituting a variable
      * @return the qualifier for the variable
      */
-    protected ValueT getVariableQualifier(TransitionResultT currentState, LocalStateT localState, Expression expression) {
+    protected ValueT getVariableQualifier(TransitionResultT currentState, LocalStateT localState,
+            Expression expression) {
         // if the variable is the right hand side of an access, the result of the left hand side is the
         // scope. otherwise, this is the scope.
         if (expression.getParent() instanceof AccessExpression parent && parent.getRight() == expression) {
@@ -317,7 +316,7 @@ public class SomeVariablesExpressionHandler<LocalStateT extends LocalState<Local
             return localState.getTopOfStack().getThisValue();
         }
     }
-
+    
     /**
      * See {@link ExpressionCrawler#aggregateExpressionValue(TransitionResult, LocalState, Expression)}.
      *
@@ -327,13 +326,14 @@ public class SomeVariablesExpressionHandler<LocalStateT extends LocalState<Local
      * @return an abstraction of the value of the expression (may not be null, but may be non-determined
      *         or an abstraction of null)
      */
-    protected ValueT aggregateExpressionValue(TransitionResultT currentState, LocalStateT localState, Expression expression) {
+    protected ValueT aggregateExpressionValue(TransitionResultT currentState, LocalStateT localState,
+            Expression expression) {
         if (expression instanceof UnaryExpression ue) {
             ValueT param = this.crawler.getValueOfChild(currentState, localState, 0);
             if (!param.isDetermined()) {
                 return this.crawler.getNonDeterminedValue();
             }
-
+            
             if (ue.getOperator().equals("-")) {
                 return this.crawler.getDeterminedValue(-1 * this.crawler.getAsInteger(param).get());
             } else if (ue.getOperator().equals("!")) {
@@ -343,20 +343,20 @@ public class SomeVariablesExpressionHandler<LocalStateT extends LocalState<Local
                 return this.crawler.getNonDeterminedValue();
             }
         }
-
+        
         BinaryOperator<ValueT> simpleOperator;
         if (expression instanceof BinaryExpression be) {
             ValueT left = this.crawler.getValueOfChild(currentState, localState, 0);
             ValueT right = this.crawler.getValueOfChild(currentState, localState, 1);
-
+            
             if (be.getOp().equals("=")) {
                 if (!left.isDetermined()) {
                     return this.crawler.getNonDeterminedValue();
                 }
-
+                
                 AccessedVariablesInformation writtenVariables = new AccessedVariablesInformation();
                 localState.setStateInformation(VARIABLES_WRITTEN_KEY, writtenVariables);
-
+                
                 if (left.get() instanceof GlobalVariable<?, ?> gv) {
                     writtenVariables.add(gv);
                     if (this.globalVariableStorageCondition.test(gv)) {
@@ -368,7 +368,7 @@ public class SomeVariablesExpressionHandler<LocalStateT extends LocalState<Local
                         localState.setVariableValue(lv, right);
                     }
                 }
-
+                
                 return right;
             } else if ((simpleOperator = getSimpleOperator(be.getOp())) != null) {
                 return simpleOperator.apply(left, right);
@@ -377,58 +377,55 @@ public class SomeVariablesExpressionHandler<LocalStateT extends LocalState<Local
                 return this.crawler.getNonDeterminedValue();
             }
         }
-
+        
         if (expression instanceof AccessExpression ae) {
             ValueT left = this.crawler.getValueOfChild(currentState, localState, 0);
             ValueT right = this.crawler.getValueOfChild(currentState, localState, 1);
-
+            
             if (ae.getRight() instanceof FunctionCallExpression fe) {
                 return right;
             }
-
+            
             if (!left.isDetermined() || !right.isDetermined()) {
                 return this.crawler.getNonDeterminedValue();
             }
-
-            // TODO: is that right?
-            // TODO: always treat VariableExpression as variable if in access and only evaluate in aggregation?
-            return currentState.globalState().getVariableValues()
-                    .getOrDefault(new GlobalVariable<>(left.get(), (SCVariable) right.get()),
-                            this.crawler.getNonDeterminedValue());
+            
+            return currentState.globalState().getVariableValues().getOrDefault(
+                    new GlobalVariable<>(left.get(), (SCVariable) right.get()), this.crawler.getNonDeterminedValue());
         }
-
+        
         if (expression instanceof SCVariableDeclarationExpression de) {
             if (de.getInitialValues().isEmpty()) {
                 return this.crawler.getNonDeterminedValue();
             }
-
+            
             ValueT left = this.crawler.getValueOfChild(currentState, localState, 0);
             ValueT right = this.crawler.getValueOfChild(currentState, localState, 1);
-
+            
             if (!left.isDetermined()) {
                 return this.crawler.getNonDeterminedValue();
             }
-
+            
             AccessedVariablesInformation writtenVariables = new AccessedVariablesInformation();
             localState.setStateInformation(VARIABLES_WRITTEN_KEY, writtenVariables);
-
+            
             if (left.get() instanceof LocalVariable<?> lv) {
                 writtenVariables.add(lv);
                 if (this.localVariableStorageCondition.test(lv)) {
                     localState.setVariableValue(lv, right);
                 }
             }
-
+            
             if (!right.isDetermined()) {
                 return this.crawler.getNonDeterminedValue();
             }
-
+            
             return right;
         }
-
+        
         return this.crawler.getNonDeterminedValue();
     }
-
+    
     protected BinaryOperator<ValueT> getSimpleOperator(String op) {
         if (op.equals("==")) {
             return (left, right) -> {
@@ -443,7 +440,7 @@ public class SomeVariablesExpressionHandler<LocalStateT extends LocalState<Local
                 try {
                     boolean i = this.crawler.getAsBoolean(left).get();
                     boolean j = this.crawler.getAsBoolean(right).get();
-
+                    
                     return this.crawler.getDeterminedValue(i == j);
                 } catch (ClassCastException e) {
                     // ignore, carry on
@@ -451,7 +448,7 @@ public class SomeVariablesExpressionHandler<LocalStateT extends LocalState<Local
                 try {
                     int i = this.crawler.getAsInteger(left).get();
                     int j = this.crawler.getAsInteger(right).get();
-
+                    
                     return this.crawler.getDeterminedValue(i == j);
                 } catch (ClassCastException e) {
                     // ignore, carry on
@@ -459,7 +456,7 @@ public class SomeVariablesExpressionHandler<LocalStateT extends LocalState<Local
                 try {
                     double i = this.crawler.getAsDouble(left).get();
                     double j = this.crawler.getAsDouble(right).get();
-
+                    
                     return this.crawler.getDeterminedValue(i == j);
                 } catch (ClassCastException e) {
                     // ignore, carry on
@@ -467,7 +464,7 @@ public class SomeVariablesExpressionHandler<LocalStateT extends LocalState<Local
                 if (left.get() instanceof String s1 && right.get() instanceof String s2) {
                     return this.crawler.getDeterminedValue(s1.equals(s2));
                 }
-
+                
                 throw new ClassCastException(
                         "incompatible types for addition: " + left.get().getClass() + " and " + right.get().getClass());
             };
@@ -479,7 +476,7 @@ public class SomeVariablesExpressionHandler<LocalStateT extends LocalState<Local
                 try {
                     int i = this.crawler.getAsInteger(left).get();
                     int j = this.crawler.getAsInteger(right).get();
-
+                    
                     return this.crawler.getDeterminedValue(i + j);
                 } catch (ClassCastException e) {
                     // ignore, carry on
@@ -487,7 +484,7 @@ public class SomeVariablesExpressionHandler<LocalStateT extends LocalState<Local
                 try {
                     double i = this.crawler.getAsDouble(left).get();
                     double j = this.crawler.getAsDouble(right).get();
-
+                    
                     return this.crawler.getDeterminedValue(i + j);
                 } catch (ClassCastException e) {
                     // ignore, carry on
@@ -495,7 +492,7 @@ public class SomeVariablesExpressionHandler<LocalStateT extends LocalState<Local
                 if (left.get() instanceof String s1 && right.get() instanceof String s2) {
                     return this.crawler.getDeterminedValue(s1 + s2);
                 }
-
+                
                 throw new ClassCastException(
                         "incompatible types for addition: " + left.get().getClass() + " and " + right.get().getClass());
             };
@@ -507,7 +504,7 @@ public class SomeVariablesExpressionHandler<LocalStateT extends LocalState<Local
                 try {
                     int i = this.crawler.getAsInteger(left).get();
                     int j = this.crawler.getAsInteger(right).get();
-
+                    
                     return this.crawler.getDeterminedValue(i - j);
                 } catch (ClassCastException e) {
                     // ignore, carry on
@@ -515,12 +512,12 @@ public class SomeVariablesExpressionHandler<LocalStateT extends LocalState<Local
                 try {
                     double i = this.crawler.getAsDouble(left).get();
                     double j = this.crawler.getAsDouble(right).get();
-
+                    
                     return this.crawler.getDeterminedValue(i - j);
                 } catch (ClassCastException e) {
                     // ignore, carry on
                 }
-
+                
                 throw new ClassCastException("incompatible types for subtraction: " + left.get().getClass() + " and "
                         + right.get().getClass());
             };
@@ -532,7 +529,7 @@ public class SomeVariablesExpressionHandler<LocalStateT extends LocalState<Local
                 try {
                     int i = this.crawler.getAsInteger(left).get();
                     int j = this.crawler.getAsInteger(right).get();
-
+                    
                     return this.crawler.getDeterminedValue(i * j);
                 } catch (ClassCastException e) {
                     // ignore, carry on
@@ -540,12 +537,12 @@ public class SomeVariablesExpressionHandler<LocalStateT extends LocalState<Local
                 try {
                     double i = this.crawler.getAsDouble(left).get();
                     double j = this.crawler.getAsDouble(right).get();
-
+                    
                     return this.crawler.getDeterminedValue(i * j);
                 } catch (ClassCastException e) {
                     // ignore, carry on
                 }
-
+                
                 throw new ClassCastException("incompatible types for multiplication: " + left.get().getClass() + " and "
                         + right.get().getClass());
             };
@@ -557,7 +554,7 @@ public class SomeVariablesExpressionHandler<LocalStateT extends LocalState<Local
                 try {
                     int i = this.crawler.getAsInteger(left).get();
                     int j = this.crawler.getAsInteger(right).get();
-
+                    
                     return this.crawler.getDeterminedValue(i / j);
                 } catch (ClassCastException e) {
                     // ignore, carry on
@@ -565,15 +562,14 @@ public class SomeVariablesExpressionHandler<LocalStateT extends LocalState<Local
                 try {
                     double i = this.crawler.getAsDouble(left).get();
                     double j = this.crawler.getAsDouble(right).get();
-
+                    
                     return this.crawler.getDeterminedValue(i / j);
                 } catch (ClassCastException e) {
                     // ignore, carry on
                 }
-
+                
                 throw new ClassCastException(
-                        "incompatible types for division: " + left.get().getClass() + " and "
-                                + right.get().getClass());
+                        "incompatible types for division: " + left.get().getClass() + " and " + right.get().getClass());
             };
         } else if (op.equals("&")) {
             return (left, right) -> {
@@ -583,12 +579,12 @@ public class SomeVariablesExpressionHandler<LocalStateT extends LocalState<Local
                 try {
                     int i = this.crawler.getAsInteger(left).get();
                     int j = this.crawler.getAsInteger(right).get();
-
+                    
                     return this.crawler.getDeterminedValue(i & j);
                 } catch (ClassCastException e) {
                     // ignore, carry on
                 }
-
+                
                 throw new ClassCastException("incompatible types for & operator: " + left.get().getClass() + " and "
                         + right.get().getClass());
             };
@@ -600,12 +596,12 @@ public class SomeVariablesExpressionHandler<LocalStateT extends LocalState<Local
                 try {
                     int i = this.crawler.getAsInteger(left).get();
                     int j = this.crawler.getAsInteger(right).get();
-
+                    
                     return this.crawler.getDeterminedValue(i | j);
                 } catch (ClassCastException e) {
                     // ignore, carry on
                 }
-
+                
                 throw new ClassCastException("incompatible types for | operator: " + left.get().getClass() + " and "
                         + right.get().getClass());
             };
@@ -617,14 +613,14 @@ public class SomeVariablesExpressionHandler<LocalStateT extends LocalState<Local
                 try {
                     int i = this.crawler.getAsInteger(left).get();
                     int j = this.crawler.getAsInteger(right).get();
-
+                    
                     return this.crawler.getDeterminedValue(i << j);
                 } catch (ClassCastException e) {
                     // ignore, carry on
                 }
-
+                
                 return null; // probably stream operator, ignore
-
+                
                 // throw new ClassCastException(
                 // "incompatible types for << operator: " + left.get().getClass() + " and "
                 // + right.get().getClass());
@@ -637,12 +633,12 @@ public class SomeVariablesExpressionHandler<LocalStateT extends LocalState<Local
                 try {
                     int i = this.crawler.getAsInteger(left).get();
                     int j = this.crawler.getAsInteger(right).get();
-
+                    
                     return this.crawler.getDeterminedValue(i >> j);
                 } catch (ClassCastException e) {
                     // ignore, carry on
                 }
-
+                
                 throw new ClassCastException("incompatible types for >> operator: " + left.get().getClass() + " and "
                         + right.get().getClass());
             };
@@ -654,15 +650,14 @@ public class SomeVariablesExpressionHandler<LocalStateT extends LocalState<Local
                 try {
                     boolean i = this.crawler.getAsBoolean(left).get();
                     boolean j = this.crawler.getAsBoolean(right).get();
-
+                    
                     return this.crawler.getDeterminedValue(i && j);
                 } catch (ClassCastException e) {
                     // ignore, carry on
                 }
-
-                throw new ClassCastException(
-                        "incompatible types for && operator: " + left.get().getClass() + " and "
-                                + right.get().getClass());
+                
+                throw new ClassCastException("incompatible types for && operator: " + left.get().getClass() + " and "
+                        + right.get().getClass());
             };
         } else if (op.equals("||")) {
             return (left, right) -> {
@@ -672,7 +667,7 @@ public class SomeVariablesExpressionHandler<LocalStateT extends LocalState<Local
                 try {
                     boolean i = this.crawler.getAsBoolean(left).get();
                     boolean j = this.crawler.getAsBoolean(right).get();
-
+                    
                     return this.crawler.getDeterminedValue(i || j);
                 } catch (ClassCastException e) {
                     // ignore, carry on
@@ -680,21 +675,20 @@ public class SomeVariablesExpressionHandler<LocalStateT extends LocalState<Local
                 try {
                     double i = this.crawler.getAsDouble(left).get();
                     double j = this.crawler.getAsDouble(right).get();
-
+                    
                     return this.crawler.getDeterminedValue(i / j);
                 } catch (ClassCastException e) {
                     // ignore, carry on
                 }
-
-                throw new ClassCastException(
-                        "incompatible types for || operator: " + left.get().getClass() + " and "
-                                + right.get().getClass());
+                
+                throw new ClassCastException("incompatible types for || operator: " + left.get().getClass() + " and "
+                        + right.get().getClass());
             };
         }
         // TODO: add more operators
         return null;
     }
-
+    
     /**
      * Called when a function has been called (i.e. entered), right before the SmallStepResult is
      * created. Not called when entering special case functions (wait, notify, request_update).
@@ -707,15 +701,16 @@ public class SomeVariablesExpressionHandler<LocalStateT extends LocalState<Local
      */
     public void functionCalled(FunctionCallExpression expression, TransitionResultT currentState,
             LocalStateT localState) {
-        EvaluationContext<ValueT> callingContext = localState.getExecutionStack().get(localState.getExecutionStack().size() - 2);
+        EvaluationContext<ValueT> callingContext =
+                localState.getExecutionStack().get(localState.getExecutionStack().size() - 2);
         List<WrappedSCFunction> stackTrace = localState.getStackTrace();
-
+        
         AccessedVariablesInformation writtenVariables = new AccessedVariablesInformation();
         localState.setStateInformation(VARIABLES_WRITTEN_KEY, writtenVariables);
-
+        
         int i = 0;
         for (SCParameter param : expression.getFunction().getParameters()) {
-            LocalVariable<SCVariable> var = new LocalVariable<SCVariable>(stackTrace, param.getVar());
+            LocalVariable<SCVariable> var = new LocalVariable<>(stackTrace, param.getVar());
             if (this.localVariableStorageCondition.test(var)) {
                 ValueT value = callingContext.getExpressionValue(0, i);
                 localState.setVariableValue(var, value);
@@ -724,8 +719,8 @@ public class SomeVariablesExpressionHandler<LocalStateT extends LocalState<Local
             i++;
         }
     }
-
-
+    
+    
     /**
      * Called when a function has been returned from (i.e. left), right before the SmallStepResult is
      * created. Not called when leaving special case functions (wait, notify, request_update) or the top
@@ -741,13 +736,13 @@ public class SomeVariablesExpressionHandler<LocalStateT extends LocalState<Local
             LocalStateT localState) {
         List<WrappedSCFunction> stackTrace = new ArrayList<>(localState.getStackTrace());
         stackTrace.add(wrap(expression.getFunction()));
-
+        
         for (SCParameter param : expression.getFunction().getParameters()) {
-            LocalVariable<SCVariable> var = new LocalVariable<SCVariable>(stackTrace, param.getVar());
+            LocalVariable<SCVariable> var = new LocalVariable<>(stackTrace, param.getVar());
             if (this.localVariableStorageCondition.test(var)) {
                 localState.deleteVariableValue(var);
             }
         }
     }
-
+    
 }

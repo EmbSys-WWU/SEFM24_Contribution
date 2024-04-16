@@ -22,19 +22,18 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @param <ProcessStateT> the type of {@link ProcessState} used in the exploration
  * @param <InfoT> the type of {@link TransitionInformation} supplied by the {@link AnalyzedProcess}
  */
-// TODO: how much of the syscir is thread safe?
 public class ConcurrentStateSpaceExploration<GlobalStateT extends GlobalState<GlobalStateT>, ProcessStateT extends ProcessState<ProcessStateT, ?>, InfoT extends TransitionInformation<InfoT>, ProcessType extends AnalyzedProcess<ProcessType, GlobalStateT, ProcessStateT, InfoT>>
-extends StateSpaceExploration<GlobalStateT, ProcessStateT, InfoT, ProcessType> {
-
+        extends StateSpaceExploration<GlobalStateT, ProcessStateT, InfoT, ProcessType> {
+    
     private int numOfThreads;
-
+    
     private Set<ConsideredState<GlobalStateT, ProcessStateT, ProcessType>> exploredStates;
     private BlockingQueue<ConsideredState<GlobalStateT, ProcessStateT, ProcessType>> worklist;
     private AtomicInteger worklistSize;
     private ThreadLocal<List<ConsideredState<GlobalStateT, ProcessStateT, ProcessType>>> worklistCache;
-
+    
     private volatile Throwable thrown;
-
+    
     /**
      * Constructs a new ConcurrentStateSpaceExploration using the given scheduler, recording all state
      * transitions in the given record and beginning its exploration at the given initial states.
@@ -51,7 +50,7 @@ extends StateSpaceExploration<GlobalStateT, ProcessStateT, InfoT, ProcessType> {
             Set<ConsideredState<GlobalStateT, ProcessStateT, ProcessType>> initialStates) {
         this(Runtime.getRuntime().availableProcessors(), scheduler, record, initialStates);
     }
-
+    
     /**
      * Constructs a new ConcurrentStateSpaceExploration using the given scheduler, recording all state
      * transitions in the given record and beginning its exploration at the given initial states.
@@ -69,24 +68,24 @@ extends StateSpaceExploration<GlobalStateT, ProcessStateT, InfoT, ProcessType> {
             ExplorationRecord<GlobalStateT, ProcessStateT, InfoT> record,
             Set<ConsideredState<GlobalStateT, ProcessStateT, ProcessType>> initialStates) {
         super(scheduler, record);
-
+        
         if (numOfThreads < 1) {
             throw new IllegalArgumentException("needs at least 1 thread");
         }
         this.numOfThreads = numOfThreads;
-
+        
         this.exploredStates = ConcurrentHashMap.newKeySet();
         this.worklist = new LinkedBlockingQueue<>();
         this.worklistSize = new AtomicInteger(initialStates.size());
-
+        
         for (ConsideredState<GlobalStateT, ProcessStateT, ProcessType> state : initialStates) {
             this.worklist.add(state);
             state.lock();
         }
-
+        
         // worklistCache is initialized in #explore() to catch illegal additional invocations
     }
-
+    
     /**
      * {@inheritDoc}
      * 
@@ -104,24 +103,24 @@ extends StateSpaceExploration<GlobalStateT, ProcessStateT, InfoT, ProcessType> {
             }
             this.worklistCache = new ThreadLocal<>();
         }
-
+        
         // create desired number of threads
         Thread[] threads = new Thread[this.numOfThreads];
         for (int i = 0; i < threads.length; i++) {
             threads[i] = new Thread() {
-
+                
                 @Override
                 public void run() {
                     runExplorationThread(threads);
                 }
             };
         }
-
+        
         // start threads
         for (int i = 0; i < threads.length; i++) {
             threads[i].start();
         }
-
+        
         // join on threads to wait for exploration to finish
         for (int i = 0; i < threads.length; i++) {
             while (true) {
@@ -133,17 +132,17 @@ extends StateSpaceExploration<GlobalStateT, ProcessStateT, InfoT, ProcessType> {
                 }
             }
         }
-
+        
         // if an exception was thrown during the exploration, rethrow it. otherwise, return normally.
         if (this.thrown != null) {
             throw new RuntimeException(this.thrown);
         }
-
+        
         if (!isAborted()) {
             done();
         }
     }
-
+    
     private void runExplorationThread(Thread[] allThreads) {
         /*
          * This exploration works just like the sequential one, except for additional bookkeeping requried
@@ -157,18 +156,18 @@ extends StateSpaceExploration<GlobalStateT, ProcessStateT, InfoT, ProcessType> {
          * If at any point an uncaught exception is thrown, this thread stores it in the field thrown,
          * abortin the exploration and causing #explore() to terminate by rethrowing the exception.
          */
-
+        
         // store the current explorer such that internally used classes can access it without an explicit
         // reference. there is no need to reset the value because this thread dies at the same time the
         // value is no longer needed.
         setCurrentExplorer(this);
-
+        
         // create a cache in which to collect newly reached states. if states were to be added to the
         // worklist directly (before the worklistSize i updated), other threads might already work on
         // them and reduce the worklistSize (potentially to zero, terminating prematurely)
         List<ConsideredState<GlobalStateT, ProcessStateT, ProcessType>> worklistCache = new ArrayList<>();
         this.worklistCache.set(worklistCache);
-
+        
         int leftInWorklist;
         do {
             try {
@@ -176,7 +175,7 @@ extends StateSpaceExploration<GlobalStateT, ProcessStateT, InfoT, ProcessType> {
                 if (isAborted()) {
                     return;
                 }
-
+                
                 // poll the worklist for a state to consider, waiting if necessary
                 ConsideredState<GlobalStateT, ProcessStateT, ProcessType> currentState =
                         ConcurrentStateSpaceExploration.this.worklist.poll(1, TimeUnit.SECONDS);
@@ -185,17 +184,17 @@ extends StateSpaceExploration<GlobalStateT, ProcessStateT, InfoT, ProcessType> {
                     leftInWorklist = ConcurrentStateSpaceExploration.this.worklistSize.get();
                     continue;
                 }
-
+                
                 // attempt to add the state to the set of explored states
                 if (ConcurrentStateSpaceExploration.this.exploredStates.add(currentState)) {
                     // if the state was successfully added, explore all followup states (adding them to the
                     // worklistCache)
                     int addedToWorklist = explorationStep(currentState);
-
+                    
                     // first update the worklistSize, then actually add the newly reached states (see above)
                     leftInWorklist = ConcurrentStateSpaceExploration.this.worklistSize.addAndGet(addedToWorklist - 1);
                     this.worklist.addAll(worklistCache);
-
+                    
                     // clear the worklistCache
                     worklistCache = new ArrayList<>();
                     this.worklistCache.set(worklistCache);
@@ -220,15 +219,15 @@ extends StateSpaceExploration<GlobalStateT, ProcessStateT, InfoT, ProcessType> {
                 return;
             }
         } while (leftInWorklist > 0);
-
+        
         // after exhausting the worklist, interrupt all other threads so that they update the worklistSize
         // and terminate as well
         for (Thread t : allThreads) {
             t.interrupt();
         }
-
+        
     }
-
+    
     @Override
     protected void handleExploration(ConsideredState<GlobalStateT, ProcessStateT, ProcessType> from,
             Collection<ProcessTransitionResult<GlobalStateT, ProcessStateT, InfoT, ProcessType>> transitions) {
@@ -238,20 +237,20 @@ extends StateSpaceExploration<GlobalStateT, ProcessStateT, InfoT, ProcessType> {
             getRecord().explorationMade(from, transition.resultingState(), transition.transitionInformation());
         }
     }
-
+    
     @Override
     public int getNumPendingStates() {
         return this.worklistSize.get();
     }
-
+    
     @Override
     public int getNumExploredStates() {
         return this.exploredStates.size();
     }
-
+    
     @Override
     public Set<ConsideredState<GlobalStateT, ProcessStateT, ProcessType>> getExploredStates() {
         return Collections.unmodifiableSet(this.exploredStates);
     }
-
+    
 }
