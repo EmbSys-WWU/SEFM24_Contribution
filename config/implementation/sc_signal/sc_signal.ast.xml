@@ -1,0 +1,365 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<INTERNAL>
+  <external_declaration idref="2">
+    <declaration idref="4">
+      <declaration_specifiers idref="8">
+        <class_specifier extSCModule="true" idref="10" keyword="class" name="sc_signalx">
+          <base_clause column="7" file="sc_signal.cpp" idref="12" line="3">
+            <base_specifier column="18" file="sc_signal.cpp" idref="14"
+              length="0" line="3" name="sc_prim_channel" sc_dt="true">
+              <base_class_access_specifier column="18"
+                file="sc_signal.cpp" idref="16" line="3" name="public"/>
+            </base_specifier>
+          </base_clause>
+          <member_declaration column="1" file="sc_signal.cpp" idref="18" line="5">
+            <access_specifier column="1" file="sc_signal.cpp" idref="20"
+              line="5" name="public"/>
+          </member_declaration>
+          <member_declaration column="9" file="sc_signal.cpp" idref="22" line="6">
+            <member_declarator_list column="9" file="sc_signal.cpp"
+              idref="24" line="6">
+              <declaration_specifiers column="9" file="sc_signal.cpp"
+                idref="26" line="6">
+                <builtin_type_specifier column="9" file="sc_signal.cpp"
+                  idref="28" length="0" line="6" name="sc_event" sc_dt="true"/>
+              </declaration_specifiers>
+              <member_declarator column="5" file="sc_signal.cpp"
+                idref="30" line="6">
+                <declarator column="5" file="sc_signal.cpp" idref="32" line="6">
+                  <qualified_id column="5" file="sc_signal.cpp"
+                    idref="34" line="6" name="change"/>
+                </declarator>
+              </member_declarator>
+            </member_declarator_list>
+          </member_declaration>
+          <member_declaration column="20" file="sc_signal.cpp"
+            idref="36" line="8">
+            <member_declarator_list column="20" file="sc_signal.cpp"
+              idref="38" line="8">
+              <declaration_specifiers column="20" file="sc_signal.cpp"
+                idref="40" line="8">
+                <builtin_type_specifier column="20" file="sc_signal.cpp"
+                  idref="42" length="0" line="8" name="int" sc_dt="false"/>
+              </declaration_specifiers>
+              <member_declarator column="5" file="sc_signal.cpp"
+                idref="44" line="8">
+                <declarator column="5" file="sc_signal.cpp" idref="46" line="8">
+                  <qualified_id column="5" file="sc_signal.cpp"
+                    idref="48" line="8" name="val"/>
+                </declarator>
+              </member_declarator>
+            </member_declarator_list>
+          </member_declaration>
+          <member_declaration column="12" file="sc_signal.cpp"
+            idref="50" line="9">
+            <member_declarator_list column="12" file="sc_signal.cpp"
+              idref="52" line="9">
+              <declaration_specifiers column="12" file="sc_signal.cpp"
+                idref="54" line="9">
+                <builtin_type_specifier column="12" file="sc_signal.cpp"
+                  idref="56" length="0" line="9" name="int" sc_dt="false"/>
+              </declaration_specifiers>
+              <member_declarator column="5" file="sc_signal.cpp"
+                idref="58" line="9">
+                <declarator column="5" file="sc_signal.cpp" idref="60" line="9">
+                  <qualified_id column="5" file="sc_signal.cpp"
+                    idref="62" line="9" name="_val"/>
+                </declarator>
+              </member_declarator>
+            </member_declarator_list>
+          </member_declaration>
+          <member_declaration column="13" file="sc_signal.cpp"
+            idref="64" line="11">
+            <member_declarator_list column="13" file="sc_signal.cpp"
+              idref="66" line="11">
+              <declaration_specifiers column="13" file="sc_signal.cpp"
+                idref="68" line="11">
+                <builtin_type_specifier column="13" file="sc_signal.cpp"
+                  idref="70" length="0" line="11" name="int" sc_dt="false"/>
+              </declaration_specifiers>
+              <member_declarator column="5" file="sc_signal.cpp"
+                idref="72" line="11">
+                <declarator column="5" file="sc_signal.cpp" idref="74" line="11">
+                  <qualified_id column="5" file="sc_signal.cpp"
+                    idref="76" line="11" name="delta"/>
+                </declarator>
+              </member_declarator>
+            </member_declarator_list>
+          </member_declaration>
+          <member_declaration column="14" file="sc_signal.cpp"
+            idref="78" line="14">
+            <function_definition column="14" file="sc_signal.cpp"
+              idref="80" line="14">
+              <declaration_specifiers column="14" file="sc_signal.cpp"
+                idref="82" line="14">
+                <builtin_type_specifier column="14" file="sc_signal.cpp"
+                  idref="84" length="0" line="14" name="int" sc_dt="false"/>
+              </declaration_specifiers>
+              <function_declarator column="5" file="sc_signal.cpp"
+                idref="86" line="14">
+                <qualified_id column="5" file="sc_signal.cpp" idref="88"
+                  line="14" name="read"/>
+              </function_declarator>
+              <block column="14" file="sc_signal.cpp" idref="90" line="14">
+                <block_statement column="16" file="sc_signal.cpp"
+                  idref="92" line="15">
+                  <return_statement column="16" file="sc_signal.cpp"
+                    idref="94" line="15">
+                    <primary_expression column="7" file="sc_signal.cpp"
+                      idref="98" line="15">
+                      <id_expression column="14" file="sc_signal.cpp"
+                        idref="100" line="15" name="val"/>
+                    </primary_expression>
+                  </return_statement>
+                </block_statement>
+              </block>
+            </function_definition>
+          </member_declaration>
+          <member_declaration column="5" file="sc_signal.cpp"
+            idref="102" line="18">
+            <function_definition column="5" file="sc_signal.cpp"
+              idref="104" line="18">
+              <declaration_specifiers column="5" file="sc_signal.cpp"
+                idref="106" line="18">
+                <builtin_type_specifier column="5" file="sc_signal.cpp"
+                  idref="108" length="0" line="18" name="void" sc_dt="false"/>
+              </declaration_specifiers>
+              <function_declarator column="5" file="sc_signal.cpp"
+                idref="110" line="18">
+                <qualified_id column="5" file="sc_signal.cpp"
+                  idref="112" line="18" name="write"/>
+                <parameter_list column="15" file="sc_signal.cpp"
+                  idref="114" line="18">
+                  <parameter_declaration column="15"
+                    file="sc_signal.cpp" idref="116" line="18">
+                    <declaration_specifiers column="15"
+                      file="sc_signal.cpp" idref="118" line="18">
+                      <builtin_type_specifier column="15"
+                        file="sc_signal.cpp" idref="120" length="0"
+                        line="18" name="int" sc_dt="false"/>
+                    </declaration_specifiers>
+                    <declarator column="16" file="sc_signal.cpp"
+                      idref="122" line="18">
+                      <qualified_id column="16" file="sc_signal.cpp"
+                        idref="124" line="18" name="newval"/>
+                    </declarator>
+                  </parameter_declaration>
+                </parameter_list>
+              </function_declarator>
+              <block column="26" file="sc_signal.cpp" idref="126" line="18">
+                <block_statement column="28" file="sc_signal.cpp"
+                  idref="128" line="19">
+                  <assignment column="12" file="sc_signal.cpp"
+                    idref="138" line="19">
+                    <primary_expression column="28" file="sc_signal.cpp"
+                      idref="132" line="19">
+                      <id_expression column="7" file="sc_signal.cpp"
+                        idref="134" line="19" name="_val"/>
+                    </primary_expression>
+                    <assignment_operator column="7" file="sc_signal.cpp"
+                      idref="136" line="19"/>
+                    <primary_expression column="12" file="sc_signal.cpp"
+                      idref="142" line="19">
+                      <id_expression column="14" file="sc_signal.cpp"
+                        idref="144" line="19" name="newval"/>
+                    </primary_expression>
+                  </assignment>
+                </block_statement>
+                <block_statement column="20" file="sc_signal.cpp"
+                  idref="146" line="20">
+                  <postfix_expression column="20" file="sc_signal.cpp"
+                    idref="148" line="20">
+                    <primary_expression column="20" file="sc_signal.cpp"
+                      idref="150" line="20">
+                      <id_expression column="7" file="sc_signal.cpp"
+                        idref="152" line="20" name="request_update"/>
+                    </primary_expression>
+                    <arguments column="7" file="sc_signal.cpp"
+                      idref="154" line="20"/>
+                  </postfix_expression>
+                </block_statement>
+              </block>
+            </function_definition>
+          </member_declaration>
+          <member_declaration column="5" file="sc_signal.cpp"
+            idref="156" line="23">
+            <function_definition column="5" file="sc_signal.cpp"
+              idref="158" line="23">
+              <declaration_specifiers column="5" file="sc_signal.cpp"
+                idref="160" line="23">
+                <builtin_type_specifier column="5" file="sc_signal.cpp"
+                  idref="162" length="0" line="23" name="void" sc_dt="false"/>
+              </declaration_specifiers>
+              <function_declarator column="5" file="sc_signal.cpp"
+                idref="164" line="23">
+                <qualified_id column="5" file="sc_signal.cpp"
+                  idref="166" line="23" name="update"/>
+              </function_declarator>
+              <block column="17" file="sc_signal.cpp" idref="168" line="23">
+                <block_statement column="19" file="sc_signal.cpp"
+                  idref="170" line="24">
+                  <if_statement column="19" file="sc_signal.cpp"
+                    idref="172" line="24">
+                    <unary_expression column="10" file="sc_signal.cpp"
+                      idref="174" line="24">
+                      <unary_operator column="10" file="sc_signal.cpp"
+                        idref="176" line="24" operator="not"/>
+                      <primary_expression column="11"
+                        file="sc_signal.cpp" idref="180" line="24">
+                        <eq_node column="18" file="sc_signal.cpp"
+                          idref="188" line="24">
+                          <primary_expression column="12"
+                            file="sc_signal.cpp" idref="184" line="24">
+                            <id_expression column="13"
+                              file="sc_signal.cpp" idref="186" line="24" name="_val"/>
+                          </primary_expression>
+                          <primary_expression column="18"
+                            file="sc_signal.cpp" idref="192" line="24">
+                            <id_expression column="21"
+                              file="sc_signal.cpp" idref="194" line="24" name="val"/>
+                          </primary_expression>
+                        </eq_node>
+                      </primary_expression>
+                    </unary_expression>
+                    <block column="25" file="sc_signal.cpp" idref="196" line="24">
+                      <block_statement column="27" file="sc_signal.cpp"
+                        idref="198" line="25">
+                        <sc_notify column="27" file="sc_signal.cpp"
+                          idref="200" line="25" name="change">
+                          <arguments_list column="22"
+                            file="sc_signal.cpp" idref="202" line="25">
+                            <primary_expression column="22"
+                              file="sc_signal.cpp" idref="206" line="25">
+                              <constant column="22" file="sc_signal.cpp"
+                                idref="208" line="25" value="SC_ZERO_TIME"/>
+                            </primary_expression>
+                          </arguments_list>
+                        </sc_notify>
+                      </block_statement>
+                      <block_statement column="36" file="sc_signal.cpp"
+                        idref="210" line="26">
+                        <assignment column="15" file="sc_signal.cpp"
+                          idref="220" line="26">
+                          <primary_expression column="36"
+                            file="sc_signal.cpp" idref="214" line="26">
+                            <id_expression column="9"
+                              file="sc_signal.cpp" idref="216" line="26" name="delta"/>
+                          </primary_expression>
+                          <assignment_operator column="9"
+                            file="sc_signal.cpp" idref="218" line="26"/>
+                          <postfix_expression column="15"
+                            file="sc_signal.cpp" idref="222" line="26">
+                            <primary_expression column="15"
+                              file="sc_signal.cpp" idref="224" line="26">
+                              <id_expression column="17"
+                                file="sc_signal.cpp" idref="226"
+                                line="26" name="sc_delta_count"/>
+                            </primary_expression>
+                            <arguments column="17" file="sc_signal.cpp"
+                              idref="228" line="26"/>
+                          </postfix_expression>
+                        </assignment>
+                      </block_statement>
+                    </block>
+                  </if_statement>
+                </block_statement>
+                <block_statement column="7" file="sc_signal.cpp"
+                  idref="230" line="28">
+                  <assignment column="11" file="sc_signal.cpp"
+                    idref="240" line="28">
+                    <primary_expression column="7" file="sc_signal.cpp"
+                      idref="234" line="28">
+                      <id_expression column="7" file="sc_signal.cpp"
+                        idref="236" line="28" name="val"/>
+                    </primary_expression>
+                    <assignment_operator column="7" file="sc_signal.cpp"
+                      idref="238" line="28"/>
+                    <primary_expression column="11" file="sc_signal.cpp"
+                      idref="244" line="28">
+                      <id_expression column="13" file="sc_signal.cpp"
+                        idref="246" line="28" name="_val"/>
+                    </primary_expression>
+                  </assignment>
+                </block_statement>
+              </block>
+            </function_definition>
+          </member_declaration>
+          <member_declaration column="5" file="sc_signal.cpp"
+            idref="248" line="31">
+            <function_definition column="5" file="sc_signal.cpp"
+              idref="250" line="31">
+              <declaration_specifiers column="5" file="sc_signal.cpp"
+                idref="252" line="31">
+                <builtin_type_specifier column="5" file="sc_signal.cpp"
+                  idref="254" length="0" line="31" name="bool" sc_dt="false"/>
+              </declaration_specifiers>
+              <function_declarator column="5" file="sc_signal.cpp"
+                idref="256" line="31">
+                <qualified_id column="5" file="sc_signal.cpp"
+                  idref="258" line="31" name="event"/>
+              </function_declarator>
+              <block column="16" file="sc_signal.cpp" idref="260" line="31">
+                <block_statement column="18" file="sc_signal.cpp"
+                  idref="262" line="32">
+                  <return_statement column="18" file="sc_signal.cpp"
+                    idref="264" line="32">
+                    <eq_node column="20" file="sc_signal.cpp"
+                      idref="272" line="32">
+                      <primary_expression column="7"
+                        file="sc_signal.cpp" idref="268" line="32">
+                        <id_expression column="14" file="sc_signal.cpp"
+                          idref="270" line="32" name="delta"/>
+                      </primary_expression>
+                      <postfix_expression column="20"
+                        file="sc_signal.cpp" idref="274" line="32">
+                        <primary_expression column="20"
+                          file="sc_signal.cpp" idref="276" line="32">
+                          <id_expression column="23"
+                            file="sc_signal.cpp" idref="278" line="32" name="sc_delta_count"/>
+                        </primary_expression>
+                        <arguments column="23" file="sc_signal.cpp"
+                          idref="280" line="32"/>
+                      </postfix_expression>
+                    </eq_node>
+                  </return_statement>
+                </block_statement>
+              </block>
+            </function_definition>
+          </member_declaration>
+          <member_declaration column="5" file="sc_signal.cpp"
+            idref="282" line="35">
+            <ctor_definition column="5" file="sc_signal.cpp" idref="284" line="35">
+              <qualified_id column="5" file="sc_signal.cpp" idref="286"
+                line="35" name="sc_signalx"/>
+              <block column="16" file="sc_signal.cpp" idref="288" line="35">
+                <block_statement column="18" file="sc_signal.cpp"
+                  idref="290" line="36">
+                  <assignment column="13" file="sc_signal.cpp"
+                    idref="300" line="36">
+                    <primary_expression column="18" file="sc_signal.cpp"
+                      idref="294" line="36">
+                      <id_expression column="7" file="sc_signal.cpp"
+                        idref="296" line="36" name="delta"/>
+                    </primary_expression>
+                    <assignment_operator column="7" file="sc_signal.cpp"
+                      idref="298" line="36"/>
+                    <unary_expression column="13" file="sc_signal.cpp"
+                      idref="302" line="36">
+                      <unary_operator column="13" file="sc_signal.cpp"
+                        idref="304" line="36" operator="minnus"/>
+                      <primary_expression column="15"
+                        file="sc_signal.cpp" idref="308" line="36">
+                        <constant column="15" file="sc_signal.cpp"
+                          idref="310" line="36" value="1"/>
+                      </primary_expression>
+                    </unary_expression>
+                  </assignment>
+                </block_statement>
+              </block>
+            </ctor_definition>
+          </member_declaration>
+        </class_specifier>
+      </declaration_specifiers>
+    </declaration>
+  </external_declaration>
+</INTERNAL>

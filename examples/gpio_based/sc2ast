@@ -1,0 +1,353 @@
+
+
+
+
+
+
+SC_MODULE(gpio)
+{
+
+  sc_in<bool> convert_bits;
+  sc_in<sc_uint<1> > bit0_in;
+  sc_in<sc_uint<1> > bit1_in;
+  sc_in<sc_uint<1> > bit2_in;
+  sc_in<sc_uint<1> > bit3_in;
+  sc_in<sc_uint<1> > bit4_in;
+  sc_in<sc_uint<1> > bit5_in;
+  sc_in<sc_uint<1> > bit6_in;
+  sc_in<sc_uint<1> > bit7_in;
+
+  sc_event word_change;
+  sc_inout<sc_uint<8> > word_reg;
+  sc_out<sc_uint<8> > word_out;
+
+  sc_in<bool> convert_word;
+  sc_in<sc_uint<8> > word_in;
+
+  sc_event bits_change;
+  sc_inout<sc_uint<1> > bit0_reg;
+  sc_inout<sc_uint<1> > bit1_reg;
+  sc_inout<sc_uint<1> > bit2_reg;
+  sc_inout<sc_uint<1> > bit3_reg;
+  sc_inout<sc_uint<1> > bit4_reg;
+  sc_inout<sc_uint<1> > bit5_reg;
+  sc_inout<sc_uint<1> > bit6_reg;
+  sc_inout<sc_uint<1> > bit7_reg;
+  sc_out<sc_uint<1> > bit0_out;
+  sc_out<sc_uint<1> > bit1_out;
+  sc_out<sc_uint<1> > bit2_out;
+  sc_out<sc_uint<1> > bit3_out;
+  sc_out<sc_uint<1> > bit4_out;
+  sc_out<sc_uint<1> > bit5_out;
+  sc_out<sc_uint<1> > bit6_out;
+  sc_out<sc_uint<1> > bit7_out;
+
+  SC_CTOR(gpio)
+  {
+    SC_THREAD(bits_to_word);
+    sensitive << convert_bits;
+    SC_METHOD(output_word);
+    sensitive << word_change;
+
+    SC_THREAD(word_to_bits);
+    sensitive << convert_word;
+    SC_METHOD(output_bits);
+    sensitive << bits_change;
+  }
+
+
+  void bits_to_word() {
+    while (true) {
+      wait();
+      if (!convert_bits.read()) {
+        continue;
+      }
+
+      sc_uint<1> bit0 = bit0_in.read();
+      sc_uint<1> bit1 = bit1_in.read();
+      sc_uint<1> bit2 = bit2_in.read();
+      sc_uint<1> bit3 = bit3_in.read();
+      sc_uint<1> bit4 = bit4_in.read();
+      sc_uint<1> bit5 = bit5_in.read();
+      sc_uint<1> bit6 = bit6_in.read();
+      sc_uint<1> bit7 = bit7_in.read();
+
+      sc_uint<8> result = bit7;
+      result = (2 * result) + bit6;
+      result = (2 * result) + bit5;
+      result = (2 * result) + bit4;
+      result = (2 * result) + bit3;
+      result = (2 * result) + bit2;
+      result = (2 * result) + bit1;
+      result = (2 * result) + bit0;
+
+      word_reg.write(result);
+
+      word_change.notify(2, SC_NS);
+      wait(2, SC_NS);
+    }
+  }
+
+  void output_word() {
+    word_out.write(word_reg.read());
+  }
+
+  void word_to_bits() {
+    while (true) {
+      wait();
+      if (!convert_word.read()) {
+        continue;
+      }
+
+      sc_uint<8> word = word_in.read();
+
+      sc_uint<1> bit0 = word % 2;
+      word = word / 2;
+      sc_uint<1> bit1 = word % 2;
+      word = word / 2;
+      sc_uint<1> bit2 = word % 2;
+      word = word / 2;
+      sc_uint<1> bit3 = word % 2;
+      word = word / 2;
+      sc_uint<1> bit4 = word % 2;
+      word = word / 2;
+      sc_uint<1> bit5 = word % 2;
+      word = word / 2;
+      sc_uint<1> bit6 = word % 2;
+      word = word / 2;
+      sc_uint<1> bit7 = word % 2;
+
+      bit0_reg.write(bit0);
+      bit1_reg.write(bit1);
+      bit2_reg.write(bit2);
+      bit3_reg.write(bit3);
+      bit4_reg.write(bit4);
+      bit5_reg.write(bit5);
+      bit6_reg.write(bit6);
+      bit7_reg.write(bit7);
+
+      bits_change.notify(2, SC_NS);
+      wait(2, SC_NS);
+    }
+  }
+
+  void output_bits() {
+    bit0_out.write(bit0_reg.read());
+    bit1_out.write(bit1_reg.read());
+    bit2_out.write(bit2_reg.read());
+    bit3_out.write(bit3_reg.read());
+    bit4_out.write(bit4_reg.read());
+    bit5_out.write(bit5_reg.read());
+    bit6_out.write(bit6_reg.read());
+    bit7_out.write(bit7_reg.read());
+  }
+
+};
+
+
+
+
+
+
+
+SC_MODULE(gpioTest)
+{
+  sc_uint<8> SENSOR_VALUE;
+  sc_uint<8> ANTENNA_VALUE;
+
+  sc_uint<8> bus_in;
+
+  sc_out<bool> gpio_convert_bits;
+  sc_out<sc_uint<1> > gpio_bit0_in;
+  sc_out<sc_uint<1> > gpio_bit1_in;
+  sc_out<sc_uint<1> > gpio_bit2_in;
+  sc_out<sc_uint<1> > gpio_bit3_in;
+  sc_out<sc_uint<1> > gpio_bit4_in;
+  sc_out<sc_uint<1> > gpio_bit5_in;
+  sc_out<sc_uint<1> > gpio_bit6_in;
+  sc_out<sc_uint<1> > gpio_bit7_in;
+  sc_in<sc_uint<8> > gpio_word_out;
+
+  sc_out<bool> gpio_convert_word;
+  sc_out<sc_uint<8> > gpio_word_in;
+  sc_in<sc_uint<1> > gpio_bit0_out;
+  sc_in<sc_uint<1> > gpio_bit1_out;
+  sc_in<sc_uint<1> > gpio_bit2_out;
+  sc_in<sc_uint<1> > gpio_bit3_out;
+  sc_in<sc_uint<1> > gpio_bit4_out;
+  sc_in<sc_uint<1> > gpio_bit5_out;
+  sc_in<sc_uint<1> > gpio_bit6_out;
+  sc_in<sc_uint<1> > gpio_bit7_out;
+
+  void sensor() {
+    while (true) {
+      sc_uint<8> value = SENSOR_VALUE;
+      bus_in = value;
+      wait(8, SC_US);
+    }
+  }
+
+  void breaks() {
+    wait(2, SC_US);
+    while (true) {
+      sc_uint<8> value = gpio_word_out.read();
+      wait(8, SC_US);
+    }
+  }
+
+  void antenna() {
+    wait(4, SC_US);
+    while (true) {
+      sc_uint<8> value = ANTENNA_VALUE;
+      bus_in = value;
+      wait(8, SC_US);
+    }
+  }
+
+  void radio() {
+    wait(6, SC_US);
+    while (true) {
+      sc_uint<8> value = gpio_word_out.read();
+      wait(8, SC_US);
+    }
+  }
+
+  void bus() {
+    while (true) {
+      wait(SC_ZERO_TIME);
+
+      gpio_word_in.write(bus_in);
+      gpio_convert_word.write(true);
+      wait(SC_ZERO_TIME);
+      gpio_convert_word.write(false);
+
+      wait(1, SC_US);
+
+      gpio_bit0_in.write(gpio_bit0_out.read());
+      gpio_bit1_in.write(gpio_bit1_out.read());
+      gpio_bit2_in.write(gpio_bit2_out.read());
+      gpio_bit3_in.write(gpio_bit3_out.read());
+      gpio_bit4_in.write(gpio_bit4_out.read());
+      gpio_bit5_in.write(gpio_bit5_out.read());
+      gpio_bit6_in.write(gpio_bit6_out.read());
+      gpio_bit7_in.write(gpio_bit7_out.read());
+
+      gpio_convert_bits.write(true);
+      wait(SC_ZERO_TIME);
+      gpio_convert_bits.write(false);
+
+      wait(3, SC_US);
+    }
+  }
+
+  SC_CTOR(gpioTest)
+  {
+    SC_THREAD(sensor);
+    SC_THREAD(breaks);
+    SC_THREAD(antenna);
+    SC_THREAD(radio);
+    SC_THREAD(bus);
+  }
+
+};
+
+
+
+
+
+
+
+
+int sc_main(int argc, char* argv[])
+{
+  gpio gpio("gpio");
+  gpioTest gpioTest("gpioTest");
+
+  sc_signal<bool> convert_bits;
+  sc_signal<bool> convert_word;
+  sc_signal<sc_uint<8> > word_in;
+  sc_signal<sc_uint<1> > bit0_in;
+  sc_signal<sc_uint<1> > bit1_in;
+  sc_signal<sc_uint<1> > bit2_in;
+  sc_signal<sc_uint<1> > bit3_in;
+  sc_signal<sc_uint<1> > bit4_in;
+  sc_signal<sc_uint<1> > bit5_in;
+  sc_signal<sc_uint<1> > bit6_in;
+  sc_signal<sc_uint<1> > bit7_in;
+  sc_signal<sc_uint<8> > word_out;
+  sc_signal<sc_uint<1> > bit0_out;
+  sc_signal<sc_uint<1> > bit1_out;
+  sc_signal<sc_uint<1> > bit2_out;
+  sc_signal<sc_uint<1> > bit3_out;
+  sc_signal<sc_uint<1> > bit4_out;
+  sc_signal<sc_uint<1> > bit5_out;
+  sc_signal<sc_uint<1> > bit6_out;
+  sc_signal<sc_uint<1> > bit7_out;
+  sc_signal<sc_uint<8> > word_reg;
+  sc_signal<sc_uint<1> > bit0_reg;
+  sc_signal<sc_uint<1> > bit1_reg;
+  sc_signal<sc_uint<1> > bit2_reg;
+  sc_signal<sc_uint<1> > bit3_reg;
+  sc_signal<sc_uint<1> > bit4_reg;
+  sc_signal<sc_uint<1> > bit5_reg;
+  sc_signal<sc_uint<1> > bit6_reg;
+  sc_signal<sc_uint<1> > bit7_reg;
+
+  gpio.convert_bits(convert_bits);
+  gpio.convert_word(convert_word);
+
+  gpio.bit0_in(bit0_in);
+  gpio.bit1_in(bit1_in);
+  gpio.bit2_in(bit2_in);
+  gpio.bit3_in(bit3_in);
+  gpio.bit4_in(bit4_in);
+  gpio.bit5_in(bit5_in);
+  gpio.bit6_in(bit6_in);
+  gpio.bit7_in(bit7_in);
+  gpio.word_out(word_out);
+
+  gpio.word_in(word_in);
+  gpio.bit0_out(bit0_out);
+  gpio.bit1_out(bit1_out);
+  gpio.bit2_out(bit2_out);
+  gpio.bit3_out(bit3_out);
+  gpio.bit4_out(bit4_out);
+  gpio.bit5_out(bit5_out);
+  gpio.bit6_out(bit6_out);
+  gpio.bit7_out(bit7_out);
+
+  gpio.word_reg(word_reg);
+  gpio.bit0_reg(bit0_reg);
+  gpio.bit1_reg(bit1_reg);
+  gpio.bit2_reg(bit2_reg);
+  gpio.bit3_reg(bit3_reg);
+  gpio.bit4_reg(bit4_reg);
+  gpio.bit5_reg(bit5_reg);
+  gpio.bit6_reg(bit6_reg);
+  gpio.bit7_reg(bit7_reg);
+
+  gpioTest.gpio_convert_bits(convert_bits);
+  gpioTest.gpio_bit0_in(bit0_in);
+  gpioTest.gpio_bit1_in(bit1_in);
+  gpioTest.gpio_bit2_in(bit2_in);
+  gpioTest.gpio_bit3_in(bit3_in);
+  gpioTest.gpio_bit4_in(bit4_in);
+  gpioTest.gpio_bit5_in(bit5_in);
+  gpioTest.gpio_bit6_in(bit6_in);
+  gpioTest.gpio_bit7_in(bit7_in);
+  gpioTest.gpio_word_out(word_out);
+
+  gpioTest.gpio_convert_word(convert_word);
+  gpioTest.gpio_word_in(word_in);
+  gpioTest.gpio_bit0_out(bit0_out);
+  gpioTest.gpio_bit1_out(bit1_out);
+  gpioTest.gpio_bit2_out(bit2_out);
+  gpioTest.gpio_bit3_out(bit3_out);
+  gpioTest.gpio_bit4_out(bit4_out);
+  gpioTest.gpio_bit5_out(bit5_out);
+  gpioTest.gpio_bit6_out(bit6_out);
+  gpioTest.gpio_bit7_out(bit7_out);
+
+  sc_start(1200,SC_US);
+  return 0;
+}
