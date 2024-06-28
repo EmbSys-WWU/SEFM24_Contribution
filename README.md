@@ -4,7 +4,7 @@
 
 This reproduction package contains the prototypical implementation of our approach to leverage symbolic execution for precise information flow analysis of timed concurrent systems.
 
-All examples are contained in the examples directory. Executing the provided JAR file (requires Java 21 or newer) runs the analysis on all these examples, printing some results into the console while providing a more detailed report for each example in a Report.txt file in the respective directory. Pregenerated reports are already present. The vm directory contains the image of a virtual machine on which the JAR can directly be executed.
+All examples are contained in the examples directory. Executing the provided JAR file (requires Java 21 or newer) runs the analysis on all these examples, printing some results into the console while providing a more detailed report for each example in a Report.txt file in the respective directory. Pregenerated reports are already present.
 
 ## Hardware requirements
 
@@ -16,16 +16,8 @@ None.
 
 ## Setup
 
-### Without Virtual machine
-
 - Install the JRE for Java 21 or newer (if not already installed).
 - Clone the repository / extract the ZIP / otherwise make sure that the JAR file is in the same place as the config and examples directories.
-
-### With Virtual Machine
-
-- Install VMware Workstation Player (or another VM that can import .vmx and .vmdk files).
-- Open the provided virtual machine (username and password are "ubuntu").
-	- If you are asked whehter you moved or copied the VM, select "I copied it".
 
 ## Test Instructions
 
