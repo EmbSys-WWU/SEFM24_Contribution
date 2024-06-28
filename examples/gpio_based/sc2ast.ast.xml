@@ -2659,18 +2659,18 @@
                 idref="2300" line="10">
                 <declarator column="12" file="gpio_test.h" idref="2302" line="10">
                   <qualified_id column="12" file="gpio_test.h"
-                    idref="2304" line="10" name="ANTENNA_VALUE"/>
+                    idref="2304" line="10" name="WIFI_VALUE"/>
                 </declarator>
               </member_declarator>
             </member_declarator_list>
           </member_declaration>
-          <member_declaration column="27" file="gpio_test.h"
+          <member_declaration column="24" file="gpio_test.h"
             idref="2306" line="12">
-            <member_declarator_list column="27" file="gpio_test.h"
+            <member_declarator_list column="24" file="gpio_test.h"
               idref="2308" line="12">
-              <declaration_specifiers column="27" file="gpio_test.h"
+              <declaration_specifiers column="24" file="gpio_test.h"
                 idref="2310" line="12">
-                <builtin_type_specifier column="27" file="gpio_test.h"
+                <builtin_type_specifier column="24" file="gpio_test.h"
                   idref="2312" length="8" line="12" name="sc_uint" sc_dt="true"/>
               </declaration_specifiers>
               <member_declarator column="12" file="gpio_test.h"
@@ -3217,12 +3217,12 @@
               <function_declarator column="3" file="gpio_test.h"
                 idref="2738" line="44">
                 <qualified_id column="3" file="gpio_test.h" idref="2740"
-                  line="44" name="breaks"/>
+                  line="44" name="pump"/>
               </function_declarator>
-              <block column="15" file="gpio_test.h" idref="2742" line="44">
-                <block_statement column="17" file="gpio_test.h"
+              <block column="13" file="gpio_test.h" idref="2742" line="44">
+                <block_statement column="15" file="gpio_test.h"
                   idref="2744" line="45">
-                  <systemCRoutine column="17" file="gpio_test.h"
+                  <systemCRoutine column="15" file="gpio_test.h"
                     idref="2748" line="45" name="wait">
                     <arguments column="5" file="gpio_test.h"
                       idref="2750" line="45">
@@ -3335,12 +3335,12 @@
               <function_declarator column="3" file="gpio_test.h"
                 idref="2838" line="52">
                 <qualified_id column="3" file="gpio_test.h" idref="2840"
-                  line="52" name="antenna"/>
+                  line="52" name="wifi"/>
               </function_declarator>
-              <block column="16" file="gpio_test.h" idref="2842" line="52">
-                <block_statement column="18" file="gpio_test.h"
+              <block column="13" file="gpio_test.h" idref="2842" line="52">
+                <block_statement column="15" file="gpio_test.h"
                   idref="2844" line="53">
-                  <systemCRoutine column="18" file="gpio_test.h"
+                  <systemCRoutine column="15" file="gpio_test.h"
                     idref="2848" line="53" name="wait">
                     <arguments column="5" file="gpio_test.h"
                       idref="2850" line="53">
@@ -3396,18 +3396,18 @@
                                   file="gpio_test.h" idref="2898" line="55">
                                   <id_expression column="26"
                                     file="gpio_test.h" idref="2900"
-                                    line="55" name="ANTENNA_VALUE"/>
+                                    line="55" name="WIFI_VALUE"/>
                                 </primary_expression>
                               </initializer>
                             </init_declarator>
                           </init_declarator_list>
                         </declaration>
                       </block_statement>
-                      <block_statement column="39" file="gpio_test.h"
+                      <block_statement column="36" file="gpio_test.h"
                         idref="2902" line="56">
                         <assignment column="14" file="gpio_test.h"
                           idref="2912" line="56">
-                          <primary_expression column="39"
+                          <primary_expression column="36"
                             file="gpio_test.h" idref="2906" line="56">
                             <id_expression column="7" file="gpio_test.h"
                               idref="2908" line="56" name="bus_in"/>
@@ -3460,12 +3460,12 @@
               <function_declarator column="3" file="gpio_test.h"
                 idref="2950" line="61">
                 <qualified_id column="3" file="gpio_test.h" idref="2952"
-                  line="61" name="radio"/>
+                  line="61" name="diagnosis"/>
               </function_declarator>
-              <block column="14" file="gpio_test.h" idref="2954" line="61">
-                <block_statement column="16" file="gpio_test.h"
+              <block column="18" file="gpio_test.h" idref="2954" line="61">
+                <block_statement column="20" file="gpio_test.h"
                   idref="2956" line="62">
-                  <systemCRoutine column="16" file="gpio_test.h"
+                  <systemCRoutine column="20" file="gpio_test.h"
                     idref="2960" line="62" name="wait">
                     <arguments column="5" file="gpio_test.h"
                       idref="2962" line="62">
@@ -4178,21 +4178,21 @@
                 <sc_thread_block column="22" file="gpio_test.h"
                   idref="3534" line="100">
                   <sc_thread column="22" file="gpio_test.h" idref="3536"
-                    line="100" name="breaks"/>
+                    line="100" name="pump"/>
                 </sc_thread_block>
-                <sc_thread_block column="22" file="gpio_test.h"
+                <sc_thread_block column="20" file="gpio_test.h"
                   idref="3538" line="101">
-                  <sc_thread column="22" file="gpio_test.h" idref="3540"
-                    line="101" name="antenna"/>
+                  <sc_thread column="20" file="gpio_test.h" idref="3540"
+                    line="101" name="wifi"/>
                 </sc_thread_block>
-                <sc_thread_block column="23" file="gpio_test.h"
+                <sc_thread_block column="20" file="gpio_test.h"
                   idref="3542" line="102">
-                  <sc_thread column="23" file="gpio_test.h" idref="3544"
-                    line="102" name="radio"/>
+                  <sc_thread column="20" file="gpio_test.h" idref="3544"
+                    line="102" name="diagnosis"/>
                 </sc_thread_block>
-                <sc_thread_block column="21" file="gpio_test.h"
+                <sc_thread_block column="25" file="gpio_test.h"
                   idref="3546" line="103">
-                  <sc_thread column="21" file="gpio_test.h" idref="3548"
+                  <sc_thread column="25" file="gpio_test.h" idref="3548"
                     line="103" name="bus"/>
                 </sc_thread_block>
               </block>

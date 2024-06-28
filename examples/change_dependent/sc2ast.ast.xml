@@ -42,288 +42,288 @@
             </member_declarator_list>
           </member_declaration>
           <member_declaration column="20"
-            file="paper_change_dependent.h" idref="38" line="12">
+            file="paper_change_dependent.h" idref="38" line="11">
             <member_declarator_list column="20"
-              file="paper_change_dependent.h" idref="40" line="12">
+              file="paper_change_dependent.h" idref="40" line="11">
               <declaration_specifiers column="20"
-                file="paper_change_dependent.h" idref="42" line="12">
+                file="paper_change_dependent.h" idref="42" line="11">
                 <builtin_type_specifier column="20"
                   file="paper_change_dependent.h" idref="44" length="0"
+                  line="11" name="int" sc_dt="false"/>
+              </declaration_specifiers>
+              <member_declarator column="3"
+                file="paper_change_dependent.h" idref="46" line="11">
+                <declarator column="3" file="paper_change_dependent.h"
+                  idref="48" line="11">
+                  <qualified_id column="3"
+                    file="paper_change_dependent.h" idref="50" line="11" name="UNTRUSTED_IN"/>
+                </declarator>
+              </member_declarator>
+            </member_declarator_list>
+          </member_declaration>
+          <member_declaration column="19"
+            file="paper_change_dependent.h" idref="52" line="12">
+            <member_declarator_list column="19"
+              file="paper_change_dependent.h" idref="54" line="12">
+              <declaration_specifiers column="19"
+                file="paper_change_dependent.h" idref="56" line="12">
+                <builtin_type_specifier column="19"
+                  file="paper_change_dependent.h" idref="58" length="0"
                   line="12" name="int" sc_dt="false"/>
               </declaration_specifiers>
               <member_declarator column="3"
-                file="paper_change_dependent.h" idref="46" line="12">
+                file="paper_change_dependent.h" idref="60" line="12">
                 <declarator column="3" file="paper_change_dependent.h"
-                  idref="48" line="12">
+                  idref="62" line="12">
                   <qualified_id column="3"
-                    file="paper_change_dependent.h" idref="50" line="12" name="SECRET_IN"/>
+                    file="paper_change_dependent.h" idref="64" line="12" name="UNTRUSTED_OUT"/>
                 </declarator>
               </member_declarator>
             </member_declarator_list>
           </member_declaration>
-          <member_declaration column="16"
-            file="paper_change_dependent.h" idref="52" line="13">
-            <member_declarator_list column="16"
-              file="paper_change_dependent.h" idref="54" line="13">
-              <declaration_specifiers column="16"
-                file="paper_change_dependent.h" idref="56" line="13">
-                <builtin_type_specifier column="16"
-                  file="paper_change_dependent.h" idref="58" length="0"
+          <member_declaration column="20"
+            file="paper_change_dependent.h" idref="66" line="13">
+            <member_declarator_list column="20"
+              file="paper_change_dependent.h" idref="68" line="13">
+              <declaration_specifiers column="20"
+                file="paper_change_dependent.h" idref="70" line="13">
+                <builtin_type_specifier column="20"
+                  file="paper_change_dependent.h" idref="72" length="0"
                   line="13" name="int" sc_dt="false"/>
               </declaration_specifiers>
               <member_declarator column="3"
-                file="paper_change_dependent.h" idref="60" line="13">
+                file="paper_change_dependent.h" idref="74" line="13">
                 <declarator column="3" file="paper_change_dependent.h"
-                  idref="62" line="13">
+                  idref="76" line="13">
                   <qualified_id column="3"
-                    file="paper_change_dependent.h" idref="64" line="13" name="SECRET_OUT"/>
+                    file="paper_change_dependent.h" idref="78" line="13" name="TRUSTED_IN"/>
                 </declarator>
               </member_declarator>
             </member_declarator_list>
           </member_declaration>
           <member_declaration column="17"
-            file="paper_change_dependent.h" idref="66" line="14">
+            file="paper_change_dependent.h" idref="80" line="14">
             <member_declarator_list column="17"
-              file="paper_change_dependent.h" idref="68" line="14">
+              file="paper_change_dependent.h" idref="82" line="14">
               <declaration_specifiers column="17"
-                file="paper_change_dependent.h" idref="70" line="14">
+                file="paper_change_dependent.h" idref="84" line="14">
                 <builtin_type_specifier column="17"
-                  file="paper_change_dependent.h" idref="72" length="0"
+                  file="paper_change_dependent.h" idref="86" length="0"
                   line="14" name="int" sc_dt="false"/>
               </declaration_specifiers>
               <member_declarator column="3"
-                file="paper_change_dependent.h" idref="74" line="14">
+                file="paper_change_dependent.h" idref="88" line="14">
                 <declarator column="3" file="paper_change_dependent.h"
-                  idref="76" line="14">
+                  idref="90" line="14">
                   <qualified_id column="3"
-                    file="paper_change_dependent.h" idref="78" line="14" name="PUBLIC_IN"/>
+                    file="paper_change_dependent.h" idref="92" line="14" name="TRUSTED_OUT"/>
                 </declarator>
               </member_declarator>
             </member_declarator_list>
           </member_declaration>
-          <member_declaration column="16"
-            file="paper_change_dependent.h" idref="80" line="15">
-            <member_declarator_list column="16"
-              file="paper_change_dependent.h" idref="82" line="15">
-              <declaration_specifiers column="16"
-                file="paper_change_dependent.h" idref="84" line="15">
-                <builtin_type_specifier column="16"
-                  file="paper_change_dependent.h" idref="86" length="0"
-                  line="15" name="int" sc_dt="false"/>
-              </declaration_specifiers>
-              <member_declarator column="3"
-                file="paper_change_dependent.h" idref="88" line="15">
-                <declarator column="3" file="paper_change_dependent.h"
-                  idref="90" line="15">
-                  <qualified_id column="3"
-                    file="paper_change_dependent.h" idref="92" line="15" name="PUBLIC_OUT"/>
-                </declarator>
-              </member_declarator>
-            </member_declarator_list>
-          </member_declaration>
-          <member_declaration column="17"
-            file="paper_change_dependent.h" idref="94" line="17">
-            <function_definition column="17"
-              file="paper_change_dependent.h" idref="96" line="17">
-              <declaration_specifiers column="17"
-                file="paper_change_dependent.h" idref="98" line="17">
-                <builtin_type_specifier column="17"
+          <member_declaration column="18"
+            file="paper_change_dependent.h" idref="94" line="16">
+            <function_definition column="18"
+              file="paper_change_dependent.h" idref="96" line="16">
+              <declaration_specifiers column="18"
+                file="paper_change_dependent.h" idref="98" line="16">
+                <builtin_type_specifier column="18"
                   file="paper_change_dependent.h" idref="100" length="0"
-                  line="17" name="void" sc_dt="false"/>
+                  line="16" name="void" sc_dt="false"/>
               </declaration_specifiers>
               <function_declarator column="3"
-                file="paper_change_dependent.h" idref="102" line="17">
+                file="paper_change_dependent.h" idref="102" line="16">
                 <qualified_id column="3" file="paper_change_dependent.h"
-                  idref="104" line="17" name="produce"/>
+                  idref="104" line="16" name="ecu"/>
               </function_declarator>
-              <block column="16" file="paper_change_dependent.h"
-                idref="106" line="17">
-                <block_statement column="18"
-                  file="paper_change_dependent.h" idref="108" line="18">
-                  <while_statement column="18"
-                    file="paper_change_dependent.h" idref="110" line="18">
+              <block column="12" file="paper_change_dependent.h"
+                idref="106" line="16">
+                <block_statement column="14"
+                  file="paper_change_dependent.h" idref="108" line="17">
+                  <while_statement column="14"
+                    file="paper_change_dependent.h" idref="110" line="17">
                     <primary_expression column="11"
-                      file="paper_change_dependent.h" idref="114" line="18">
+                      file="paper_change_dependent.h" idref="114" line="17">
                       <constant column="11"
                         file="paper_change_dependent.h" idref="116"
-                        line="18" value="true"/>
+                        line="17" value="true"/>
                     </primary_expression>
                     <block column="16" file="paper_change_dependent.h"
-                      idref="118" line="18">
+                      idref="118" line="17">
                       <block_statement column="18"
-                        file="paper_change_dependent.h" idref="120" line="19">
+                        file="paper_change_dependent.h" idref="120" line="18">
                         <declaration column="18"
-                          file="paper_change_dependent.h" idref="122" line="19">
+                          file="paper_change_dependent.h" idref="122" line="18">
                           <init_declarator_list column="18"
-                            file="paper_change_dependent.h" idref="124" line="19">
+                            file="paper_change_dependent.h" idref="124" line="18">
                             <declaration_specifiers column="18"
                               file="paper_change_dependent.h"
-                              idref="126" line="19">
+                              idref="126" line="18">
                               <builtin_type_specifier column="18"
                                 file="paper_change_dependent.h"
-                                idref="128" length="0" line="19"
+                                idref="128" length="0" line="18"
                                 name="int" sc_dt="false"/>
                             </declaration_specifiers>
                             <init_declarator column="7"
                               file="paper_change_dependent.h"
-                              idref="130" line="19">
+                              idref="130" line="18">
                               <declarator column="7"
                                 file="paper_change_dependent.h"
-                                idref="132" line="19">
+                                idref="132" line="18">
                                 <qualified_id column="7"
                                   file="paper_change_dependent.h"
-                                  idref="134" line="19" name="data"/>
+                                  idref="134" line="18" name="data"/>
                               </declarator>
                               <initializer column="16"
                                 file="paper_change_dependent.h"
-                                idref="136" line="19">
+                                idref="136" line="18">
                                 <primary_expression column="16"
                                   file="paper_change_dependent.h"
-                                  idref="140" line="19">
+                                  idref="140" line="18">
                                   <id_expression column="18"
                                     file="paper_change_dependent.h"
-                                    idref="142" line="19" name="SECRET_IN"/>
+                                    idref="142" line="18" name="UNTRUSTED_IN"/>
                                 </primary_expression>
                               </initializer>
                             </init_declarator>
                           </init_declarator_list>
                         </declaration>
                       </block_statement>
-                      <block_statement column="27"
-                        file="paper_change_dependent.h" idref="144" line="20">
-                        <postfix_expression column="27"
-                          file="paper_change_dependent.h" idref="146" line="20">
-                          <primary_expression column="27"
-                            file="paper_change_dependent.h" idref="148" line="20">
+                      <block_statement column="30"
+                        file="paper_change_dependent.h" idref="144" line="19">
+                        <postfix_expression column="30"
+                          file="paper_change_dependent.h" idref="146" line="19">
+                          <primary_expression column="30"
+                            file="paper_change_dependent.h" idref="148" line="19">
                             <id_expression column="7"
                               file="paper_change_dependent.h"
-                              idref="150" line="20" name="bus"/>
+                              idref="150" line="19" name="bus"/>
                           </primary_expression>
                           <dereferencing_operator column="7"
                             file="paper_change_dependent.h" idref="152"
-                            line="20" name="&amp;"/>
+                            line="19" name="&amp;"/>
                           <id_expression column="11"
                             file="paper_change_dependent.h" idref="154"
-                            line="20" name="write"/>
+                            line="19" name="write"/>
                           <arguments column="11"
-                            file="paper_change_dependent.h" idref="156" line="20">
+                            file="paper_change_dependent.h" idref="156" line="19">
                             <arguments_list column="16"
                               file="paper_change_dependent.h"
-                              idref="158" line="20">
+                              idref="158" line="19">
                               <primary_expression column="16"
                                 file="paper_change_dependent.h"
-                                idref="162" line="20">
+                                idref="162" line="19">
                                 <id_expression column="17"
                                   file="paper_change_dependent.h"
-                                  idref="164" line="20" name="data"/>
+                                  idref="164" line="19" name="data"/>
                               </primary_expression>
                             </arguments_list>
                           </arguments>
                         </postfix_expression>
                       </block_statement>
                       <block_statement column="22"
-                        file="paper_change_dependent.h" idref="166" line="21">
+                        file="paper_change_dependent.h" idref="166" line="20">
                         <systemCRoutine column="22"
                           file="paper_change_dependent.h" idref="170"
-                          line="21" name="wait">
+                          line="20" name="wait">
                           <arguments column="7"
-                            file="paper_change_dependent.h" idref="172" line="21">
+                            file="paper_change_dependent.h" idref="172" line="20">
                             <arguments_list column="11"
                               file="paper_change_dependent.h"
-                              idref="174" line="21">
+                              idref="174" line="20">
                               <primary_expression column="11"
                                 file="paper_change_dependent.h"
-                                idref="178" line="21">
+                                idref="178" line="20">
                                 <constant column="11"
                                   file="paper_change_dependent.h"
-                                  idref="180" line="21" value="2"/>
+                                  idref="180" line="20" value="2"/>
                               </primary_expression>
                               <primary_expression column="13"
                                 file="paper_change_dependent.h"
-                                idref="184" line="21">
+                                idref="184" line="20">
                                 <constant column="13"
                                   file="paper_change_dependent.h"
-                                  idref="186" line="21" value="SC_NS"/>
+                                  idref="186" line="20" value="SC_NS"/>
                               </primary_expression>
                             </arguments_list>
                           </arguments>
                         </systemCRoutine>
                       </block_statement>
                       <block_statement column="21"
-                        file="paper_change_dependent.h" idref="188" line="22">
+                        file="paper_change_dependent.h" idref="188" line="21">
                         <assignment column="12"
-                          file="paper_change_dependent.h" idref="198" line="22">
+                          file="paper_change_dependent.h" idref="198" line="21">
                           <primary_expression column="21"
-                            file="paper_change_dependent.h" idref="192" line="22">
+                            file="paper_change_dependent.h" idref="192" line="21">
                             <id_expression column="7"
                               file="paper_change_dependent.h"
-                              idref="194" line="22" name="data"/>
+                              idref="194" line="21" name="data"/>
                           </primary_expression>
                           <assignment_operator column="7"
-                            file="paper_change_dependent.h" idref="196" line="22"/>
+                            file="paper_change_dependent.h" idref="196" line="21"/>
                           <primary_expression column="12"
-                            file="paper_change_dependent.h" idref="202" line="22">
+                            file="paper_change_dependent.h" idref="202" line="21">
                             <id_expression column="14"
                               file="paper_change_dependent.h"
-                              idref="204" line="22" name="PUBLIC_IN"/>
+                              idref="204" line="21" name="TRUSTED_IN"/>
                           </primary_expression>
                         </assignment>
                       </block_statement>
-                      <block_statement column="23"
-                        file="paper_change_dependent.h" idref="206" line="23">
-                        <postfix_expression column="23"
-                          file="paper_change_dependent.h" idref="208" line="23">
-                          <primary_expression column="23"
-                            file="paper_change_dependent.h" idref="210" line="23">
+                      <block_statement column="24"
+                        file="paper_change_dependent.h" idref="206" line="22">
+                        <postfix_expression column="24"
+                          file="paper_change_dependent.h" idref="208" line="22">
+                          <primary_expression column="24"
+                            file="paper_change_dependent.h" idref="210" line="22">
                             <id_expression column="7"
                               file="paper_change_dependent.h"
-                              idref="212" line="23" name="bus"/>
+                              idref="212" line="22" name="bus"/>
                           </primary_expression>
                           <dereferencing_operator column="7"
                             file="paper_change_dependent.h" idref="214"
-                            line="23" name="&amp;"/>
+                            line="22" name="&amp;"/>
                           <id_expression column="11"
                             file="paper_change_dependent.h" idref="216"
-                            line="23" name="write"/>
+                            line="22" name="write"/>
                           <arguments column="11"
-                            file="paper_change_dependent.h" idref="218" line="23">
+                            file="paper_change_dependent.h" idref="218" line="22">
                             <arguments_list column="16"
                               file="paper_change_dependent.h"
-                              idref="220" line="23">
+                              idref="220" line="22">
                               <primary_expression column="16"
                                 file="paper_change_dependent.h"
-                                idref="224" line="23">
+                                idref="224" line="22">
                                 <id_expression column="17"
                                   file="paper_change_dependent.h"
-                                  idref="226" line="23" name="data"/>
+                                  idref="226" line="22" name="data"/>
                               </primary_expression>
                             </arguments_list>
                           </arguments>
                         </postfix_expression>
                       </block_statement>
                       <block_statement column="22"
-                        file="paper_change_dependent.h" idref="228" line="24">
+                        file="paper_change_dependent.h" idref="228" line="23">
                         <systemCRoutine column="22"
                           file="paper_change_dependent.h" idref="232"
-                          line="24" name="wait">
+                          line="23" name="wait">
                           <arguments column="7"
-                            file="paper_change_dependent.h" idref="234" line="24">
+                            file="paper_change_dependent.h" idref="234" line="23">
                             <arguments_list column="11"
                               file="paper_change_dependent.h"
-                              idref="236" line="24">
+                              idref="236" line="23">
                               <primary_expression column="11"
                                 file="paper_change_dependent.h"
-                                idref="240" line="24">
+                                idref="240" line="23">
                                 <constant column="11"
                                   file="paper_change_dependent.h"
-                                  idref="242" line="24" value="2"/>
+                                  idref="242" line="23" value="2"/>
                               </primary_expression>
                               <primary_expression column="13"
                                 file="paper_change_dependent.h"
-                                idref="246" line="24">
+                                idref="246" line="23">
                                 <constant column="13"
                                   file="paper_change_dependent.h"
-                                  idref="248" line="24" value="SC_NS"/>
+                                  idref="248" line="23" value="SC_NS"/>
                               </primary_expression>
                             </arguments_list>
                           </arguments>
@@ -336,105 +336,105 @@
             </function_definition>
           </member_declaration>
           <member_declaration column="3" file="paper_change_dependent.h"
-            idref="250" line="28">
+            idref="250" line="27">
             <function_definition column="3"
-              file="paper_change_dependent.h" idref="252" line="28">
+              file="paper_change_dependent.h" idref="252" line="27">
               <declaration_specifiers column="3"
-                file="paper_change_dependent.h" idref="254" line="28">
+                file="paper_change_dependent.h" idref="254" line="27">
                 <builtin_type_specifier column="3"
                   file="paper_change_dependent.h" idref="256" length="0"
-                  line="28" name="void" sc_dt="false"/>
+                  line="27" name="void" sc_dt="false"/>
               </declaration_specifiers>
               <function_declarator column="3"
-                file="paper_change_dependent.h" idref="258" line="28">
+                file="paper_change_dependent.h" idref="258" line="27">
                 <qualified_id column="3" file="paper_change_dependent.h"
-                  idref="260" line="28" name="consume_secret"/>
+                  idref="260" line="27" name="diagnosis"/>
               </function_declarator>
-              <block column="23" file="paper_change_dependent.h"
-                idref="262" line="28">
-                <block_statement column="25"
-                  file="paper_change_dependent.h" idref="264" line="29">
-                  <systemCRoutine column="25"
+              <block column="18" file="paper_change_dependent.h"
+                idref="262" line="27">
+                <block_statement column="20"
+                  file="paper_change_dependent.h" idref="264" line="28">
+                  <systemCRoutine column="20"
                     file="paper_change_dependent.h" idref="268"
-                    line="29" name="wait">
+                    line="28" name="wait">
                     <arguments column="5"
-                      file="paper_change_dependent.h" idref="270" line="29">
+                      file="paper_change_dependent.h" idref="270" line="28">
                       <arguments_list column="9"
-                        file="paper_change_dependent.h" idref="272" line="29">
+                        file="paper_change_dependent.h" idref="272" line="28">
                         <primary_expression column="9"
-                          file="paper_change_dependent.h" idref="276" line="29">
+                          file="paper_change_dependent.h" idref="276" line="28">
                           <constant column="9"
                             file="paper_change_dependent.h" idref="278"
-                            line="29" value="1"/>
+                            line="28" value="1"/>
                         </primary_expression>
                         <primary_expression column="11"
-                          file="paper_change_dependent.h" idref="282" line="29">
+                          file="paper_change_dependent.h" idref="282" line="28">
                           <constant column="11"
                             file="paper_change_dependent.h" idref="284"
-                            line="29" value="SC_NS"/>
+                            line="28" value="SC_NS"/>
                         </primary_expression>
                       </arguments_list>
                     </arguments>
                   </systemCRoutine>
                 </block_statement>
                 <block_statement column="19"
-                  file="paper_change_dependent.h" idref="286" line="30">
+                  file="paper_change_dependent.h" idref="286" line="29">
                   <while_statement column="19"
-                    file="paper_change_dependent.h" idref="288" line="30">
+                    file="paper_change_dependent.h" idref="288" line="29">
                     <primary_expression column="11"
-                      file="paper_change_dependent.h" idref="292" line="30">
+                      file="paper_change_dependent.h" idref="292" line="29">
                       <constant column="11"
                         file="paper_change_dependent.h" idref="294"
-                        line="30" value="true"/>
+                        line="29" value="true"/>
                     </primary_expression>
                     <block column="16" file="paper_change_dependent.h"
-                      idref="296" line="30">
+                      idref="296" line="29">
                       <block_statement column="18"
-                        file="paper_change_dependent.h" idref="298" line="31">
+                        file="paper_change_dependent.h" idref="298" line="30">
                         <declaration column="18"
-                          file="paper_change_dependent.h" idref="300" line="31">
+                          file="paper_change_dependent.h" idref="300" line="30">
                           <init_declarator_list column="18"
-                            file="paper_change_dependent.h" idref="302" line="31">
+                            file="paper_change_dependent.h" idref="302" line="30">
                             <declaration_specifiers column="18"
                               file="paper_change_dependent.h"
-                              idref="304" line="31">
+                              idref="304" line="30">
                               <builtin_type_specifier column="18"
                                 file="paper_change_dependent.h"
-                                idref="306" length="0" line="31"
+                                idref="306" length="0" line="30"
                                 name="int" sc_dt="false"/>
                             </declaration_specifiers>
                             <init_declarator column="7"
                               file="paper_change_dependent.h"
-                              idref="308" line="31">
+                              idref="308" line="30">
                               <declarator column="7"
                                 file="paper_change_dependent.h"
-                                idref="310" line="31">
+                                idref="310" line="30">
                                 <qualified_id column="7"
                                   file="paper_change_dependent.h"
-                                  idref="312" line="31" name="read"/>
+                                  idref="312" line="30" name="read"/>
                               </declarator>
                               <initializer column="16"
                                 file="paper_change_dependent.h"
-                                idref="314" line="31">
+                                idref="314" line="30">
                                 <postfix_expression column="16"
                                   file="paper_change_dependent.h"
-                                  idref="316" line="31">
+                                  idref="316" line="30">
                                   <primary_expression column="16"
                                     file="paper_change_dependent.h"
-                                    idref="318" line="31">
+                                    idref="318" line="30">
                                     <id_expression column="18"
                                     file="paper_change_dependent.h"
-                                    idref="320" line="31" name="bus"/>
+                                    idref="320" line="30" name="bus"/>
                                   </primary_expression>
                                   <dereferencing_operator column="18"
                                     file="paper_change_dependent.h"
-                                    idref="322" line="31" name="&amp;"/>
+                                    idref="322" line="30" name="&amp;"/>
                                   <id_expression column="22"
                                     file="paper_change_dependent.h"
-                                    idref="324" line="31" name="read"/>
+                                    idref="324" line="30" name="read"/>
                                   <arguments column="22"
                                     file="paper_change_dependent.h"
-                                    idref="326" line="31"/>
+                                    idref="326" line="30"/>
                                 </postfix_expression>
                               </initializer>
                             </init_declarator>
@@ -442,48 +442,48 @@
                         </declaration>
                       </block_statement>
                       <block_statement column="28"
-                        file="paper_change_dependent.h" idref="328" line="32">
-                        <assignment column="18"
-                          file="paper_change_dependent.h" idref="338" line="32">
+                        file="paper_change_dependent.h" idref="328" line="31">
+                        <assignment column="21"
+                          file="paper_change_dependent.h" idref="338" line="31">
                           <primary_expression column="28"
-                            file="paper_change_dependent.h" idref="332" line="32">
+                            file="paper_change_dependent.h" idref="332" line="31">
                             <id_expression column="7"
                               file="paper_change_dependent.h"
-                              idref="334" line="32" name="SECRET_OUT"/>
+                              idref="334" line="31" name="UNTRUSTED_OUT"/>
                           </primary_expression>
                           <assignment_operator column="7"
-                            file="paper_change_dependent.h" idref="336" line="32"/>
-                          <primary_expression column="18"
-                            file="paper_change_dependent.h" idref="342" line="32">
-                            <id_expression column="20"
+                            file="paper_change_dependent.h" idref="336" line="31"/>
+                          <primary_expression column="21"
+                            file="paper_change_dependent.h" idref="342" line="31">
+                            <id_expression column="23"
                               file="paper_change_dependent.h"
-                              idref="344" line="32" name="read"/>
+                              idref="344" line="31" name="read"/>
                           </primary_expression>
                         </assignment>
                       </block_statement>
-                      <block_statement column="24"
-                        file="paper_change_dependent.h" idref="346" line="33">
-                        <systemCRoutine column="24"
+                      <block_statement column="27"
+                        file="paper_change_dependent.h" idref="346" line="32">
+                        <systemCRoutine column="27"
                           file="paper_change_dependent.h" idref="350"
-                          line="33" name="wait">
+                          line="32" name="wait">
                           <arguments column="7"
-                            file="paper_change_dependent.h" idref="352" line="33">
+                            file="paper_change_dependent.h" idref="352" line="32">
                             <arguments_list column="11"
                               file="paper_change_dependent.h"
-                              idref="354" line="33">
+                              idref="354" line="32">
                               <primary_expression column="11"
                                 file="paper_change_dependent.h"
-                                idref="358" line="33">
+                                idref="358" line="32">
                                 <constant column="11"
                                   file="paper_change_dependent.h"
-                                  idref="360" line="33" value="4"/>
+                                  idref="360" line="32" value="4"/>
                               </primary_expression>
                               <primary_expression column="13"
                                 file="paper_change_dependent.h"
-                                idref="364" line="33">
+                                idref="364" line="32">
                                 <constant column="13"
                                   file="paper_change_dependent.h"
-                                  idref="366" line="33" value="SC_NS"/>
+                                  idref="366" line="32" value="SC_NS"/>
                               </primary_expression>
                             </arguments_list>
                           </arguments>
@@ -496,122 +496,122 @@
             </function_definition>
           </member_declaration>
           <member_declaration column="3" file="paper_change_dependent.h"
-            idref="368" line="37">
+            idref="368" line="36">
             <function_definition column="3"
-              file="paper_change_dependent.h" idref="370" line="37">
+              file="paper_change_dependent.h" idref="370" line="36">
               <declaration_specifiers column="3"
-                file="paper_change_dependent.h" idref="372" line="37">
+                file="paper_change_dependent.h" idref="372" line="36">
                 <builtin_type_specifier column="3"
                   file="paper_change_dependent.h" idref="374" length="0"
-                  line="37" name="void" sc_dt="false"/>
+                  line="36" name="void" sc_dt="false"/>
               </declaration_specifiers>
               <function_declarator column="3"
-                file="paper_change_dependent.h" idref="376" line="37">
+                file="paper_change_dependent.h" idref="376" line="36">
                 <qualified_id column="3" file="paper_change_dependent.h"
-                  idref="378" line="37" name="consume_public"/>
+                  idref="378" line="36" name="pump"/>
               </function_declarator>
-              <block column="23" file="paper_change_dependent.h"
-                idref="380" line="37">
-                <block_statement column="25"
-                  file="paper_change_dependent.h" idref="382" line="38">
-                  <while_statement column="25"
-                    file="paper_change_dependent.h" idref="384" line="38">
+              <block column="13" file="paper_change_dependent.h"
+                idref="380" line="36">
+                <block_statement column="15"
+                  file="paper_change_dependent.h" idref="382" line="37">
+                  <while_statement column="15"
+                    file="paper_change_dependent.h" idref="384" line="37">
                     <primary_expression column="11"
-                      file="paper_change_dependent.h" idref="388" line="38">
+                      file="paper_change_dependent.h" idref="388" line="37">
                       <constant column="11"
                         file="paper_change_dependent.h" idref="390"
-                        line="38" value="true"/>
+                        line="37" value="true"/>
                     </primary_expression>
                     <block column="16" file="paper_change_dependent.h"
-                      idref="392" line="38">
+                      idref="392" line="37">
                       <block_statement column="18"
-                        file="paper_change_dependent.h" idref="394" line="39">
+                        file="paper_change_dependent.h" idref="394" line="38">
                         <systemCRoutine column="18"
                           file="paper_change_dependent.h" idref="398"
-                          line="39" name="wait">
+                          line="38" name="wait">
                           <arguments column="7"
-                            file="paper_change_dependent.h" idref="400" line="39">
+                            file="paper_change_dependent.h" idref="400" line="38">
                             <arguments_list column="11"
                               file="paper_change_dependent.h"
-                              idref="402" line="39">
+                              idref="402" line="38">
                               <primary_expression column="11"
                                 file="paper_change_dependent.h"
-                                idref="406" line="39">
+                                idref="406" line="38">
                                 <id_expression column="12"
                                   file="paper_change_dependent.h"
-                                  idref="408" line="39" name="bus"/>
+                                  idref="408" line="38" name="bus"/>
                               </primary_expression>
                             </arguments_list>
                           </arguments>
                         </systemCRoutine>
                       </block_statement>
                       <block_statement column="16"
-                        file="paper_change_dependent.h" idref="410" line="40">
+                        file="paper_change_dependent.h" idref="410" line="39">
                         <systemCRoutine column="16"
                           file="paper_change_dependent.h" idref="414"
-                          line="40" name="wait">
+                          line="39" name="wait">
                           <arguments column="7"
-                            file="paper_change_dependent.h" idref="416" line="40">
+                            file="paper_change_dependent.h" idref="416" line="39">
                             <arguments_list column="11"
                               file="paper_change_dependent.h"
-                              idref="418" line="40">
+                              idref="418" line="39">
                               <primary_expression column="11"
                                 file="paper_change_dependent.h"
-                                idref="422" line="40">
+                                idref="422" line="39">
                                 <id_expression column="12"
                                   file="paper_change_dependent.h"
-                                  idref="424" line="40" name="bus"/>
+                                  idref="424" line="39" name="bus"/>
                               </primary_expression>
                             </arguments_list>
                           </arguments>
                         </systemCRoutine>
                       </block_statement>
                       <block_statement column="16"
-                        file="paper_change_dependent.h" idref="426" line="41">
+                        file="paper_change_dependent.h" idref="426" line="40">
                         <declaration column="16"
-                          file="paper_change_dependent.h" idref="428" line="41">
+                          file="paper_change_dependent.h" idref="428" line="40">
                           <init_declarator_list column="16"
-                            file="paper_change_dependent.h" idref="430" line="41">
+                            file="paper_change_dependent.h" idref="430" line="40">
                             <declaration_specifiers column="16"
                               file="paper_change_dependent.h"
-                              idref="432" line="41">
+                              idref="432" line="40">
                               <builtin_type_specifier column="16"
                                 file="paper_change_dependent.h"
-                                idref="434" length="0" line="41"
+                                idref="434" length="0" line="40"
                                 name="int" sc_dt="false"/>
                             </declaration_specifiers>
                             <init_declarator column="7"
                               file="paper_change_dependent.h"
-                              idref="436" line="41">
+                              idref="436" line="40">
                               <declarator column="7"
                                 file="paper_change_dependent.h"
-                                idref="438" line="41">
+                                idref="438" line="40">
                                 <qualified_id column="7"
                                   file="paper_change_dependent.h"
-                                  idref="440" line="41" name="read"/>
+                                  idref="440" line="40" name="read"/>
                               </declarator>
                               <initializer column="16"
                                 file="paper_change_dependent.h"
-                                idref="442" line="41">
+                                idref="442" line="40">
                                 <postfix_expression column="16"
                                   file="paper_change_dependent.h"
-                                  idref="444" line="41">
+                                  idref="444" line="40">
                                   <primary_expression column="16"
                                     file="paper_change_dependent.h"
-                                    idref="446" line="41">
+                                    idref="446" line="40">
                                     <id_expression column="18"
                                     file="paper_change_dependent.h"
-                                    idref="448" line="41" name="bus"/>
+                                    idref="448" line="40" name="bus"/>
                                   </primary_expression>
                                   <dereferencing_operator column="18"
                                     file="paper_change_dependent.h"
-                                    idref="450" line="41" name="&amp;"/>
+                                    idref="450" line="40" name="&amp;"/>
                                   <id_expression column="22"
                                     file="paper_change_dependent.h"
-                                    idref="452" line="41" name="read"/>
+                                    idref="452" line="40" name="read"/>
                                   <arguments column="22"
                                     file="paper_change_dependent.h"
-                                    idref="454" line="41"/>
+                                    idref="454" line="40"/>
                                 </postfix_expression>
                               </initializer>
                             </init_declarator>
@@ -619,22 +619,22 @@
                         </declaration>
                       </block_statement>
                       <block_statement column="28"
-                        file="paper_change_dependent.h" idref="456" line="42">
-                        <assignment column="18"
-                          file="paper_change_dependent.h" idref="466" line="42">
+                        file="paper_change_dependent.h" idref="456" line="41">
+                        <assignment column="19"
+                          file="paper_change_dependent.h" idref="466" line="41">
                           <primary_expression column="28"
-                            file="paper_change_dependent.h" idref="460" line="42">
+                            file="paper_change_dependent.h" idref="460" line="41">
                             <id_expression column="7"
                               file="paper_change_dependent.h"
-                              idref="462" line="42" name="PUBLIC_OUT"/>
+                              idref="462" line="41" name="TRUSTED_OUT"/>
                           </primary_expression>
                           <assignment_operator column="7"
-                            file="paper_change_dependent.h" idref="464" line="42"/>
-                          <primary_expression column="18"
-                            file="paper_change_dependent.h" idref="470" line="42">
-                            <id_expression column="20"
+                            file="paper_change_dependent.h" idref="464" line="41"/>
+                          <primary_expression column="19"
+                            file="paper_change_dependent.h" idref="470" line="41">
+                            <id_expression column="21"
                               file="paper_change_dependent.h"
-                              idref="472" line="42" name="read"/>
+                              idref="472" line="41" name="read"/>
                           </primary_expression>
                         </assignment>
                       </block_statement>
@@ -645,68 +645,68 @@
             </function_definition>
           </member_declaration>
           <member_declaration column="3" file="paper_change_dependent.h"
-            idref="474" line="47"/>
+            idref="474" line="46"/>
           <member_declaration column="3" file="paper_change_dependent.h"
-            idref="476" line="47">
+            idref="476" line="46">
             <ctor_definition column="3" file="paper_change_dependent.h"
-              idref="478" line="47">
+              idref="478" line="46">
               <qualified_id column="10" file="paper_change_dependent.h"
-                idref="480" line="47" name="paperChangeDependent"/>
+                idref="480" line="46" name="paperChangeDependent"/>
               <parameter_list column="31"
-                file="paper_change_dependent.h" idref="482" line="48">
+                file="paper_change_dependent.h" idref="482" line="47">
                 <parameter_declaration column="31"
-                  file="paper_change_dependent.h" idref="484" line="48">
+                  file="paper_change_dependent.h" idref="484" line="47">
                   <declaration_specifiers column="31"
-                    file="paper_change_dependent.h" idref="486" line="48">
+                    file="paper_change_dependent.h" idref="486" line="47">
                     <builtin_type_specifier column="31"
                       file="paper_change_dependent.h" idref="488"
-                      length="0" line="48" name="sc_module_name" sc_dt="true"/>
+                      length="0" line="47" name="sc_module_name" sc_dt="true"/>
                   </declaration_specifiers>
                   <declarator column="31"
-                    file="paper_change_dependent.h" idref="490" line="48">
+                    file="paper_change_dependent.h" idref="490" line="47">
                     <qualified_id column="31"
                       file="paper_change_dependent.h" idref="492"
-                      line="48" name="name"/>
+                      line="47" name="name"/>
                   </declarator>
                 </parameter_declaration>
               </parameter_list>
               <ctor_initializer column="31"
-                file="paper_change_dependent.h" idref="494" line="48">
+                file="paper_change_dependent.h" idref="494" line="47">
                 <superclass_init column="31"
-                  file="paper_change_dependent.h" idref="496" line="48">
+                  file="paper_change_dependent.h" idref="496" line="47">
                   <declaration_specifiers column="31"
-                    file="paper_change_dependent.h" idref="498" line="48">
+                    file="paper_change_dependent.h" idref="498" line="47">
                     <builtin_type_specifier column="31"
                       file="paper_change_dependent.h" idref="500"
-                      length="0" line="48" name="sc_module" sc_dt="true"/>
+                      length="0" line="47" name="sc_module" sc_dt="true"/>
                   </declaration_specifiers>
                   <arguments_list column="31"
-                    file="paper_change_dependent.h" idref="502" line="48">
+                    file="paper_change_dependent.h" idref="502" line="47">
                     <primary_expression column="31"
-                      file="paper_change_dependent.h" idref="504" line="48">
+                      file="paper_change_dependent.h" idref="504" line="47">
                       <id_expression column="31"
                         file="paper_change_dependent.h" idref="506"
-                        line="48" name="name"/>
+                        line="47" name="name"/>
                     </primary_expression>
                   </arguments_list>
                 </superclass_init>
               </ctor_initializer>
               <block column="31" file="paper_change_dependent.h"
-                idref="508" line="48">
+                idref="508" line="47">
                 <sc_thread_block column="3"
-                  file="paper_change_dependent.h" idref="510" line="49">
+                  file="paper_change_dependent.h" idref="510" line="48">
                   <sc_thread column="3" file="paper_change_dependent.h"
-                    idref="512" line="49" name="produce"/>
+                    idref="512" line="48" name="ecu"/>
                 </sc_thread_block>
-                <sc_thread_block column="23"
-                  file="paper_change_dependent.h" idref="514" line="50">
-                  <sc_thread column="23" file="paper_change_dependent.h"
-                    idref="516" line="50" name="consume_secret"/>
+                <sc_thread_block column="19"
+                  file="paper_change_dependent.h" idref="514" line="49">
+                  <sc_thread column="19" file="paper_change_dependent.h"
+                    idref="516" line="49" name="diagnosis"/>
                 </sc_thread_block>
-                <sc_thread_block column="30"
-                  file="paper_change_dependent.h" idref="518" line="51">
-                  <sc_thread column="30" file="paper_change_dependent.h"
-                    idref="520" line="51" name="consume_public"/>
+                <sc_thread_block column="25"
+                  file="paper_change_dependent.h" idref="518" line="50">
+                  <sc_thread column="25" file="paper_change_dependent.h"
+                    idref="520" line="50" name="pump"/>
                 </sc_thread_block>
               </block>
             </ctor_definition>

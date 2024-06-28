@@ -8,24 +8,23 @@ SC_MODULE(paperTimingLeak)
 {
   sc_inout<int> bus;
   sc_event event;
-  
  
-  int SECRET_IN;
-  int SECRET_OUT;
-  int PUBLIC_IN;
-  int PUBLIC_OUT;
+  int UNTRUSTED_IN;
+  int UNTRUSTED_OUT;
+  int TRUSTED_IN;
+  int TRUSTED_OUT;
   
-  void produce() {
+  void ecu() {
     while (true) {
-      int data = SECRET_IN;
+      int data = UNTRUSTED_IN;
       bus.write(data);
       wait(2, SC_NS);
       if (data < 0) {
-	      data = PUBLIC_IN;
+	      data = TRUSTED_IN;
 	      bus.write(data);
 	      event.notify(750, SC_PS);
       } else {
-	      data = PUBLIC_IN;
+	      data = TRUSTED_IN;
 	      bus.write(data);
 	      event.notify(1250, SC_PS);
       }
@@ -33,29 +32,29 @@ SC_MODULE(paperTimingLeak)
     }
   }
   
-  void consume_secret() {
+  void diagnosis() {
     wait(1, SC_NS);
     while (true) {
       int read = bus.read();
-      SECRET_OUT = read;
+      UNTRUSTED_OUT = read;
       wait(4, SC_NS);
     }
   }
   
-  void consume_public() {
+  void pump() {
     while (true) {
       wait(event);
       int read = bus.read();
-      PUBLIC_OUT = read;
+      TRUSTED_OUT = read;
     }
   }
 
     
   SC_CTOR(paperTimingLeak)
   {
-    SC_THREAD(produce);
-    SC_THREAD(consume_secret);
-    SC_THREAD(consume_public);
+    SC_THREAD(ecu);
+    SC_THREAD(diagnosis);
+    SC_THREAD(pump);
   }
 
 };

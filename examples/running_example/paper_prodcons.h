@@ -8,48 +8,47 @@ SC_MODULE(paperProdcons)
 {
   sc_inout<int> bus;
   sc_event event;
-  
  
-  int SECRET_IN;
-  int SECRET_OUT;
-  int PUBLIC_IN;
-  int PUBLIC_OUT;
+  int UNTRUSTED_IN;
+  int UNTRUSTED_OUT;
+  int TRUSTED_IN;
+  int TRUSTED_OUT;
   
-  void produce() {
+  void ecu() {
     while (true) {
-      int data = SECRET_IN;
+      int data = UNTRUSTED_IN;
       bus.write(data);
       wait(2, SC_NS);
-      data = PUBLIC_IN;
+      data = TRUSTED_IN;
       bus.write(data);
       event.notify(1, SC_NS);
       wait(2, SC_NS);
     }
   }
   
-  void consume_secret() {
+  void diagnosis() {
     wait(1, SC_NS);
     while (true) {
       int read = bus.read();
-      SECRET_OUT = read;
+      UNTRUSTED_OUT = read;
       wait(4, SC_NS);
     }
   }
   
-  void consume_public() {
+  void pump() {
     while (true) {
       wait(event);
       int read = bus.read();
-      PUBLIC_OUT = read;
+      TRUSTED_OUT = read;
     }
   }
 
     
   SC_CTOR(paperProdcons)
   {
-    SC_THREAD(produce);
-    SC_THREAD(consume_secret);
-    SC_THREAD(consume_public);
+    SC_THREAD(ecu);
+    SC_THREAD(diagnosis);
+    SC_THREAD(pump);
   }
 
 };

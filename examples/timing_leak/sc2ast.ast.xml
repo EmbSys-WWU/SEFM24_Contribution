@@ -60,372 +60,372 @@
             </member_declarator_list>
           </member_declaration>
           <member_declaration column="17" file="paper_timing_leak.h"
-            idref="52" line="13">
+            idref="52" line="12">
             <member_declarator_list column="17"
-              file="paper_timing_leak.h" idref="54" line="13">
+              file="paper_timing_leak.h" idref="54" line="12">
               <declaration_specifiers column="17"
-                file="paper_timing_leak.h" idref="56" line="13">
+                file="paper_timing_leak.h" idref="56" line="12">
                 <builtin_type_specifier column="17"
                   file="paper_timing_leak.h" idref="58" length="0"
+                  line="12" name="int" sc_dt="false"/>
+              </declaration_specifiers>
+              <member_declarator column="3" file="paper_timing_leak.h"
+                idref="60" line="12">
+                <declarator column="3" file="paper_timing_leak.h"
+                  idref="62" line="12">
+                  <qualified_id column="3" file="paper_timing_leak.h"
+                    idref="64" line="12" name="UNTRUSTED_IN"/>
+                </declarator>
+              </member_declarator>
+            </member_declarator_list>
+          </member_declaration>
+          <member_declaration column="19" file="paper_timing_leak.h"
+            idref="66" line="13">
+            <member_declarator_list column="19"
+              file="paper_timing_leak.h" idref="68" line="13">
+              <declaration_specifiers column="19"
+                file="paper_timing_leak.h" idref="70" line="13">
+                <builtin_type_specifier column="19"
+                  file="paper_timing_leak.h" idref="72" length="0"
                   line="13" name="int" sc_dt="false"/>
               </declaration_specifiers>
               <member_declarator column="3" file="paper_timing_leak.h"
-                idref="60" line="13">
+                idref="74" line="13">
                 <declarator column="3" file="paper_timing_leak.h"
-                  idref="62" line="13">
+                  idref="76" line="13">
                   <qualified_id column="3" file="paper_timing_leak.h"
-                    idref="64" line="13" name="SECRET_IN"/>
+                    idref="78" line="13" name="UNTRUSTED_OUT"/>
                 </declarator>
               </member_declarator>
             </member_declarator_list>
           </member_declaration>
-          <member_declaration column="16" file="paper_timing_leak.h"
-            idref="66" line="14">
-            <member_declarator_list column="16"
-              file="paper_timing_leak.h" idref="68" line="14">
-              <declaration_specifiers column="16"
-                file="paper_timing_leak.h" idref="70" line="14">
-                <builtin_type_specifier column="16"
-                  file="paper_timing_leak.h" idref="72" length="0"
+          <member_declaration column="20" file="paper_timing_leak.h"
+            idref="80" line="14">
+            <member_declarator_list column="20"
+              file="paper_timing_leak.h" idref="82" line="14">
+              <declaration_specifiers column="20"
+                file="paper_timing_leak.h" idref="84" line="14">
+                <builtin_type_specifier column="20"
+                  file="paper_timing_leak.h" idref="86" length="0"
                   line="14" name="int" sc_dt="false"/>
               </declaration_specifiers>
               <member_declarator column="3" file="paper_timing_leak.h"
-                idref="74" line="14">
+                idref="88" line="14">
                 <declarator column="3" file="paper_timing_leak.h"
-                  idref="76" line="14">
+                  idref="90" line="14">
                   <qualified_id column="3" file="paper_timing_leak.h"
-                    idref="78" line="14" name="SECRET_OUT"/>
+                    idref="92" line="14" name="TRUSTED_IN"/>
                 </declarator>
               </member_declarator>
             </member_declarator_list>
           </member_declaration>
           <member_declaration column="17" file="paper_timing_leak.h"
-            idref="80" line="15">
+            idref="94" line="15">
             <member_declarator_list column="17"
-              file="paper_timing_leak.h" idref="82" line="15">
+              file="paper_timing_leak.h" idref="96" line="15">
               <declaration_specifiers column="17"
-                file="paper_timing_leak.h" idref="84" line="15">
+                file="paper_timing_leak.h" idref="98" line="15">
                 <builtin_type_specifier column="17"
-                  file="paper_timing_leak.h" idref="86" length="0"
+                  file="paper_timing_leak.h" idref="100" length="0"
                   line="15" name="int" sc_dt="false"/>
               </declaration_specifiers>
               <member_declarator column="3" file="paper_timing_leak.h"
-                idref="88" line="15">
+                idref="102" line="15">
                 <declarator column="3" file="paper_timing_leak.h"
-                  idref="90" line="15">
+                  idref="104" line="15">
                   <qualified_id column="3" file="paper_timing_leak.h"
-                    idref="92" line="15" name="PUBLIC_IN"/>
+                    idref="106" line="15" name="TRUSTED_OUT"/>
                 </declarator>
               </member_declarator>
             </member_declarator_list>
           </member_declaration>
-          <member_declaration column="16" file="paper_timing_leak.h"
-            idref="94" line="16">
-            <member_declarator_list column="16"
-              file="paper_timing_leak.h" idref="96" line="16">
-              <declaration_specifiers column="16"
-                file="paper_timing_leak.h" idref="98" line="16">
-                <builtin_type_specifier column="16"
-                  file="paper_timing_leak.h" idref="100" length="0"
-                  line="16" name="int" sc_dt="false"/>
-              </declaration_specifiers>
-              <member_declarator column="3" file="paper_timing_leak.h"
-                idref="102" line="16">
-                <declarator column="3" file="paper_timing_leak.h"
-                  idref="104" line="16">
-                  <qualified_id column="3" file="paper_timing_leak.h"
-                    idref="106" line="16" name="PUBLIC_OUT"/>
-                </declarator>
-              </member_declarator>
-            </member_declarator_list>
-          </member_declaration>
-          <member_declaration column="17" file="paper_timing_leak.h"
-            idref="108" line="18">
-            <function_definition column="17" file="paper_timing_leak.h"
-              idref="110" line="18">
-              <declaration_specifiers column="17"
-                file="paper_timing_leak.h" idref="112" line="18">
-                <builtin_type_specifier column="17"
+          <member_declaration column="18" file="paper_timing_leak.h"
+            idref="108" line="17">
+            <function_definition column="18" file="paper_timing_leak.h"
+              idref="110" line="17">
+              <declaration_specifiers column="18"
+                file="paper_timing_leak.h" idref="112" line="17">
+                <builtin_type_specifier column="18"
                   file="paper_timing_leak.h" idref="114" length="0"
-                  line="18" name="void" sc_dt="false"/>
+                  line="17" name="void" sc_dt="false"/>
               </declaration_specifiers>
               <function_declarator column="3" file="paper_timing_leak.h"
-                idref="116" line="18">
+                idref="116" line="17">
                 <qualified_id column="3" file="paper_timing_leak.h"
-                  idref="118" line="18" name="produce"/>
+                  idref="118" line="17" name="ecu"/>
               </function_declarator>
-              <block column="16" file="paper_timing_leak.h" idref="120" line="18">
-                <block_statement column="18" file="paper_timing_leak.h"
-                  idref="122" line="19">
-                  <while_statement column="18"
-                    file="paper_timing_leak.h" idref="124" line="19">
+              <block column="12" file="paper_timing_leak.h" idref="120" line="17">
+                <block_statement column="14" file="paper_timing_leak.h"
+                  idref="122" line="18">
+                  <while_statement column="14"
+                    file="paper_timing_leak.h" idref="124" line="18">
                     <primary_expression column="11"
-                      file="paper_timing_leak.h" idref="128" line="19">
+                      file="paper_timing_leak.h" idref="128" line="18">
                       <constant column="11" file="paper_timing_leak.h"
-                        idref="130" line="19" value="true"/>
+                        idref="130" line="18" value="true"/>
                     </primary_expression>
                     <block column="16" file="paper_timing_leak.h"
-                      idref="132" line="19">
+                      idref="132" line="18">
                       <block_statement column="18"
-                        file="paper_timing_leak.h" idref="134" line="20">
+                        file="paper_timing_leak.h" idref="134" line="19">
                         <declaration column="18"
-                          file="paper_timing_leak.h" idref="136" line="20">
+                          file="paper_timing_leak.h" idref="136" line="19">
                           <init_declarator_list column="18"
-                            file="paper_timing_leak.h" idref="138" line="20">
+                            file="paper_timing_leak.h" idref="138" line="19">
                             <declaration_specifiers column="18"
-                              file="paper_timing_leak.h" idref="140" line="20">
+                              file="paper_timing_leak.h" idref="140" line="19">
                               <builtin_type_specifier column="18"
                                 file="paper_timing_leak.h" idref="142"
-                                length="0" line="20" name="int" sc_dt="false"/>
+                                length="0" line="19" name="int" sc_dt="false"/>
                             </declaration_specifiers>
                             <init_declarator column="7"
-                              file="paper_timing_leak.h" idref="144" line="20">
+                              file="paper_timing_leak.h" idref="144" line="19">
                               <declarator column="7"
-                                file="paper_timing_leak.h" idref="146" line="20">
+                                file="paper_timing_leak.h" idref="146" line="19">
                                 <qualified_id column="7"
                                   file="paper_timing_leak.h" idref="148"
-                                  line="20" name="data"/>
+                                  line="19" name="data"/>
                               </declarator>
                               <initializer column="16"
-                                file="paper_timing_leak.h" idref="150" line="20">
+                                file="paper_timing_leak.h" idref="150" line="19">
                                 <primary_expression column="16"
-                                  file="paper_timing_leak.h" idref="154" line="20">
+                                  file="paper_timing_leak.h" idref="154" line="19">
                                   <id_expression column="18"
                                     file="paper_timing_leak.h"
-                                    idref="156" line="20" name="SECRET_IN"/>
+                                    idref="156" line="19" name="UNTRUSTED_IN"/>
                                 </primary_expression>
                               </initializer>
                             </init_declarator>
                           </init_declarator_list>
                         </declaration>
                       </block_statement>
-                      <block_statement column="27"
-                        file="paper_timing_leak.h" idref="158" line="21">
-                        <postfix_expression column="27"
-                          file="paper_timing_leak.h" idref="160" line="21">
-                          <primary_expression column="27"
-                            file="paper_timing_leak.h" idref="162" line="21">
+                      <block_statement column="30"
+                        file="paper_timing_leak.h" idref="158" line="20">
+                        <postfix_expression column="30"
+                          file="paper_timing_leak.h" idref="160" line="20">
+                          <primary_expression column="30"
+                            file="paper_timing_leak.h" idref="162" line="20">
                             <id_expression column="7"
                               file="paper_timing_leak.h" idref="164"
-                              line="21" name="bus"/>
+                              line="20" name="bus"/>
                           </primary_expression>
                           <dereferencing_operator column="7"
                             file="paper_timing_leak.h" idref="166"
-                            line="21" name="&amp;"/>
+                            line="20" name="&amp;"/>
                           <id_expression column="11"
                             file="paper_timing_leak.h" idref="168"
-                            line="21" name="write"/>
+                            line="20" name="write"/>
                           <arguments column="11"
-                            file="paper_timing_leak.h" idref="170" line="21">
+                            file="paper_timing_leak.h" idref="170" line="20">
                             <arguments_list column="16"
-                              file="paper_timing_leak.h" idref="172" line="21">
+                              file="paper_timing_leak.h" idref="172" line="20">
                               <primary_expression column="16"
-                                file="paper_timing_leak.h" idref="176" line="21">
+                                file="paper_timing_leak.h" idref="176" line="20">
                                 <id_expression column="17"
                                   file="paper_timing_leak.h" idref="178"
-                                  line="21" name="data"/>
+                                  line="20" name="data"/>
                               </primary_expression>
                             </arguments_list>
                           </arguments>
                         </postfix_expression>
                       </block_statement>
                       <block_statement column="22"
-                        file="paper_timing_leak.h" idref="180" line="22">
+                        file="paper_timing_leak.h" idref="180" line="21">
                         <systemCRoutine column="22"
                           file="paper_timing_leak.h" idref="184"
-                          line="22" name="wait">
+                          line="21" name="wait">
                           <arguments column="7"
-                            file="paper_timing_leak.h" idref="186" line="22">
+                            file="paper_timing_leak.h" idref="186" line="21">
                             <arguments_list column="11"
-                              file="paper_timing_leak.h" idref="188" line="22">
+                              file="paper_timing_leak.h" idref="188" line="21">
                               <primary_expression column="11"
-                                file="paper_timing_leak.h" idref="192" line="22">
+                                file="paper_timing_leak.h" idref="192" line="21">
                                 <constant column="11"
                                   file="paper_timing_leak.h" idref="194"
-                                  line="22" value="2"/>
+                                  line="21" value="2"/>
                               </primary_expression>
                               <primary_expression column="13"
-                                file="paper_timing_leak.h" idref="198" line="22">
+                                file="paper_timing_leak.h" idref="198" line="21">
                                 <constant column="13"
                                   file="paper_timing_leak.h" idref="200"
-                                  line="22" value="SC_NS"/>
+                                  line="21" value="SC_NS"/>
                               </primary_expression>
                             </arguments_list>
                           </arguments>
                         </systemCRoutine>
                       </block_statement>
                       <block_statement column="21"
-                        file="paper_timing_leak.h" idref="202" line="23">
+                        file="paper_timing_leak.h" idref="202" line="22">
                         <if_statement column="21"
-                          file="paper_timing_leak.h" idref="204" line="23">
+                          file="paper_timing_leak.h" idref="204" line="22">
                           <lt_node column="16"
-                            file="paper_timing_leak.h" idref="212" line="23">
+                            file="paper_timing_leak.h" idref="212" line="22">
                             <primary_expression column="10"
-                              file="paper_timing_leak.h" idref="208" line="23">
+                              file="paper_timing_leak.h" idref="208" line="22">
                               <id_expression column="11"
                                 file="paper_timing_leak.h" idref="210"
-                                line="23" name="data"/>
+                                line="22" name="data"/>
                             </primary_expression>
                             <primary_expression column="16"
-                              file="paper_timing_leak.h" idref="216" line="23">
+                              file="paper_timing_leak.h" idref="216" line="22">
                               <constant column="16"
                                 file="paper_timing_leak.h" idref="218"
-                                line="23" value="0"/>
+                                line="22" value="0"/>
                             </primary_expression>
                           </lt_node>
                           <block column="19" file="paper_timing_leak.h"
-                            idref="220" line="23">
+                            idref="220" line="22">
                             <block_statement column="21"
-                              file="paper_timing_leak.h" idref="222" line="24">
+                              file="paper_timing_leak.h" idref="222" line="23">
                               <assignment column="13"
-                                file="paper_timing_leak.h" idref="232" line="24">
+                                file="paper_timing_leak.h" idref="232" line="23">
                                 <primary_expression column="21"
-                                  file="paper_timing_leak.h" idref="226" line="24">
+                                  file="paper_timing_leak.h" idref="226" line="23">
                                   <id_expression column="8"
                                     file="paper_timing_leak.h"
-                                    idref="228" line="24" name="data"/>
+                                    idref="228" line="23" name="data"/>
                                 </primary_expression>
                                 <assignment_operator column="8"
-                                  file="paper_timing_leak.h" idref="230" line="24"/>
+                                  file="paper_timing_leak.h" idref="230" line="23"/>
                                 <primary_expression column="13"
-                                  file="paper_timing_leak.h" idref="236" line="24">
+                                  file="paper_timing_leak.h" idref="236" line="23">
                                   <id_expression column="15"
                                     file="paper_timing_leak.h"
-                                    idref="238" line="24" name="PUBLIC_IN"/>
+                                    idref="238" line="23" name="TRUSTED_IN"/>
                                 </primary_expression>
                               </assignment>
                             </block_statement>
-                            <block_statement column="24"
-                              file="paper_timing_leak.h" idref="240" line="25">
-                              <postfix_expression column="24"
-                                file="paper_timing_leak.h" idref="242" line="25">
-                                <primary_expression column="24"
-                                  file="paper_timing_leak.h" idref="244" line="25">
+                            <block_statement column="25"
+                              file="paper_timing_leak.h" idref="240" line="24">
+                              <postfix_expression column="25"
+                                file="paper_timing_leak.h" idref="242" line="24">
+                                <primary_expression column="25"
+                                  file="paper_timing_leak.h" idref="244" line="24">
                                   <id_expression column="8"
                                     file="paper_timing_leak.h"
-                                    idref="246" line="25" name="bus"/>
+                                    idref="246" line="24" name="bus"/>
                                 </primary_expression>
                                 <dereferencing_operator column="8"
                                   file="paper_timing_leak.h" idref="248"
-                                  line="25" name="&amp;"/>
+                                  line="24" name="&amp;"/>
                                 <id_expression column="12"
                                   file="paper_timing_leak.h" idref="250"
-                                  line="25" name="write"/>
+                                  line="24" name="write"/>
                                 <arguments column="12"
-                                  file="paper_timing_leak.h" idref="252" line="25">
+                                  file="paper_timing_leak.h" idref="252" line="24">
                                   <arguments_list column="17"
                                     file="paper_timing_leak.h"
-                                    idref="254" line="25">
+                                    idref="254" line="24">
                                     <primary_expression column="17"
                                     file="paper_timing_leak.h"
-                                    idref="258" line="25">
+                                    idref="258" line="24">
                                     <id_expression column="18"
                                     file="paper_timing_leak.h"
-                                    idref="260" line="25" name="data"/>
+                                    idref="260" line="24" name="data"/>
                                     </primary_expression>
                                   </arguments_list>
                                 </arguments>
                               </postfix_expression>
                             </block_statement>
                             <block_statement column="23"
-                              file="paper_timing_leak.h" idref="262" line="26">
+                              file="paper_timing_leak.h" idref="262" line="25">
                               <sc_notify column="23"
                                 file="paper_timing_leak.h" idref="264"
-                                line="26" name="event">
+                                line="25" name="event">
                                 <arguments_list column="20"
-                                  file="paper_timing_leak.h" idref="266" line="26">
+                                  file="paper_timing_leak.h" idref="266" line="25">
                                   <primary_expression column="20"
                                     file="paper_timing_leak.h"
-                                    idref="270" line="26">
+                                    idref="270" line="25">
                                     <constant column="20"
                                     file="paper_timing_leak.h"
-                                    idref="272" line="26" value="750"/>
+                                    idref="272" line="25" value="750"/>
                                   </primary_expression>
                                   <primary_expression column="24"
                                     file="paper_timing_leak.h"
-                                    idref="276" line="26">
+                                    idref="276" line="25">
                                     <constant column="24"
                                     file="paper_timing_leak.h"
-                                    idref="278" line="26" value="SC_PS"/>
+                                    idref="278" line="25" value="SC_PS"/>
                                   </primary_expression>
                                 </arguments_list>
                               </sc_notify>
                             </block_statement>
                           </block>
                           <block column="9" file="paper_timing_leak.h"
-                            idref="280" line="27">
+                            idref="280" line="26">
                             <block_statement column="14"
-                              file="paper_timing_leak.h" idref="282" line="28">
+                              file="paper_timing_leak.h" idref="282" line="27">
                               <assignment column="13"
-                                file="paper_timing_leak.h" idref="292" line="28">
+                                file="paper_timing_leak.h" idref="292" line="27">
                                 <primary_expression column="14"
-                                  file="paper_timing_leak.h" idref="286" line="28">
+                                  file="paper_timing_leak.h" idref="286" line="27">
                                   <id_expression column="8"
                                     file="paper_timing_leak.h"
-                                    idref="288" line="28" name="data"/>
+                                    idref="288" line="27" name="data"/>
                                 </primary_expression>
                                 <assignment_operator column="8"
-                                  file="paper_timing_leak.h" idref="290" line="28"/>
+                                  file="paper_timing_leak.h" idref="290" line="27"/>
                                 <primary_expression column="13"
-                                  file="paper_timing_leak.h" idref="296" line="28">
+                                  file="paper_timing_leak.h" idref="296" line="27">
                                   <id_expression column="15"
                                     file="paper_timing_leak.h"
-                                    idref="298" line="28" name="PUBLIC_IN"/>
+                                    idref="298" line="27" name="TRUSTED_IN"/>
                                 </primary_expression>
                               </assignment>
                             </block_statement>
-                            <block_statement column="24"
-                              file="paper_timing_leak.h" idref="300" line="29">
-                              <postfix_expression column="24"
-                                file="paper_timing_leak.h" idref="302" line="29">
-                                <primary_expression column="24"
-                                  file="paper_timing_leak.h" idref="304" line="29">
+                            <block_statement column="25"
+                              file="paper_timing_leak.h" idref="300" line="28">
+                              <postfix_expression column="25"
+                                file="paper_timing_leak.h" idref="302" line="28">
+                                <primary_expression column="25"
+                                  file="paper_timing_leak.h" idref="304" line="28">
                                   <id_expression column="8"
                                     file="paper_timing_leak.h"
-                                    idref="306" line="29" name="bus"/>
+                                    idref="306" line="28" name="bus"/>
                                 </primary_expression>
                                 <dereferencing_operator column="8"
                                   file="paper_timing_leak.h" idref="308"
-                                  line="29" name="&amp;"/>
+                                  line="28" name="&amp;"/>
                                 <id_expression column="12"
                                   file="paper_timing_leak.h" idref="310"
-                                  line="29" name="write"/>
+                                  line="28" name="write"/>
                                 <arguments column="12"
-                                  file="paper_timing_leak.h" idref="312" line="29">
+                                  file="paper_timing_leak.h" idref="312" line="28">
                                   <arguments_list column="17"
                                     file="paper_timing_leak.h"
-                                    idref="314" line="29">
+                                    idref="314" line="28">
                                     <primary_expression column="17"
                                     file="paper_timing_leak.h"
-                                    idref="318" line="29">
+                                    idref="318" line="28">
                                     <id_expression column="18"
                                     file="paper_timing_leak.h"
-                                    idref="320" line="29" name="data"/>
+                                    idref="320" line="28" name="data"/>
                                     </primary_expression>
                                   </arguments_list>
                                 </arguments>
                               </postfix_expression>
                             </block_statement>
                             <block_statement column="23"
-                              file="paper_timing_leak.h" idref="322" line="30">
+                              file="paper_timing_leak.h" idref="322" line="29">
                               <sc_notify column="23"
                                 file="paper_timing_leak.h" idref="324"
-                                line="30" name="event">
+                                line="29" name="event">
                                 <arguments_list column="20"
-                                  file="paper_timing_leak.h" idref="326" line="30">
+                                  file="paper_timing_leak.h" idref="326" line="29">
                                   <primary_expression column="20"
                                     file="paper_timing_leak.h"
-                                    idref="330" line="30">
+                                    idref="330" line="29">
                                     <constant column="20"
                                     file="paper_timing_leak.h"
-                                    idref="332" line="30" value="1250"/>
+                                    idref="332" line="29" value="1250"/>
                                   </primary_expression>
                                   <primary_expression column="25"
                                     file="paper_timing_leak.h"
-                                    idref="336" line="30">
+                                    idref="336" line="29">
                                     <constant column="25"
                                     file="paper_timing_leak.h"
-                                    idref="338" line="30" value="SC_PS"/>
+                                    idref="338" line="29" value="SC_PS"/>
                                   </primary_expression>
                                 </arguments_list>
                               </sc_notify>
@@ -434,25 +434,25 @@
                         </if_statement>
                       </block_statement>
                       <block_statement column="7"
-                        file="paper_timing_leak.h" idref="340" line="32">
+                        file="paper_timing_leak.h" idref="340" line="31">
                         <systemCRoutine column="7"
                           file="paper_timing_leak.h" idref="344"
-                          line="32" name="wait">
+                          line="31" name="wait">
                           <arguments column="7"
-                            file="paper_timing_leak.h" idref="346" line="32">
+                            file="paper_timing_leak.h" idref="346" line="31">
                             <arguments_list column="11"
-                              file="paper_timing_leak.h" idref="348" line="32">
+                              file="paper_timing_leak.h" idref="348" line="31">
                               <primary_expression column="11"
-                                file="paper_timing_leak.h" idref="352" line="32">
+                                file="paper_timing_leak.h" idref="352" line="31">
                                 <constant column="11"
                                   file="paper_timing_leak.h" idref="354"
-                                  line="32" value="2"/>
+                                  line="31" value="2"/>
                               </primary_expression>
                               <primary_expression column="13"
-                                file="paper_timing_leak.h" idref="358" line="32">
+                                file="paper_timing_leak.h" idref="358" line="31">
                                 <constant column="13"
                                   file="paper_timing_leak.h" idref="360"
-                                  line="32" value="SC_NS"/>
+                                  line="31" value="SC_NS"/>
                               </primary_expression>
                             </arguments_list>
                           </arguments>
@@ -465,96 +465,96 @@
             </function_definition>
           </member_declaration>
           <member_declaration column="3" file="paper_timing_leak.h"
-            idref="362" line="36">
+            idref="362" line="35">
             <function_definition column="3" file="paper_timing_leak.h"
-              idref="364" line="36">
+              idref="364" line="35">
               <declaration_specifiers column="3"
-                file="paper_timing_leak.h" idref="366" line="36">
+                file="paper_timing_leak.h" idref="366" line="35">
                 <builtin_type_specifier column="3"
                   file="paper_timing_leak.h" idref="368" length="0"
-                  line="36" name="void" sc_dt="false"/>
+                  line="35" name="void" sc_dt="false"/>
               </declaration_specifiers>
               <function_declarator column="3" file="paper_timing_leak.h"
-                idref="370" line="36">
+                idref="370" line="35">
                 <qualified_id column="3" file="paper_timing_leak.h"
-                  idref="372" line="36" name="consume_secret"/>
+                  idref="372" line="35" name="diagnosis"/>
               </function_declarator>
-              <block column="23" file="paper_timing_leak.h" idref="374" line="36">
-                <block_statement column="25" file="paper_timing_leak.h"
-                  idref="376" line="37">
-                  <systemCRoutine column="25" file="paper_timing_leak.h"
-                    idref="380" line="37" name="wait">
+              <block column="18" file="paper_timing_leak.h" idref="374" line="35">
+                <block_statement column="20" file="paper_timing_leak.h"
+                  idref="376" line="36">
+                  <systemCRoutine column="20" file="paper_timing_leak.h"
+                    idref="380" line="36" name="wait">
                     <arguments column="5" file="paper_timing_leak.h"
-                      idref="382" line="37">
+                      idref="382" line="36">
                       <arguments_list column="9"
-                        file="paper_timing_leak.h" idref="384" line="37">
+                        file="paper_timing_leak.h" idref="384" line="36">
                         <primary_expression column="9"
-                          file="paper_timing_leak.h" idref="388" line="37">
+                          file="paper_timing_leak.h" idref="388" line="36">
                           <constant column="9"
                             file="paper_timing_leak.h" idref="390"
-                            line="37" value="1"/>
+                            line="36" value="1"/>
                         </primary_expression>
                         <primary_expression column="11"
-                          file="paper_timing_leak.h" idref="394" line="37">
+                          file="paper_timing_leak.h" idref="394" line="36">
                           <constant column="11"
                             file="paper_timing_leak.h" idref="396"
-                            line="37" value="SC_NS"/>
+                            line="36" value="SC_NS"/>
                         </primary_expression>
                       </arguments_list>
                     </arguments>
                   </systemCRoutine>
                 </block_statement>
                 <block_statement column="19" file="paper_timing_leak.h"
-                  idref="398" line="38">
+                  idref="398" line="37">
                   <while_statement column="19"
-                    file="paper_timing_leak.h" idref="400" line="38">
+                    file="paper_timing_leak.h" idref="400" line="37">
                     <primary_expression column="11"
-                      file="paper_timing_leak.h" idref="404" line="38">
+                      file="paper_timing_leak.h" idref="404" line="37">
                       <constant column="11" file="paper_timing_leak.h"
-                        idref="406" line="38" value="true"/>
+                        idref="406" line="37" value="true"/>
                     </primary_expression>
                     <block column="16" file="paper_timing_leak.h"
-                      idref="408" line="38">
+                      idref="408" line="37">
                       <block_statement column="18"
-                        file="paper_timing_leak.h" idref="410" line="39">
+                        file="paper_timing_leak.h" idref="410" line="38">
                         <declaration column="18"
-                          file="paper_timing_leak.h" idref="412" line="39">
+                          file="paper_timing_leak.h" idref="412" line="38">
                           <init_declarator_list column="18"
-                            file="paper_timing_leak.h" idref="414" line="39">
+                            file="paper_timing_leak.h" idref="414" line="38">
                             <declaration_specifiers column="18"
-                              file="paper_timing_leak.h" idref="416" line="39">
+                              file="paper_timing_leak.h" idref="416" line="38">
                               <builtin_type_specifier column="18"
                                 file="paper_timing_leak.h" idref="418"
-                                length="0" line="39" name="int" sc_dt="false"/>
+                                length="0" line="38" name="int" sc_dt="false"/>
                             </declaration_specifiers>
                             <init_declarator column="7"
-                              file="paper_timing_leak.h" idref="420" line="39">
+                              file="paper_timing_leak.h" idref="420" line="38">
                               <declarator column="7"
-                                file="paper_timing_leak.h" idref="422" line="39">
+                                file="paper_timing_leak.h" idref="422" line="38">
                                 <qualified_id column="7"
                                   file="paper_timing_leak.h" idref="424"
-                                  line="39" name="read"/>
+                                  line="38" name="read"/>
                               </declarator>
                               <initializer column="16"
-                                file="paper_timing_leak.h" idref="426" line="39">
+                                file="paper_timing_leak.h" idref="426" line="38">
                                 <postfix_expression column="16"
-                                  file="paper_timing_leak.h" idref="428" line="39">
+                                  file="paper_timing_leak.h" idref="428" line="38">
                                   <primary_expression column="16"
                                     file="paper_timing_leak.h"
-                                    idref="430" line="39">
+                                    idref="430" line="38">
                                     <id_expression column="18"
                                     file="paper_timing_leak.h"
-                                    idref="432" line="39" name="bus"/>
+                                    idref="432" line="38" name="bus"/>
                                   </primary_expression>
                                   <dereferencing_operator column="18"
                                     file="paper_timing_leak.h"
-                                    idref="434" line="39" name="&amp;"/>
+                                    idref="434" line="38" name="&amp;"/>
                                   <id_expression column="22"
                                     file="paper_timing_leak.h"
-                                    idref="436" line="39" name="read"/>
+                                    idref="436" line="38" name="read"/>
                                   <arguments column="22"
                                     file="paper_timing_leak.h"
-                                    idref="438" line="39"/>
+                                    idref="438" line="38"/>
                                 </postfix_expression>
                               </initializer>
                             </init_declarator>
@@ -562,45 +562,45 @@
                         </declaration>
                       </block_statement>
                       <block_statement column="28"
-                        file="paper_timing_leak.h" idref="440" line="40">
-                        <assignment column="18"
-                          file="paper_timing_leak.h" idref="450" line="40">
+                        file="paper_timing_leak.h" idref="440" line="39">
+                        <assignment column="21"
+                          file="paper_timing_leak.h" idref="450" line="39">
                           <primary_expression column="28"
-                            file="paper_timing_leak.h" idref="444" line="40">
+                            file="paper_timing_leak.h" idref="444" line="39">
                             <id_expression column="7"
                               file="paper_timing_leak.h" idref="446"
-                              line="40" name="SECRET_OUT"/>
+                              line="39" name="UNTRUSTED_OUT"/>
                           </primary_expression>
                           <assignment_operator column="7"
-                            file="paper_timing_leak.h" idref="448" line="40"/>
-                          <primary_expression column="18"
-                            file="paper_timing_leak.h" idref="454" line="40">
-                            <id_expression column="20"
+                            file="paper_timing_leak.h" idref="448" line="39"/>
+                          <primary_expression column="21"
+                            file="paper_timing_leak.h" idref="454" line="39">
+                            <id_expression column="23"
                               file="paper_timing_leak.h" idref="456"
-                              line="40" name="read"/>
+                              line="39" name="read"/>
                           </primary_expression>
                         </assignment>
                       </block_statement>
-                      <block_statement column="24"
-                        file="paper_timing_leak.h" idref="458" line="41">
-                        <systemCRoutine column="24"
+                      <block_statement column="27"
+                        file="paper_timing_leak.h" idref="458" line="40">
+                        <systemCRoutine column="27"
                           file="paper_timing_leak.h" idref="462"
-                          line="41" name="wait">
+                          line="40" name="wait">
                           <arguments column="7"
-                            file="paper_timing_leak.h" idref="464" line="41">
+                            file="paper_timing_leak.h" idref="464" line="40">
                             <arguments_list column="11"
-                              file="paper_timing_leak.h" idref="466" line="41">
+                              file="paper_timing_leak.h" idref="466" line="40">
                               <primary_expression column="11"
-                                file="paper_timing_leak.h" idref="470" line="41">
+                                file="paper_timing_leak.h" idref="470" line="40">
                                 <constant column="11"
                                   file="paper_timing_leak.h" idref="472"
-                                  line="41" value="4"/>
+                                  line="40" value="4"/>
                               </primary_expression>
                               <primary_expression column="13"
-                                file="paper_timing_leak.h" idref="476" line="41">
+                                file="paper_timing_leak.h" idref="476" line="40">
                                 <constant column="13"
                                   file="paper_timing_leak.h" idref="478"
-                                  line="41" value="SC_NS"/>
+                                  line="40" value="SC_NS"/>
                               </primary_expression>
                             </arguments_list>
                           </arguments>
@@ -613,91 +613,91 @@
             </function_definition>
           </member_declaration>
           <member_declaration column="3" file="paper_timing_leak.h"
-            idref="480" line="45">
+            idref="480" line="44">
             <function_definition column="3" file="paper_timing_leak.h"
-              idref="482" line="45">
+              idref="482" line="44">
               <declaration_specifiers column="3"
-                file="paper_timing_leak.h" idref="484" line="45">
+                file="paper_timing_leak.h" idref="484" line="44">
                 <builtin_type_specifier column="3"
                   file="paper_timing_leak.h" idref="486" length="0"
-                  line="45" name="void" sc_dt="false"/>
+                  line="44" name="void" sc_dt="false"/>
               </declaration_specifiers>
               <function_declarator column="3" file="paper_timing_leak.h"
-                idref="488" line="45">
+                idref="488" line="44">
                 <qualified_id column="3" file="paper_timing_leak.h"
-                  idref="490" line="45" name="consume_public"/>
+                  idref="490" line="44" name="pump"/>
               </function_declarator>
-              <block column="23" file="paper_timing_leak.h" idref="492" line="45">
-                <block_statement column="25" file="paper_timing_leak.h"
-                  idref="494" line="46">
-                  <while_statement column="25"
-                    file="paper_timing_leak.h" idref="496" line="46">
+              <block column="13" file="paper_timing_leak.h" idref="492" line="44">
+                <block_statement column="15" file="paper_timing_leak.h"
+                  idref="494" line="45">
+                  <while_statement column="15"
+                    file="paper_timing_leak.h" idref="496" line="45">
                     <primary_expression column="11"
-                      file="paper_timing_leak.h" idref="500" line="46">
+                      file="paper_timing_leak.h" idref="500" line="45">
                       <constant column="11" file="paper_timing_leak.h"
-                        idref="502" line="46" value="true"/>
+                        idref="502" line="45" value="true"/>
                     </primary_expression>
                     <block column="16" file="paper_timing_leak.h"
-                      idref="504" line="46">
+                      idref="504" line="45">
                       <block_statement column="18"
-                        file="paper_timing_leak.h" idref="506" line="47">
+                        file="paper_timing_leak.h" idref="506" line="46">
                         <systemCRoutine column="18"
                           file="paper_timing_leak.h" idref="510"
-                          line="47" name="wait">
+                          line="46" name="wait">
                           <arguments column="7"
-                            file="paper_timing_leak.h" idref="512" line="47">
+                            file="paper_timing_leak.h" idref="512" line="46">
                             <arguments_list column="11"
-                              file="paper_timing_leak.h" idref="514" line="47">
+                              file="paper_timing_leak.h" idref="514" line="46">
                               <primary_expression column="11"
-                                file="paper_timing_leak.h" idref="518" line="47">
+                                file="paper_timing_leak.h" idref="518" line="46">
                                 <id_expression column="12"
                                   file="paper_timing_leak.h" idref="520"
-                                  line="47" name="event"/>
+                                  line="46" name="event"/>
                               </primary_expression>
                             </arguments_list>
                           </arguments>
                         </systemCRoutine>
                       </block_statement>
                       <block_statement column="18"
-                        file="paper_timing_leak.h" idref="522" line="48">
+                        file="paper_timing_leak.h" idref="522" line="47">
                         <declaration column="18"
-                          file="paper_timing_leak.h" idref="524" line="48">
+                          file="paper_timing_leak.h" idref="524" line="47">
                           <init_declarator_list column="18"
-                            file="paper_timing_leak.h" idref="526" line="48">
+                            file="paper_timing_leak.h" idref="526" line="47">
                             <declaration_specifiers column="18"
-                              file="paper_timing_leak.h" idref="528" line="48">
+                              file="paper_timing_leak.h" idref="528" line="47">
                               <builtin_type_specifier column="18"
                                 file="paper_timing_leak.h" idref="530"
-                                length="0" line="48" name="int" sc_dt="false"/>
+                                length="0" line="47" name="int" sc_dt="false"/>
                             </declaration_specifiers>
                             <init_declarator column="7"
-                              file="paper_timing_leak.h" idref="532" line="48">
+                              file="paper_timing_leak.h" idref="532" line="47">
                               <declarator column="7"
-                                file="paper_timing_leak.h" idref="534" line="48">
+                                file="paper_timing_leak.h" idref="534" line="47">
                                 <qualified_id column="7"
                                   file="paper_timing_leak.h" idref="536"
-                                  line="48" name="read"/>
+                                  line="47" name="read"/>
                               </declarator>
                               <initializer column="16"
-                                file="paper_timing_leak.h" idref="538" line="48">
+                                file="paper_timing_leak.h" idref="538" line="47">
                                 <postfix_expression column="16"
-                                  file="paper_timing_leak.h" idref="540" line="48">
+                                  file="paper_timing_leak.h" idref="540" line="47">
                                   <primary_expression column="16"
                                     file="paper_timing_leak.h"
-                                    idref="542" line="48">
+                                    idref="542" line="47">
                                     <id_expression column="18"
                                     file="paper_timing_leak.h"
-                                    idref="544" line="48" name="bus"/>
+                                    idref="544" line="47" name="bus"/>
                                   </primary_expression>
                                   <dereferencing_operator column="18"
                                     file="paper_timing_leak.h"
-                                    idref="546" line="48" name="&amp;"/>
+                                    idref="546" line="47" name="&amp;"/>
                                   <id_expression column="22"
                                     file="paper_timing_leak.h"
-                                    idref="548" line="48" name="read"/>
+                                    idref="548" line="47" name="read"/>
                                   <arguments column="22"
                                     file="paper_timing_leak.h"
-                                    idref="550" line="48"/>
+                                    idref="550" line="47"/>
                                 </postfix_expression>
                               </initializer>
                             </init_declarator>
@@ -705,22 +705,22 @@
                         </declaration>
                       </block_statement>
                       <block_statement column="28"
-                        file="paper_timing_leak.h" idref="552" line="49">
-                        <assignment column="18"
-                          file="paper_timing_leak.h" idref="562" line="49">
+                        file="paper_timing_leak.h" idref="552" line="48">
+                        <assignment column="19"
+                          file="paper_timing_leak.h" idref="562" line="48">
                           <primary_expression column="28"
-                            file="paper_timing_leak.h" idref="556" line="49">
+                            file="paper_timing_leak.h" idref="556" line="48">
                             <id_expression column="7"
                               file="paper_timing_leak.h" idref="558"
-                              line="49" name="PUBLIC_OUT"/>
+                              line="48" name="TRUSTED_OUT"/>
                           </primary_expression>
                           <assignment_operator column="7"
-                            file="paper_timing_leak.h" idref="560" line="49"/>
-                          <primary_expression column="18"
-                            file="paper_timing_leak.h" idref="566" line="49">
-                            <id_expression column="20"
+                            file="paper_timing_leak.h" idref="560" line="48"/>
+                          <primary_expression column="19"
+                            file="paper_timing_leak.h" idref="566" line="48">
+                            <id_expression column="21"
                               file="paper_timing_leak.h" idref="568"
-                              line="49" name="read"/>
+                              line="48" name="read"/>
                           </primary_expression>
                         </assignment>
                       </block_statement>
@@ -731,65 +731,65 @@
             </function_definition>
           </member_declaration>
           <member_declaration column="3" file="paper_timing_leak.h"
-            idref="570" line="54"/>
+            idref="570" line="53"/>
           <member_declaration column="3" file="paper_timing_leak.h"
-            idref="572" line="54">
+            idref="572" line="53">
             <ctor_definition column="3" file="paper_timing_leak.h"
-              idref="574" line="54">
+              idref="574" line="53">
               <qualified_id column="10" file="paper_timing_leak.h"
-                idref="576" line="54" name="paperTimingLeak"/>
+                idref="576" line="53" name="paperTimingLeak"/>
               <parameter_list column="26" file="paper_timing_leak.h"
-                idref="578" line="55">
+                idref="578" line="54">
                 <parameter_declaration column="26"
-                  file="paper_timing_leak.h" idref="580" line="55">
+                  file="paper_timing_leak.h" idref="580" line="54">
                   <declaration_specifiers column="26"
-                    file="paper_timing_leak.h" idref="582" line="55">
+                    file="paper_timing_leak.h" idref="582" line="54">
                     <builtin_type_specifier column="26"
                       file="paper_timing_leak.h" idref="584" length="0"
-                      line="55" name="sc_module_name" sc_dt="true"/>
+                      line="54" name="sc_module_name" sc_dt="true"/>
                   </declaration_specifiers>
                   <declarator column="26" file="paper_timing_leak.h"
-                    idref="586" line="55">
+                    idref="586" line="54">
                     <qualified_id column="26" file="paper_timing_leak.h"
-                      idref="588" line="55" name="name"/>
+                      idref="588" line="54" name="name"/>
                   </declarator>
                 </parameter_declaration>
               </parameter_list>
               <ctor_initializer column="26" file="paper_timing_leak.h"
-                idref="590" line="55">
+                idref="590" line="54">
                 <superclass_init column="26" file="paper_timing_leak.h"
-                  idref="592" line="55">
+                  idref="592" line="54">
                   <declaration_specifiers column="26"
-                    file="paper_timing_leak.h" idref="594" line="55">
+                    file="paper_timing_leak.h" idref="594" line="54">
                     <builtin_type_specifier column="26"
                       file="paper_timing_leak.h" idref="596" length="0"
-                      line="55" name="sc_module" sc_dt="true"/>
+                      line="54" name="sc_module" sc_dt="true"/>
                   </declaration_specifiers>
                   <arguments_list column="26" file="paper_timing_leak.h"
-                    idref="598" line="55">
+                    idref="598" line="54">
                     <primary_expression column="26"
-                      file="paper_timing_leak.h" idref="600" line="55">
+                      file="paper_timing_leak.h" idref="600" line="54">
                       <id_expression column="26"
-                        file="paper_timing_leak.h" idref="602" line="55" name="name"/>
+                        file="paper_timing_leak.h" idref="602" line="54" name="name"/>
                     </primary_expression>
                   </arguments_list>
                 </superclass_init>
               </ctor_initializer>
-              <block column="26" file="paper_timing_leak.h" idref="604" line="55">
+              <block column="26" file="paper_timing_leak.h" idref="604" line="54">
                 <sc_thread_block column="3" file="paper_timing_leak.h"
-                  idref="606" line="56">
+                  idref="606" line="55">
                   <sc_thread column="3" file="paper_timing_leak.h"
-                    idref="608" line="56" name="produce"/>
+                    idref="608" line="55" name="ecu"/>
                 </sc_thread_block>
-                <sc_thread_block column="23" file="paper_timing_leak.h"
-                  idref="610" line="57">
-                  <sc_thread column="23" file="paper_timing_leak.h"
-                    idref="612" line="57" name="consume_secret"/>
+                <sc_thread_block column="19" file="paper_timing_leak.h"
+                  idref="610" line="56">
+                  <sc_thread column="19" file="paper_timing_leak.h"
+                    idref="612" line="56" name="diagnosis"/>
                 </sc_thread_block>
-                <sc_thread_block column="30" file="paper_timing_leak.h"
-                  idref="614" line="58">
-                  <sc_thread column="30" file="paper_timing_leak.h"
-                    idref="616" line="58" name="consume_public"/>
+                <sc_thread_block column="25" file="paper_timing_leak.h"
+                  idref="614" line="57">
+                  <sc_thread column="25" file="paper_timing_leak.h"
+                    idref="616" line="57" name="pump"/>
                 </sc_thread_block>
               </block>
             </ctor_definition>

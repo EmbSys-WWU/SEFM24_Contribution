@@ -7,7 +7,7 @@
 SC_MODULE(gpioTest)
 {
   sc_uint<8> SENSOR_VALUE;
-  sc_uint<8> ANTENNA_VALUE;
+  sc_uint<8> WIFI_VALUE;
   
   sc_uint<8> bus_in;
   
@@ -41,7 +41,7 @@ SC_MODULE(gpioTest)
     }
   }
   
-  void breaks() {
+  void pump() {
     wait(2, SC_US);
     while (true) {
       sc_uint<8> value = gpio_word_out.read();
@@ -49,16 +49,16 @@ SC_MODULE(gpioTest)
     }
   }
   
-  void antenna() {
+  void wifi() {
     wait(4, SC_US);
     while (true) {
-      sc_uint<8> value = ANTENNA_VALUE;
+      sc_uint<8> value = WIFI_VALUE;
       bus_in = value;
       wait(8, SC_US);
     }
   }
   
-  void radio() {
+  void diagnosis() {
     wait(6, SC_US);
     while (true) {
       sc_uint<8> value = gpio_word_out.read();
@@ -97,9 +97,9 @@ SC_MODULE(gpioTest)
   SC_CTOR(gpioTest)
   {
     SC_THREAD(sensor);
-    SC_THREAD(breaks);
-    SC_THREAD(antenna);
-    SC_THREAD(radio);
+    SC_THREAD(pump);
+    SC_THREAD(wifi);
+    SC_THREAD(diagnosis);
     SC_THREAD(bus);
   }
 
