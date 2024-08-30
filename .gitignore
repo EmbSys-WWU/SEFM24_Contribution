@@ -1,6 +1,7 @@
 # compiled files
 *.class
 /target/
+SEFM24_Contribution.zip
 
 # eclipse
 .settings

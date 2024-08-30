@@ -364,14 +364,14 @@ public class Main {
         StateSpaceExploration<SomeVariablesGlobalState<BinaryAbstractedValue<?>>, SomeVariablesProcessState<BinaryAbstractedValue<?>>, PdgInformation, SomeVariablesProcess<BinaryAbstractedValue<?>, PdgInformation>> explorer =
                 constructExplorer(scheduler, record, Set.of(initialState));
 
-        long explorationStartTime = System.currentTimeMillis();
+        long explorationStartTime = System.nanoTime();
         explorer.run();
-        long explorationEndTime = System.currentTimeMillis();
+        long explorationEndTime = System.nanoTime();
         long explorationTime = explorationEndTime - explorationStartTime;
 
-        long integrationStartTime = System.currentTimeMillis();
+        long integrationStartTime = System.nanoTime();
         Sdg sdg = SdgFromInterleavingCfg.create(record);
-        long integrationEndTime = System.currentTimeMillis();
+        long integrationEndTime = System.nanoTime();
         long integrationTime = integrationEndTime - integrationStartTime;
 
         Set<SdgEdge> edges = sdg.getEdges();
@@ -382,11 +382,18 @@ public class Main {
         for (SdgNode node : sdg.getNodes().values().stream()
                 .filter(n -> n.getId().id().toString().equals(slicingCriterion)).toList()) {
             criteria.add(node);
-            long start = System.currentTimeMillis();
+            long start = System.nanoTime();
             slice.addAll(node.backwardsSlice());
-            long end = System.currentTimeMillis();
+            long end = System.nanoTime();
             slicingTime += (end - start);
         }
+
+        long totalTime = explorationTime + integrationTime + slicingTime;
+
+        explorationTime = Math.round(explorationTime / 1000000.0);
+        integrationTime = Math.round(integrationTime / 1000000.0);
+        slicingTime = Math.round(slicingTime / 1000000.0);
+        totalTime = Math.round(totalTime / 1000000.0);
 
         Map<String, Boolean> nodesOfInteresetContained = new LinkedHashMap<>();
         nodesOfInterest.entrySet().stream().forEach(e -> {
@@ -461,6 +468,7 @@ public class Main {
         output.println("Symbolic execution time: " + explorationTime + " ms");
         output.println("Integrated analysis time: " + integrationTime + " ms");
         output.println("Slicing time: " + slicingTime + " ms");
+        output.println("Total time: " + totalTime + " ms");
         output.println();
 
         printWriter.println("Slicing criteria:");
